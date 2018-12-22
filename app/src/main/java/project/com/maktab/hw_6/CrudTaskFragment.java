@@ -11,6 +11,8 @@ import android.widget.EditText;
 
 import java.util.UUID;
 
+import project.com.maktab.hw_6.model.TaskRepository;
+
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,10 +61,22 @@ public class CrudTaskFragment extends Fragment {
         mEditTextDesc = view.findViewById(R.id.desc_edit_text);
         mEditTextDate = view.findViewById(R.id.date_edit_text);
         mEditTextTime = view.findViewById(R.id.time_edit_text);
-        if(!mHasExtra){
+        if (!mHasExtra) {
             mButtonDoneCrud.setEnabled(false);
             mButtonDeleteCrud.setEnabled(false);
             mButtonEditCrud.setEnabled(false);
+            mButtonAddCrud.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String title = mEditTextTitle.getText().toString();
+                    String desc = mEditTextDesc.getText().toString();
+                    String date = mEditTextDate.getText().toString();
+                    String time = mEditTextTime.getText().toString();
+                    TaskRepository.getInstance().addToAll(title, desc, date, time);
+                }
+            });
+
+
         }
 
 
