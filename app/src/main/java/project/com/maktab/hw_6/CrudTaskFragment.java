@@ -6,6 +6,8 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import java.util.UUID;
 
@@ -14,22 +16,31 @@ import java.util.UUID;
  * A simple {@link Fragment} subclass.
  */
 public class CrudTaskFragment extends Fragment {
-private static final String ARGS_EXTRA_ID = "project.com.maktab.hw_6.args_extra_id" ;
-private static boolean hasExtra = false;
+    private static final String ARGS_EXTRA_ID = "project.com.maktab.hw_6.args_extra_id";
+    private static boolean mHasExtra = false;
+    private Button mButtonAddCrud;
+    private Button mButtonEditCrud;
+    private Button mButtonDeleteCrud;
+    private Button mButtonDoneCrud;
+    private EditText mEditTextTitle;
+    private EditText mEditTextDesc;
+    private EditText mEditTextDate;
+    private EditText mEditTextTime;
 
     public static CrudTaskFragment getInstance(UUID id) {
-        hasExtra = true;
+        mHasExtra = true;
         CrudTaskFragment fragment = new CrudTaskFragment();
         Bundle bundle = new Bundle();
-        bundle.putSerializable(ARGS_EXTRA_ID,id);
+        bundle.putSerializable(ARGS_EXTRA_ID, id);
         fragment.setArguments(bundle);
         return fragment;
     }
 
     public static CrudTaskFragment getInstance() {
-        hasExtra = false;
+        mHasExtra = false;
         return new CrudTaskFragment();
     }
+
     public CrudTaskFragment() {
         // Required empty public constructor
     }
@@ -39,7 +50,23 @@ private static boolean hasExtra = false;
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_crud_task, container, false);
+        View view = inflater.inflate(R.layout.fragment_crud_task, container, false);
+        mButtonAddCrud = view.findViewById(R.id.crud_add);
+        mButtonDeleteCrud = view.findViewById(R.id.crud_delete);
+        mButtonDoneCrud = view.findViewById(R.id.crud_done);
+        mButtonEditCrud = view.findViewById(R.id.crud_edit);
+        mEditTextTitle = view.findViewById(R.id.title_edit_text);
+        mEditTextDesc = view.findViewById(R.id.desc_edit_text);
+        mEditTextDate = view.findViewById(R.id.date_edit_text);
+        mEditTextTime = view.findViewById(R.id.time_edit_text);
+        if(!mHasExtra){
+            mButtonDoneCrud.setEnabled(false);
+            mButtonDeleteCrud.setEnabled(false);
+            mButtonEditCrud.setEnabled(false);
+        }
+
+
+        return view;
     }
 
 }
