@@ -1,10 +1,20 @@
 package project.com.maktab.hw_6.model;
 
+import java.util.UUID;
+
 public class Task {
     private String mTitle;
     private String mDescription;
     private String mDate;
     private String mTime;
+    private UUID mID;
+
+    public Task(){
+        mID = UUID.randomUUID();
+    }
+    public UUID getID() {
+        return mID;
+    }
 
     public String getTitle() {
         return mTitle;
