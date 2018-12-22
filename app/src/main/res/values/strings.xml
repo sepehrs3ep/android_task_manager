@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">HW_6</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title">title:</string>
+    <string name="description">description:</string>
+    <string name="date">date:</string>
+    <string name="time">time:</string>
+    <string name="title_hint">please add the task title</string>
+    <string name="desc_hint">please add the task description</string>
+    <string name="date_hint">please add the task date</string>
+    <string name="time_hint">please add the task time</string>
+    <string name="crud_delete">delete</string>
+    <string name="crud_edit">edit</string>
+    <string name="crud_done">done</string>
+    <string name="crud_add">add</string>
 </resources>

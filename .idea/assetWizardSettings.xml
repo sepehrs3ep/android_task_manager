@@ -28,8 +28,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="ic_add_float_button" />
+                            <entry key="outputName" value="ic_add_crud" />
                             <entry key="sourceFile" value="C:\Users\S3ep" />
                           </map>
                         </option>
