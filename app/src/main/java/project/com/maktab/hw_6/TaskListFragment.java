@@ -42,6 +42,12 @@ public class TaskListFragment extends Fragment {
         return fragment;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateUI();
+    }
+
     private void updateUI() {
         List<Task> list;
         if (mListStatus)
@@ -87,14 +93,14 @@ public class TaskListFragment extends Fragment {
             super(itemView);
             mTextViewTitle = itemView.findViewById(R.id.item_title);
             mTextViewImage = itemView.findViewById(R.id.item_circle_view);
-                itemView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        UUID id = mTask.getID();
-                        Intent intent = CrudTaskActivity.newIntent(getActivity(), id);
-                        startActivity(intent);
-                    }
-                });
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    UUID id = mTask.getID();
+                    Intent intent = CrudTaskActivity.newIntent(getActivity(), id);
+                    startActivity(intent);
+                }
+            });
         }
 
         public void bind(Task task) {

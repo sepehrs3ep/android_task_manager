@@ -16,4 +16,5 @@
     <string name="crud_done">done</string>
     <string name="crud_add">add</string>
     <string name="toast_crud_success">your item added successfully!</string>
+    <string name="toast_req_success">your request successfully done!</string>
 </resources>

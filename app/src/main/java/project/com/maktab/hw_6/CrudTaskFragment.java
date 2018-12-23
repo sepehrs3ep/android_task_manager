@@ -4,13 +4,17 @@ package project.com.maktab.hw_6;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.UUID;
 
 import project.com.maktab.hw_6.model.Task;
@@ -29,8 +33,8 @@ public class CrudTaskFragment extends Fragment {
     private Button mButtonDoneCrud;
     private EditText mEditTextTitle;
     private EditText mEditTextDesc;
-    private EditText mEditTextDate;
-    private EditText mEditTextTime;
+    private TextView mTextViewDate;
+    private TextView mTextViewTime;
     private Task mTask;
 
     public static CrudTaskFragment getInstance(UUID id) {
@@ -72,8 +76,8 @@ public class CrudTaskFragment extends Fragment {
         mButtonEditCrud = view.findViewById(R.id.crud_edit);
         mEditTextTitle = view.findViewById(R.id.title_edit_text);
         mEditTextDesc = view.findViewById(R.id.desc_edit_text);
-        mEditTextDate = view.findViewById(R.id.date_edit_text);
-        mEditTextTime = view.findViewById(R.id.time_edit_text);
+        mTextViewDate = view.findViewById(R.id.date_text_view);
+        mTextViewTime = view.findViewById(R.id.time_text_view);
         if (!mHasExtra) {
             mButtonDoneCrud.setEnabled(false);
             mButtonDeleteCrud.setEnabled(false);
@@ -83,23 +87,65 @@ public class CrudTaskFragment extends Fragment {
                 public void onClick(View v) {
                     String title = mEditTextTitle.getText().toString();
                     String desc = mEditTextDesc.getText().toString();
-                    String date = mEditTextDate.getText().toString();
-                    String time = mEditTextTime.getText().toString();
-                    TaskRepository.getInstance().addToAll(title, desc, date, time);
+                    TaskRepository.getInstance().addToAll(title, desc);
                     Toast.makeText(getActivity(), R.string.toast_crud_success, Toast.LENGTH_SHORT).show();
                     getActivity().finish();
                 }
             });
         }
         if (mHasExtra) {
+            final Toast toast = Toast.makeText(getActivity(),R.string.toast_req_success,Toast.LENGTH_SHORT);
             mButtonEditCrud.setEnabled(true);
             mButtonDeleteCrud.setEnabled(true);
             mButtonDoneCrud.setEnabled(true);
             mButtonAddCrud.setEnabled(false);
             mEditTextTitle.setText(mTask.getTitle());
             mEditTextDesc.setText(mTask.getDescription());
-            mEditTextDate.setText(mTask.getDate());
-            mEditTextTime.setText(mTask.getTime());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd,E");
+            String dateOutput = dateFormat.format(mTask.getDate());
+            SimpleDateFormat timeFormat = new SimpleDateFormat("h-m-a");
+            String timeOutput = timeFormat.format(mTask.getTime());
+            mTextViewDate.setText(dateOutput);
+            mTextViewTime.setText(timeOutput);
+            mEditTextTitle.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    mTask.setTitle(s.toString());
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+            mEditTextDesc.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence s, int start, int before, int count) {
+                    mTask.setDescription(s.toString());
+                }
+
+                @Override
+                public void afterTextChanged(Editable s) {
+
+                }
+            });
+            mButtonEditCrud.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    toast.show();
+                    getActivity().finish();
+                }
+            });
 
 
         }

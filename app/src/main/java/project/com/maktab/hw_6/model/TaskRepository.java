@@ -14,32 +14,36 @@ public class TaskRepository {
         mTaskListDone = new ArrayList<>();
     }
 
-    public void addToAll(String title, String desc, String date, String time) {
-        Task task = getTask(title, desc, date, time);
+    public void addToAll(String title, String desc) {
+        Task task = getTask(title, desc);
         mTaskListAll.add(task);
     }
 
-    public void addToDone(String title, String desc, String date, String time) {
-        Task task = getTask(title, desc, date, time);
-        mTaskListAll.add(task);
+    public void removeFromAll(UUID id) {
+        for (int i = 0; i < mTaskListAll.size(); i++) {
+            if (mTaskListAll.get(i).getID().equals(id)) mTaskListAll.remove(i);
+        }
+    }
+
+    public void addToDone(Task task) {
         mTaskListDone.add(task);
     }
 
-    private Task getTask(String title, String desc, String date, String time) {
+    private Task getTask(String title, String desc) {
         Task task = new Task();
         task.setTitle(title);
         task.setDescription(desc);
-        task.setDate(date);
-        task.setTime(time);
         return task;
     }
-    public Task getTaskByID(UUID id){
-        for(Task task:mTaskListAll){
-            if(task.getID().equals(id))
+
+    public Task getTaskByID(UUID id) {
+        for (Task task : mTaskListAll) {
+            if (task.getID().equals(id))
                 return task;
         }
         return null;
     }
+
     public List<Task> getAllList() {
         return mTaskListAll;
     }

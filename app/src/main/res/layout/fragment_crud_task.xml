@@ -65,17 +65,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/textView3" />
 
-    <EditText
-        android:id="@+id/date_edit_text"
+    <TextView
+        android:id="@+id/date_text_view"
+        style="?android:attr/listSeparatorTextViewStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
-        android:hint="@string/date_hint"
-        android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@id/textView4"
         app:layout_constraintTop_toBottomOf="@id/desc_edit_text" />
 
@@ -91,21 +91,19 @@
         app:layout_constraintTop_toBottomOf="@id/textView4"
         app:layout_constraintVertical_bias="0.0" />
 
-    <EditText
-        android:id="@+id/time_edit_text"
+    <TextView
+        android:id="@+id/time_text_view"
+        style="?android:attr/listSeparatorTextViewStyle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
         android:ems="10"
-        android:hint="@string/time_hint"
-        android:inputType="textPersonName"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.505"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@id/textView5"
-        app:layout_constraintTop_toBottomOf="@id/date_edit_text" />
+        app:layout_constraintTop_toBottomOf="@id/date_text_view" />
 
     <ImageView
 
