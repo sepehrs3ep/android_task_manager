@@ -158,12 +158,26 @@ public class CrudTaskFragment extends Fragment {
             mButtonDeleteCrud.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    if (mIsFromDoneList)
-                        TaskRepository.getInstance().removeFromDone(mTask.getID());
-                    else
-                        TaskRepository.getInstance().removeFromAll(mTask.getID());
-                    toast.show();
-                    getActivity().finish();
+                    AlertDialogFragment deleteAlert = AlertDialogFragment.getInstance("Are you sure you want to delete this item?");
+                    deleteAlert.show(getFragmentManager(), "Delete Alert");
+                    deleteAlert.setOnYesNoClick(new AlertDialogFragment.OnYesNoClick() {
+                        @Override
+                        public void onYesClicked() {
+                            if (mIsFromDoneList)
+                                TaskRepository.getInstance().removeFromDone(mTask.getID());
+                            else
+                                TaskRepository.getInstance().removeFromAll(mTask.getID());
+                            toast.show();
+                            getActivity().finish();
+                        }
+
+                        @Override
+                        public void onNoClicked() {
+
+                        }
+                    });
+
+
                 }
             });
             if (mIsFromDoneList) {
@@ -183,6 +197,10 @@ public class CrudTaskFragment extends Fragment {
 
 
         return view;
+    }
+
+    private void showDeleteDialog() {
+
     }
 
 }
