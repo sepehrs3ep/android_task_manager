@@ -24,6 +24,11 @@ public class TaskRepository {
             if (mTaskListAll.get(i).getID().equals(id)) mTaskListAll.remove(i);
         }
     }
+    public void removeFromDone(UUID id){
+        for (int i = 0; i < mTaskListDone.size(); i++) {
+            if (mTaskListDone.get(i).getID().equals(id)) mTaskListDone.remove(i);
+        }
+    }
 
     public void addToDone(Task task) {
         mTaskListDone.add(task);
@@ -36,8 +41,14 @@ public class TaskRepository {
         task.setDescription(desc);
         return task;
     }
-
-    public Task getTaskByID(UUID id) {
+    public Task getTaskFromDoneByID(UUID id){
+        for(Task task:mTaskListDone){
+            if(task.getID().equals(id))
+                return task;
+        }
+        return null;
+    }
+    public Task getTaskFromAllByID(UUID id) {
         for (Task task : mTaskListAll) {
             if (task.getID().equals(id))
                 return task;

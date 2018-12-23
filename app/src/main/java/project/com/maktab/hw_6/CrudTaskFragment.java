@@ -36,6 +36,7 @@ public class CrudTaskFragment extends Fragment {
     private TextView mTextViewDate;
     private TextView mTextViewTime;
     private Task mTask;
+    private static boolean mIsFromDoneList = false;
 
     public static CrudTaskFragment getInstance(UUID id) {
         mHasExtra = true;
@@ -58,9 +59,17 @@ public class CrudTaskFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Task tempTask;
+        mIsFromDoneList = false;
         if (mHasExtra) {
             UUID id = (UUID) getArguments().getSerializable(ARGS_EXTRA_ID);
-            mTask = TaskRepository.getInstance().getTaskByID(id);
+            tempTask = TaskRepository.getInstance().getTaskFromAllByID(id);
+            if (tempTask == null) {
+                mIsFromDoneList = true;
+                tempTask = TaskRepository.getInstance().getTaskFromDoneByID(id);
+            }
+            mTask = tempTask;
+
 
         }
     }
@@ -94,7 +103,7 @@ public class CrudTaskFragment extends Fragment {
             });
         }
         if (mHasExtra) {
-            final Toast toast = Toast.makeText(getActivity(),R.string.toast_req_success,Toast.LENGTH_SHORT);
+            final Toast toast = Toast.makeText(getActivity(), R.string.toast_req_success, Toast.LENGTH_SHORT);
             mButtonEditCrud.setEnabled(true);
             mButtonDeleteCrud.setEnabled(true);
             mButtonDoneCrud.setEnabled(true);
@@ -149,11 +158,17 @@ public class CrudTaskFragment extends Fragment {
             mButtonDeleteCrud.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    TaskRepository.getInstance().removeFromAll(mTask.getID());
+                    if (mIsFromDoneList)
+                        TaskRepository.getInstance().removeFromDone(mTask.getID());
+                    else
+                        TaskRepository.getInstance().removeFromAll(mTask.getID());
                     toast.show();
                     getActivity().finish();
                 }
             });
+            if (mIsFromDoneList) {
+                mButtonDoneCrud.setEnabled(false);
+            }
             mButtonDoneCrud.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
