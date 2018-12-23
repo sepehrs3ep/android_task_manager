@@ -27,6 +27,7 @@ public class TaskRepository {
 
     public void addToDone(Task task) {
         mTaskListDone.add(task);
+        removeFromAll(task.getID());
     }
 
     private Task getTask(String title, String desc) {

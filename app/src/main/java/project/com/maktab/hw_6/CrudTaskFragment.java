@@ -146,6 +146,22 @@ public class CrudTaskFragment extends Fragment {
                     getActivity().finish();
                 }
             });
+            mButtonDeleteCrud.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TaskRepository.getInstance().removeFromAll(mTask.getID());
+                    toast.show();
+                    getActivity().finish();
+                }
+            });
+            mButtonDoneCrud.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    TaskRepository.getInstance().addToDone(mTask);
+                    toast.show();
+                    getActivity().finish();
+                }
+            });
 
 
         }
