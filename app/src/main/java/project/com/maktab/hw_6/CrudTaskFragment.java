@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.util.UUID;
 
@@ -73,6 +74,8 @@ public class CrudTaskFragment extends Fragment {
                     String date = mEditTextDate.getText().toString();
                     String time = mEditTextTime.getText().toString();
                     TaskRepository.getInstance().addToAll(title, desc, date, time);
+                    Toast.makeText(getActivity(), R.string.toast_crud_success, Toast.LENGTH_SHORT).show();
+                    getActivity().finish();
                 }
             });
 

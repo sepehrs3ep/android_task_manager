@@ -87,7 +87,11 @@ public class TaskListFragment extends Fragment {
         }
 
         public void bind(Task task) {
-            mTextViewTitle.setText(task.getTitle());
+            String imageText = "";
+            String taskTitleText = task.getTitle();
+            mTextViewTitle.setText(taskTitleText);
+            imageText = taskTitleText.substring(0,1);
+            mTextViewImage.setText(imageText);
         }
     }
 
