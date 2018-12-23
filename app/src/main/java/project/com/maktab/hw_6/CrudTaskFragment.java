@@ -2,6 +2,7 @@ package project.com.maktab.hw_6;
 
 
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import java.util.UUID;
 
+import project.com.maktab.hw_6.model.Task;
 import project.com.maktab.hw_6.model.TaskRepository;
 
 
@@ -29,6 +31,7 @@ public class CrudTaskFragment extends Fragment {
     private EditText mEditTextDesc;
     private EditText mEditTextDate;
     private EditText mEditTextTime;
+    private Task mTask;
 
     public static CrudTaskFragment getInstance(UUID id) {
         mHasExtra = true;
@@ -48,6 +51,15 @@ public class CrudTaskFragment extends Fragment {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (mHasExtra) {
+            UUID id = (UUID) getArguments().getSerializable(ARGS_EXTRA_ID);
+            mTask = TaskRepository.getInstance().getTaskByID(id);
+
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -78,6 +90,16 @@ public class CrudTaskFragment extends Fragment {
                     getActivity().finish();
                 }
             });
+        }
+        if (mHasExtra) {
+            mButtonEditCrud.setEnabled(true);
+            mButtonDeleteCrud.setEnabled(true);
+            mButtonDoneCrud.setEnabled(true);
+            mButtonAddCrud.setEnabled(false);
+            mEditTextTitle.setText(mTask.getTitle());
+            mEditTextDesc.setText(mTask.getDescription());
+            mEditTextDate.setText(mTask.getDate());
+            mEditTextTime.setText(mTask.getTime());
 
 
         }

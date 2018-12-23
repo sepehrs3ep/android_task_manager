@@ -1,6 +1,7 @@
 package project.com.maktab.hw_6;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.List;
+import java.util.UUID;
 
 import project.com.maktab.hw_6.model.Task;
 import project.com.maktab.hw_6.model.TaskRepository;
@@ -79,18 +81,28 @@ public class TaskListFragment extends Fragment {
     private class TaskViewHolder extends RecyclerView.ViewHolder {
         private TextView mTextViewTitle;
         private TextView mTextViewImage;
+        private Task mTask;
 
         public TaskViewHolder(@NonNull View itemView) {
             super(itemView);
             mTextViewTitle = itemView.findViewById(R.id.item_title);
             mTextViewImage = itemView.findViewById(R.id.item_circle_view);
+                itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        UUID id = mTask.getID();
+                        Intent intent = CrudTaskActivity.newIntent(getActivity(), id);
+                        startActivity(intent);
+                    }
+                });
         }
 
         public void bind(Task task) {
+            mTask = task;
             String imageText = "";
             String taskTitleText = task.getTitle();
             mTextViewTitle.setText(taskTitleText);
-            imageText = taskTitleText.substring(0,1);
+            imageText = taskTitleText.substring(0, 1);
             mTextViewImage.setText(imageText);
         }
     }

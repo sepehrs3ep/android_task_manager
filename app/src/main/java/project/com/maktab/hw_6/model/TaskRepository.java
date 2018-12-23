@@ -2,6 +2,7 @@ package project.com.maktab.hw_6.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class TaskRepository {
     private static TaskRepository mInstance;
@@ -20,6 +21,7 @@ public class TaskRepository {
 
     public void addToDone(String title, String desc, String date, String time) {
         Task task = getTask(title, desc, date, time);
+        mTaskListAll.add(task);
         mTaskListDone.add(task);
     }
 
@@ -31,7 +33,13 @@ public class TaskRepository {
         task.setTime(time);
         return task;
     }
-
+    public Task getTaskByID(UUID id){
+        for(Task task:mTaskListAll){
+            if(task.getID().equals(id))
+                return task;
+        }
+        return null;
+    }
     public List<Task> getAllList() {
         return mTaskListAll;
     }
