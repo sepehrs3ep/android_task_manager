@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -26,9 +27,11 @@ import project.com.maktab.hw_6.model.TaskRepository;
  */
 public class TaskListFragment extends Fragment {
     private RecyclerView mRecyclerView;
+    private ImageView mNoTaskImageView;
     private static final String ARGS_LIST_STATUS = "project.com.maktab.hw_6.args_list_status";
     private TaskAdapter mTaskAdapter;
     private boolean mListStatus;
+
 
     public TaskListFragment() {
         // Required empty public constructor
@@ -61,6 +64,13 @@ public class TaskListFragment extends Fragment {
             mTaskAdapter.setTaskList(list);
             mTaskAdapter.notifyDataSetChanged();
         }
+        if(list==null||list.size()==0){
+            mRecyclerView.setVisibility(View.GONE);
+            mNoTaskImageView.setVisibility(View.VISIBLE);
+        }else {
+            mRecyclerView.setVisibility(View.VISIBLE);
+            mNoTaskImageView.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -78,6 +88,7 @@ public class TaskListFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_task_list, container, false);
         mRecyclerView = view.findViewById(R.id.recycler_view);
+        mNoTaskImageView = view.findViewById(R.id.no_task_image);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
         updateUI();
