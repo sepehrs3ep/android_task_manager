@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">HW_6</string>
+    <string name="app_name">Todo List</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -17,4 +17,5 @@
     <string name="crud_add">add</string>
     <string name="toast_crud_success">your item added successfully!</string>
     <string name="toast_req_success">your request successfully done!</string>
+    <string name="title_warning">title can\'t be empty please fill it</string>
 </resources>

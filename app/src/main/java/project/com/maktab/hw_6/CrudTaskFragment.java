@@ -1,8 +1,11 @@
 package project.com.maktab.hw_6;
 
 
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -36,6 +39,7 @@ public class CrudTaskFragment extends Fragment {
     private TextView mTextViewDate;
     private TextView mTextViewTime;
     private Task mTask;
+    private String mTaskTitle;
     private static boolean mIsFromDoneList = false;
 
     public static CrudTaskFragment getInstance(UUID id) {
@@ -69,6 +73,7 @@ public class CrudTaskFragment extends Fragment {
                 tempTask = TaskRepository.getInstance().getTaskFromDoneByID(id);
             }
             mTask = tempTask;
+            mTaskTitle = mTask.getTitle();
 
 
         }
@@ -85,6 +90,9 @@ public class CrudTaskFragment extends Fragment {
         mButtonEditCrud = view.findViewById(R.id.crud_edit);
         mEditTextTitle = view.findViewById(R.id.title_edit_text);
         mEditTextDesc = view.findViewById(R.id.desc_edit_text);
+        final Drawable descDrawble = mEditTextDesc.getBackground();
+//        mEditTextTitle.setBackgroundColor(descDrawble.getColor());
+        mEditTextTitle.setBackground(descDrawble);
         mTextViewDate = view.findViewById(R.id.date_text_view);
         mTextViewTime = view.findViewById(R.id.time_text_view);
         if (!mHasExtra) {
@@ -95,10 +103,18 @@ public class CrudTaskFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     String title = mEditTextTitle.getText().toString();
-                    String desc = mEditTextDesc.getText().toString();
-                    TaskRepository.getInstance().addToAll(title, desc);
-                    Toast.makeText(getActivity(), R.string.toast_crud_success, Toast.LENGTH_SHORT).show();
-                    getActivity().finish();
+                    if (title == null || title.equals("")) {
+                        Snackbar.make(getView(), R.string.title_warning, Snackbar.LENGTH_SHORT).show();
+                        mEditTextTitle.setBackgroundColor(Color.RED);
+                    } else {
+//                        mEditTextTitle.setBackgroundColor(descDrawble.getColor());
+                        mEditTextTitle.setBackground(descDrawble);
+                        String desc = mEditTextDesc.getText().toString();
+                        TaskRepository.getInstance().addToAll(title, desc);
+                        Toast.makeText(getActivity(), R.string.toast_crud_success, Toast.LENGTH_SHORT).show();
+                        getActivity().finish();
+
+                    }
                 }
             });
         }
@@ -151,8 +167,15 @@ public class CrudTaskFragment extends Fragment {
             mButtonEditCrud.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    toast.show();
-                    getActivity().finish();
+                    String title = mTask.getTitle();
+                    if (title == null || title.equals("")) {
+                        checkTitle();
+                    } else {
+                        mEditTextTitle.setBackground(descDrawble);
+                        toast.show();
+                        getActivity().finish();
+
+                    }
                 }
             });
             mButtonDeleteCrud.setOnClickListener(new View.OnClickListener() {
@@ -186,9 +209,16 @@ public class CrudTaskFragment extends Fragment {
             mButtonDoneCrud.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    TaskRepository.getInstance().addToDone(mTask);
-                    toast.show();
-                    getActivity().finish();
+                    String title = mTask.getTitle();
+                    if (title == null || title.equals("")) {
+                        checkTitle();
+                    } else {
+                        TaskRepository.getInstance().addToDone(mTask);
+                        toast.show();
+                        getActivity().finish();
+
+                    }
+
                 }
             });
 
@@ -199,8 +229,12 @@ public class CrudTaskFragment extends Fragment {
         return view;
     }
 
-    private void showDeleteDialog() {
-
+    private void checkTitle() {
+        Snackbar.make(getView(), R.string.title_warning, Snackbar.LENGTH_SHORT).show();
+        mEditTextTitle.setBackgroundColor(Color.RED);
+        mTask.setTitle(mTaskTitle);
+        mEditTextTitle.setText(mTaskTitle);
     }
+
 
 }
