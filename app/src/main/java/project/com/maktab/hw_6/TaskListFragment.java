@@ -1,8 +1,6 @@
 package project.com.maktab.hw_6;
 
 
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -35,19 +33,19 @@ import project.com.maktab.hw_6.model.TaskRepository;
 public class TaskListFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private ImageView mNoTaskImageView;
-    private static final String ARGS_LIST_STATUS = "project.com.maktab.hw_6.args_list_status";
+    private static final String ARGS_LIST_TYPE = "args_list_type";
     private TaskAdapter mTaskAdapter;
-    private boolean mListStatus;
-    private int mpostion;
+    private int mListType;
+    private int mPosition;
 
 
     public TaskListFragment() {
         // Required empty public constructor
     }
 
-    public static TaskListFragment getInstance(boolean listStatus) {
+    public static TaskListFragment getInstance(int listType) {
         Bundle args = new Bundle();
-        args.putBoolean(ARGS_LIST_STATUS, listStatus);
+        args.putInt(ARGS_LIST_TYPE, listType);
         TaskListFragment fragment = new TaskListFragment();
         fragment.setArguments(args);
         return fragment;
@@ -60,17 +58,20 @@ public class TaskListFragment extends Fragment {
     }
 
     private void updateUI() {
-        List<Task> list;
-        if (mListStatus)
-            list = TaskRepository.getInstance().getAllList();
-        else list = TaskRepository.getInstance().getDoneList();
+        List<Task> list =null;
+        if (mListType == 0)
+            list = TaskRepository.getInstance().getList();
+        if (mListType == 1)
+            list = TaskRepository.getInstance().getDoneTaskList();
+        if (mListType == -1)
+            list = TaskRepository.getInstance().getUnDoneTaskList();
 
         if (mTaskAdapter == null) {
             mTaskAdapter = new TaskAdapter(list);
             mRecyclerView.setAdapter(mTaskAdapter);
         } else {
             mTaskAdapter.setTaskList(list);
-            mTaskAdapter.notifyItemChanged(mpostion);
+            mTaskAdapter.notifyDataSetChanged();
         }
         if (list == null || list.size() == 0) {
             mRecyclerView.setVisibility(View.GONE);
@@ -86,8 +87,8 @@ public class TaskListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         /*true>> all list
         false >> doneList*/
+        mListType = getArguments().getInt(ARGS_LIST_TYPE);
         setHasOptionsMenu(true);
-        mListStatus = getArguments().getBoolean(ARGS_LIST_STATUS);
 
     }
 
@@ -141,8 +142,8 @@ public class TaskListFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     UUID id = mTask.getID();
-                    Intent intent = CrudTaskActivity.newIntent(getActivity(), id);
-                    mpostion = getAdapterPosition();
+                    Intent intent = CrudTaskActivity.newIntent(getActivity(), id,false);
+                    mPosition = getAdapterPosition();
                     startActivity(intent);
                 }
             });

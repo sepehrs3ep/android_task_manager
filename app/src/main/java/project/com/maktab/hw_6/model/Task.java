@@ -9,6 +9,15 @@ public class Task {
     private Date mDate;
     private Date mTime;
     private UUID mID;
+    private int taskType;
+
+    public int getTaskType() {
+        return taskType;
+    }
+
+    public void setTaskType(int taskType) {
+        this.taskType = taskType;
+    }
 
     public Date getDate() {
         return mDate;

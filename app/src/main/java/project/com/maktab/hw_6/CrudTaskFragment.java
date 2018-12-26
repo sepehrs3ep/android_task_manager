@@ -28,8 +28,8 @@ import project.com.maktab.hw_6.model.TaskRepository;
  * A simple {@link Fragment} subclass.
  */
 public class CrudTaskFragment extends Fragment {
-    private static final String ARGS_EXTRA_ID = "project.com.maktab.hw_6.args_extra_id";
-    private static boolean mHasExtra = false;
+    private static final String ARGS_EXTRA_ID = "args_extra_id";
+    private static final String ARGS_EXTRA_HAS_EXTRA = "args_extra_has_extra";
     private Button mButtonAddCrud;
     private Button mButtonEditCrud;
     private Button mButtonDeleteCrud;
@@ -38,23 +38,18 @@ public class CrudTaskFragment extends Fragment {
     private EditText mEditTextDesc;
     private TextView mTextViewDate;
     private TextView mTextViewTime;
+    private boolean mFromFloatButton;
     private Task mTask;
-    private String mTaskTitle;
-    private static boolean mIsFromDoneList = false;
 
-    public static CrudTaskFragment getInstance(UUID id) {
-        mHasExtra = true;
+    public static CrudTaskFragment getInstance(UUID id, boolean hasExtra) {
         CrudTaskFragment fragment = new CrudTaskFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(ARGS_EXTRA_ID, id);
+        bundle.putBoolean(ARGS_EXTRA_HAS_EXTRA, hasExtra);
         fragment.setArguments(bundle);
         return fragment;
     }
 
-    public static CrudTaskFragment getInstance() {
-        mHasExtra = false;
-        return new CrudTaskFragment();
-    }
 
     public CrudTaskFragment() {
         // Required empty public constructor
@@ -63,20 +58,9 @@ public class CrudTaskFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Task tempTask;
-        mIsFromDoneList = false;
-        if (mHasExtra) {
-            UUID id = (UUID) getArguments().getSerializable(ARGS_EXTRA_ID);
-            tempTask = TaskRepository.getInstance().getTaskFromAllByID(id);
-            if (tempTask == null) {
-                mIsFromDoneList = true;
-                tempTask = TaskRepository.getInstance().getTaskFromDoneByID(id);
-            }
-            mTask = tempTask;
-            mTaskTitle = mTask.getTitle();
-
-
-        }
+        UUID id = (UUID) getArguments().getSerializable(ARGS_EXTRA_ID);
+        mFromFloatButton = getArguments().getBoolean(ARGS_EXTRA_HAS_EXTRA);
+        mTask = TaskRepository.getInstance().getTaskByID(id);
     }
 
     @Override
@@ -95,7 +79,8 @@ public class CrudTaskFragment extends Fragment {
         mEditTextTitle.setBackground(descDrawble);
         mTextViewDate = view.findViewById(R.id.date_text_view);
         mTextViewTime = view.findViewById(R.id.time_text_view);
-        if (!mHasExtra) {
+        if (mFromFloatButton) {
+            mButtonAddCrud.setEnabled(true);
             mButtonDoneCrud.setEnabled(false);
             mButtonDeleteCrud.setEnabled(false);
             mButtonEditCrud.setEnabled(false);
@@ -110,7 +95,9 @@ public class CrudTaskFragment extends Fragment {
 //                        mEditTextTitle.setBackgroundColor(descDrawble.getColor());
                         mEditTextTitle.setBackground(descDrawble);
                         String desc = mEditTextDesc.getText().toString();
-                        TaskRepository.getInstance().addToAll(title, desc);
+                        mTask.setTitle(title);
+                        mTask.setDescription(desc);
+                        mTask.setTaskType(-1);
                         Toast.makeText(getActivity(), R.string.toast_crud_success, Toast.LENGTH_SHORT).show();
                         getActivity().finish();
 
@@ -118,7 +105,7 @@ public class CrudTaskFragment extends Fragment {
                 }
             });
         }
-        if (mHasExtra) {
+        if (!mFromFloatButton) {
             final Toast toast = Toast.makeText(getActivity(), R.string.toast_req_success, Toast.LENGTH_SHORT);
             mButtonEditCrud.setEnabled(true);
             mButtonDeleteCrud.setEnabled(true);
@@ -128,7 +115,7 @@ public class CrudTaskFragment extends Fragment {
             mEditTextDesc.setText(mTask.getDescription());
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd,E");
             String dateOutput = dateFormat.format(mTask.getDate());
-            SimpleDateFormat timeFormat = new SimpleDateFormat("h-m-a");
+            final SimpleDateFormat timeFormat = new SimpleDateFormat("h-m-a");
             String timeOutput = timeFormat.format(mTask.getTime());
             mTextViewDate.setText(dateOutput);
             mTextViewTime.setText(timeOutput);
@@ -186,10 +173,7 @@ public class CrudTaskFragment extends Fragment {
                     deleteAlert.setOnYesNoClick(new AlertDialogFragment.OnYesNoClick() {
                         @Override
                         public void onYesClicked() {
-                            if (mIsFromDoneList)
-                                TaskRepository.getInstance().removeFromDone(mTask.getID());
-                            else
-                                TaskRepository.getInstance().removeFromAll(mTask.getID());
+                            TaskRepository.getInstance().removeTask(mTask.getID());
                             toast.show();
                             getActivity().finish();
                         }
@@ -203,9 +187,9 @@ public class CrudTaskFragment extends Fragment {
 
                 }
             });
-            if (mIsFromDoneList) {
-                mButtonDoneCrud.setEnabled(false);
-            }
+       /* if (mIsFromDoneList) {
+            mButtonDoneCrud.setEnabled(false);
+        }*/
             mButtonDoneCrud.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -213,7 +197,7 @@ public class CrudTaskFragment extends Fragment {
                     if (title == null || title.equals("")) {
                         checkTitle();
                     } else {
-                        TaskRepository.getInstance().addToDone(mTask);
+                        mTask.setTaskType(1);
                         toast.show();
                         getActivity().finish();
 
@@ -224,17 +208,13 @@ public class CrudTaskFragment extends Fragment {
 
 
         }
-
-
         return view;
     }
 
     private void checkTitle() {
         Snackbar.make(getView(), R.string.title_warning, Snackbar.LENGTH_SHORT).show();
         mEditTextTitle.setBackgroundColor(Color.RED);
-        mTask.setTitle(mTaskTitle);
-        mEditTextTitle.setText(mTaskTitle);
+        mEditTextTitle.setText(mTask.getTitle());
     }
-
 
 }

@@ -6,63 +6,53 @@ import java.util.UUID;
 
 public class TaskRepository {
     private static TaskRepository mInstance;
-    private List<Task> mTaskListAll;
-    private List<Task> mTaskListDone;
+    private List<Task> mTaskList;
 
     private TaskRepository() {
-        mTaskListAll = new ArrayList<>();
-        mTaskListDone = new ArrayList<>();
+        mTaskList = new ArrayList<>();
     }
 
-    public void addToAll(String title, String desc) {
-        Task task = getTask(title, desc);
-        mTaskListAll.add(task);
+    public void addTask(Task task) {
+        mTaskList.add(task);
     }
 
-    public void removeFromAll(UUID id) {
-        for (int i = 0; i < mTaskListAll.size(); i++) {
-            if (mTaskListAll.get(i).getID().equals(id)) mTaskListAll.remove(i);
-        }
-    }
-    public void removeFromDone(UUID id){
-        for (int i = 0; i < mTaskListDone.size(); i++) {
-            if (mTaskListDone.get(i).getID().equals(id)) mTaskListDone.remove(i);
+    public void removeTask(UUID id) {
+        for (int i = 0; i < mTaskList.size(); i++) {
+            if (mTaskList.get(i).getID().equals(id)) mTaskList.remove(i);
         }
     }
 
-    public void addToDone(Task task) {
-        mTaskListDone.add(task);
-        removeFromAll(task.getID());
+    public List<Task> getDoneTaskList() {
+        List<Task> doneTaskList = new ArrayList<>();
+        for (Task task : mTaskList) {
+            if (task.getTaskType() == 1)
+                doneTaskList.add(task);
+        }
+        return doneTaskList;
     }
 
-    private Task getTask(String title, String desc) {
-        Task task = new Task();
-        task.setTitle(title);
-        task.setDescription(desc);
-        return task;
-    }
-    public Task getTaskFromDoneByID(UUID id){
-        for(Task task:mTaskListDone){
-            if(task.getID().equals(id))
-                return task;
+    public List<Task> getUnDoneTaskList() {
+        List<Task> unDoneTaskList = new ArrayList<>();
+        for (Task task : mTaskList) {
+            if (task.getTaskType() == -1)
+                unDoneTaskList.add(task);
         }
-        return null;
+        return unDoneTaskList;
     }
-    public Task getTaskFromAllByID(UUID id) {
-        for (Task task : mTaskListAll) {
+
+
+    public Task getTaskByID(UUID id) {
+        for (Task task : mTaskList) {
             if (task.getID().equals(id))
                 return task;
         }
         return null;
     }
 
-    public List<Task> getAllList() {
-        return mTaskListAll;
+    public List<Task> getList() {
+        return mTaskList;
     }
 
-    public List<Task> getDoneList() {
-        return mTaskListDone;
-    }
 
     public static TaskRepository getInstance() {
         if (mInstance == null)
