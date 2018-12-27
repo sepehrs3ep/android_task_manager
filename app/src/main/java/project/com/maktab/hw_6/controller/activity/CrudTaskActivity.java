@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import java.util.UUID;
 
@@ -24,6 +25,11 @@ public class CrudTaskActivity extends AppCompatActivity {
         return intent;
     }
 
+    @Override
+    public void onBackPressed() {
+        //
+        Log.d("test", "is it disable?");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

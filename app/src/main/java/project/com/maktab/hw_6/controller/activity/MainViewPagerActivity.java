@@ -32,10 +32,9 @@ public class MainViewPagerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_view_pager);
         Paper.init(MainViewPagerActivity.this);
-//        Paper.book().destroy();
         if (Paper.book().contains(PAPER_TASK_LIST)) {
-            List<Task> list = new ArrayList<>();
-            list = Paper.book().read(PAPER_TASK_LIST);
+
+            List<Task> list = Paper.book().read(PAPER_TASK_LIST);
             TaskRepository.getInstance().setTaskList(list);
         }
 

@@ -20,4 +20,6 @@
     <string name="title_warning">title can\'t be empty please fill it</string>
     <string name="crime_date_picker">crime date picker:</string>
     <string name="crime_time_picker">crime time picker:</string>
+    <string name="clear_list_menu">clear all lists</string>
+    <string name="clear_list_toast">are you sure you want delete all your lists?</string>
 </resources>

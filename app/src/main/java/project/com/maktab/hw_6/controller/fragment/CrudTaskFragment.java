@@ -272,6 +272,7 @@ public class CrudTaskFragment extends Fragment {
 
         }
     }
+
 }
 
 

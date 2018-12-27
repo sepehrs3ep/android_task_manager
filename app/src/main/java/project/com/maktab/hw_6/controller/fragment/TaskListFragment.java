@@ -130,6 +130,31 @@ public class TaskListFragment extends Fragment {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.clear_list_menu:
+                AlertDialogFragment fragment = AlertDialogFragment.getInstance("are you sure you want delete all your lists?");
+                fragment.show(getFragmentManager(), "menu_tag");
+                fragment.setOnYesNoClick(new AlertDialogFragment.OnYesNoClick() {
+                    @Override
+                    public void onYesClicked() {
+                        TaskRepository.getInstance().clearLists();
+                        updateUI();
+                    }
+
+                    @Override
+                    public void onNoClicked() {
+
+                    }
+                });
+
+
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
 
     private class TaskViewHolder extends RecyclerView.ViewHolder {
         private TextView mTextViewTitle;
@@ -155,15 +180,11 @@ public class TaskListFragment extends Fragment {
             mTask = task;
             String imageText = "";
             String taskTitleText = task.getTitle();
-            if (taskTitleText.equals("") || taskTitleText == null) {
-                taskTitleText = "";
-                imageText = "-";
-            } else {
-                mTextViewTitle.setText(taskTitleText);
-                imageText = taskTitleText.substring(0, 1);
-                mTextViewImage.setText(imageText);
 
-            }
+            mTextViewTitle.setText(taskTitleText);
+            imageText = taskTitleText.substring(0, 1);
+            mTextViewImage.setText(imageText);
+
         }
     }
 
