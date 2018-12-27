@@ -12,6 +12,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import io.paperdb.Paper;
 import project.com.maktab.hw_6.R;
 import project.com.maktab.hw_6.controller.fragment.TaskListFragment;
 import project.com.maktab.hw_6.model.Task;
@@ -21,11 +25,20 @@ public class MainViewPagerActivity extends AppCompatActivity {
     private TabLayout mTabLayout;
     private ViewPager mViewPager;
     private FloatingActionButton mFloatingActionButton;
+    public static final String PAPER_TASK_LIST = "paper_task_list";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_view_pager);
+        Paper.init(MainViewPagerActivity.this);
+//        Paper.book().destroy();
+        if (Paper.book().contains(PAPER_TASK_LIST)) {
+            List<Task> list = new ArrayList<>();
+            list = Paper.book().read(PAPER_TASK_LIST);
+            TaskRepository.getInstance().setTaskList(list);
+        }
+
         mTabLayout = findViewById(R.id.tab_layout);
         mViewPager = findViewById(R.id.view_pager);
         mFloatingActionButton = findViewById(R.id.float_button_add);
@@ -67,5 +80,11 @@ public class MainViewPagerActivity extends AppCompatActivity {
             }
         });
         mTabLayout.setupWithViewPager(mViewPager);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        Paper.book().write(PAPER_TASK_LIST, TaskRepository.getInstance().getList());
     }
 }

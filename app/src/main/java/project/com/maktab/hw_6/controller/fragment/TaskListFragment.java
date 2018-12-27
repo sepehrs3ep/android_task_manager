@@ -60,7 +60,7 @@ public class TaskListFragment extends Fragment {
     }
 
     private void updateUI() {
-        List<Task> list =null;
+        List<Task> list = null;
         if (mListType == 0)
             list = TaskRepository.getInstance().getList();
         if (mListType == 1)
@@ -144,7 +144,7 @@ public class TaskListFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     UUID id = mTask.getID();
-                    Intent intent = CrudTaskActivity.newIntent(getActivity(), id,false);
+                    Intent intent = CrudTaskActivity.newIntent(getActivity(), id, false);
                     mPosition = getAdapterPosition();
                     startActivity(intent);
                 }
@@ -155,9 +155,15 @@ public class TaskListFragment extends Fragment {
             mTask = task;
             String imageText = "";
             String taskTitleText = task.getTitle();
-            mTextViewTitle.setText(taskTitleText);
-            imageText = taskTitleText.substring(0, 1);
-            mTextViewImage.setText(imageText);
+            if (taskTitleText.equals("") || taskTitleText == null) {
+                taskTitleText = "";
+                imageText = "-";
+            } else {
+                mTextViewTitle.setText(taskTitleText);
+                imageText = taskTitleText.substring(0, 1);
+                mTextViewImage.setText(imageText);
+
+            }
         }
     }
 

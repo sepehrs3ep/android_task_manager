@@ -4,8 +4,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import io.paperdb.Paper;
+import project.com.maktab.hw_6.controller.activity.MainViewPagerActivity;
+
 public class TaskRepository {
     private static TaskRepository mInstance;
+
+    public void setTaskList(List<Task> taskList) {
+        mTaskList = taskList;
+    }
+
     private List<Task> mTaskList;
 
     private TaskRepository() {
