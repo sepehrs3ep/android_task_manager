@@ -54,9 +54,9 @@ public class MainViewPagerActivity extends AppCompatActivity {
             @Nullable
             @Override
             public CharSequence getPageTitle(int position) {
-                if (position == 0) return "Undone List";
-                if (position == 1) return "Done List";
-                if (position == 2) return "All List";
+                if (position == 0) return "Undone";
+                if (position == 1) return "Done";
+                if (position == 2) return "All";
                 return "";
             }
 

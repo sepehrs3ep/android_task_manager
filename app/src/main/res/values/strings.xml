@@ -18,4 +18,5 @@
     <string name="toast_crud_success">your item added successfully!</string>
     <string name="toast_req_success">your request successfully done!</string>
     <string name="title_warning">title can\'t be empty please fill it</string>
+    <string name="crime_date_picker">crime date picker:</string>
 </resources>

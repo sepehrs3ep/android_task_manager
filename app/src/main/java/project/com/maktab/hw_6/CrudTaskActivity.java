@@ -21,6 +21,7 @@ public class CrudTaskActivity extends AppCompatActivity {
         return intent;
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,12 +41,14 @@ public class CrudTaskActivity extends AppCompatActivity {
 
 
         } else {
-
             if (fragmentManager.findFragmentById(R.id.crud_fragment_container) == null) {
                 fragmentManager.beginTransaction()
                         .add(R.id.crud_fragment_container, CrudTaskFragment.getInstance(id, false))
+
                         .commit();
             }
         }
     }
+
 }
+

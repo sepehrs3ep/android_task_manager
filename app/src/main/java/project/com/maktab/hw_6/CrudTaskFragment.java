@@ -1,6 +1,8 @@
 package project.com.maktab.hw_6;
 
 
+import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -14,10 +16,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 
 import project.com.maktab.hw_6.model.Task;
@@ -30,16 +32,19 @@ import project.com.maktab.hw_6.model.TaskRepository;
 public class CrudTaskFragment extends Fragment {
     private static final String ARGS_EXTRA_ID = "args_extra_id";
     private static final String ARGS_EXTRA_HAS_EXTRA = "args_extra_has_extra";
+    private static final int DATE_REQ_CODE = 1;
+    private static final String DATE_TAG = "date_tag";
     private Button mButtonAddCrud;
     private Button mButtonEditCrud;
     private Button mButtonDeleteCrud;
     private Button mButtonDoneCrud;
     private EditText mEditTextTitle;
     private EditText mEditTextDesc;
-    private TextView mTextViewDate;
-    private TextView mTextViewTime;
+    private Button mDateButton;
+    private Button mTimeButton;
     private boolean mFromFloatButton;
     private Task mTask;
+    private String mTaskTitle;
 
     public static CrudTaskFragment getInstance(UUID id, boolean hasExtra) {
         CrudTaskFragment fragment = new CrudTaskFragment();
@@ -61,6 +66,7 @@ public class CrudTaskFragment extends Fragment {
         UUID id = (UUID) getArguments().getSerializable(ARGS_EXTRA_ID);
         mFromFloatButton = getArguments().getBoolean(ARGS_EXTRA_HAS_EXTRA);
         mTask = TaskRepository.getInstance().getTaskByID(id);
+        mTaskTitle = mTask.getTitle();
     }
 
     @Override
@@ -77,8 +83,11 @@ public class CrudTaskFragment extends Fragment {
         final Drawable descDrawble = mEditTextDesc.getBackground();
 //        mEditTextTitle.setBackgroundColor(descDrawble.getColor());
         mEditTextTitle.setBackground(descDrawble);
-        mTextViewDate = view.findViewById(R.id.date_text_view);
-        mTextViewTime = view.findViewById(R.id.time_text_view);
+        mDateButton = view.findViewById(R.id.date_button);
+        mTimeButton = view.findViewById(R.id.time_button);
+        setDateButton();
+        setTimeButton();
+
         if (mFromFloatButton) {
             mButtonAddCrud.setEnabled(true);
             mButtonDoneCrud.setEnabled(false);
@@ -113,12 +122,7 @@ public class CrudTaskFragment extends Fragment {
             mButtonAddCrud.setEnabled(false);
             mEditTextTitle.setText(mTask.getTitle());
             mEditTextDesc.setText(mTask.getDescription());
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd,E");
-            String dateOutput = dateFormat.format(mTask.getDate());
-            final SimpleDateFormat timeFormat = new SimpleDateFormat("h-m-a");
-            String timeOutput = timeFormat.format(mTask.getTime());
-            mTextViewDate.setText(dateOutput);
-            mTextViewTime.setText(timeOutput);
+
             mEditTextTitle.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -187,9 +191,9 @@ public class CrudTaskFragment extends Fragment {
 
                 }
             });
-       /* if (mIsFromDoneList) {
-            mButtonDoneCrud.setEnabled(false);
-        }*/
+            if (mTask.getTaskType() == 1)
+                mButtonDoneCrud.setEnabled(false);
+
             mButtonDoneCrud.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -208,13 +212,47 @@ public class CrudTaskFragment extends Fragment {
 
 
         }
+        mDateButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerFragment fragment = DatePickerFragment.newInstance(mTask.getDate());
+                fragment.setTargetFragment(CrudTaskFragment.this, DATE_REQ_CODE);
+                fragment.show(getFragmentManager(), DATE_TAG);
+            }
+        });
+
+
         return view;
     }
 
-    private void checkTitle() {
+    private void setTimeButton() {
+        final SimpleDateFormat timeFormat = new SimpleDateFormat("h-m-a");
+        String timeOutput = timeFormat.format(mTask.getTime());
+        mTimeButton.setText(timeOutput);
+    }
+
+    private void setDateButton() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd,E");
+        String dateOutput = dateFormat.format(mTask.getDate());
+        mDateButton.setText(dateOutput);
+    }
+
+    public void checkTitle() {
         Snackbar.make(getView(), R.string.title_warning, Snackbar.LENGTH_SHORT).show();
         mEditTextTitle.setBackgroundColor(Color.RED);
+        mTask.setTitle(mTaskTitle);
         mEditTextTitle.setText(mTask.getTitle());
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode != DATE_REQ_CODE) return;
+        if (resultCode == Activity.RESULT_OK) {
+            Date date = (Date) data.getSerializableExtra(DatePickerFragment.getDatePickerExtra());
+            mTask.setDate(date);
+            setDateButton();
+        }
+    }
 }
+
+
