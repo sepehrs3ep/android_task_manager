@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -39,6 +40,7 @@ public class TaskListFragment extends Fragment {
     private TaskAdapter mTaskAdapter;
     private int mListType;
     private int mPosition;
+    private List<Task> mTaskList;
 
 
     public TaskListFragment() {
@@ -67,7 +69,7 @@ public class TaskListFragment extends Fragment {
             list = TaskRepository.getInstance().getDoneTaskList();
         if (mListType == -1)
             list = TaskRepository.getInstance().getUnDoneTaskList();
-
+        mTaskList = list;
         if (mTaskAdapter == null) {
             mTaskAdapter = new TaskAdapter(list);
             mRecyclerView.setAdapter(mTaskAdapter);
@@ -148,8 +150,13 @@ public class TaskListFragment extends Fragment {
 
                     }
                 });
-
-
+                return true;
+            case R.id.menu_subtitle_tasks:
+                AppCompatActivity activity = (AppCompatActivity) getActivity();
+                int count = mTaskList.size();
+                String subtitle = getString(R.string.subtitle_format, String.valueOf(count));
+                activity.getSupportActionBar().setSubtitle(subtitle);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }

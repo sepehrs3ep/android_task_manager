@@ -22,4 +22,6 @@
     <string name="crime_time_picker">crime time picker:</string>
     <string name="clear_list_menu">clear all lists</string>
     <string name="clear_list_toast">are you sure you want delete all your lists?</string>
+    <string name="menu_subtitle">show subtitle</string>
+    <string name="subtitle_format">%1$s tasks</string>
 </resources>
