@@ -1,4 +1,4 @@
-package project.com.maktab.hw_6;
+package project.com.maktab.hw_6.controller.fragment;
 
 
 import android.app.Activity;
@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
+import project.com.maktab.hw_6.R;
 import project.com.maktab.hw_6.model.Task;
 import project.com.maktab.hw_6.model.TaskRepository;
 
@@ -34,6 +35,8 @@ public class CrudTaskFragment extends Fragment {
     private static final String ARGS_EXTRA_HAS_EXTRA = "args_extra_has_extra";
     private static final int DATE_REQ_CODE = 1;
     private static final String DATE_TAG = "date_tag";
+    private static final String TIME_TAG = "time_tag";
+    private static final int TIME_REQ_CODE = -1;
     private Button mButtonAddCrud;
     private Button mButtonEditCrud;
     private Button mButtonDeleteCrud;
@@ -212,6 +215,14 @@ public class CrudTaskFragment extends Fragment {
 
 
         }
+        mTimeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TimePickerFragment fragment = TimePickerFragment.newInstance(mTask.getDate());
+                fragment.setTargetFragment(CrudTaskFragment.this, TIME_REQ_CODE);
+                fragment.show(getFragmentManager(), TIME_TAG);
+            }
+        });
         mDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -226,8 +237,8 @@ public class CrudTaskFragment extends Fragment {
     }
 
     private void setTimeButton() {
-        final SimpleDateFormat timeFormat = new SimpleDateFormat("h-m-a");
-        String timeOutput = timeFormat.format(mTask.getTime());
+        final SimpleDateFormat timeFormat = new SimpleDateFormat("HH-mm");
+        String timeOutput = timeFormat.format(mTask.getDate());
         mTimeButton.setText(timeOutput);
     }
 
@@ -246,11 +257,19 @@ public class CrudTaskFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode != DATE_REQ_CODE) return;
-        if (resultCode == Activity.RESULT_OK) {
+        if (resultCode != Activity.RESULT_OK) return;
+        if (requestCode == DATE_REQ_CODE) {
             Date date = (Date) data.getSerializableExtra(DatePickerFragment.getDatePickerExtra());
             mTask.setDate(date);
             setDateButton();
+
+        }
+        if (requestCode == TIME_REQ_CODE) {
+            Date date = (Date) data.getSerializableExtra(TimePickerFragment.getTimeExtra());
+            mTask.setDate(date);
+            setTimeButton();
+
+
         }
     }
 }

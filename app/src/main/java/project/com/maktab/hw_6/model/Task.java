@@ -7,7 +7,6 @@ public class Task {
     private String mTitle;
     private String mDescription;
     private Date mDate;
-    private Date mTime;
     private UUID mID;
     private int taskType;
 
@@ -27,19 +26,11 @@ public class Task {
         mDate = date;
     }
 
-    public Date getTime() {
-        return mTime;
-    }
-
-    public void setTime(Date time) {
-        mTime = time;
-    }
 
 
     public Task(){
         mID = UUID.randomUUID();
         mDate = new Date();
-        mTime = new Date();
     }
     public UUID getID() {
         return mID;

@@ -1,4 +1,4 @@
-package project.com.maktab.hw_6;
+package project.com.maktab.hw_6.controller.fragment;
 
 
 import android.app.Activity;
@@ -13,12 +13,13 @@ import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.DatePicker;
 
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+
+import project.com.maktab.hw_6.R;
 
 
 /**
@@ -86,9 +87,7 @@ public class DatePickerFragment extends DialogFragment {
         int year = mDatePicker.getYear();
         int month = mDatePicker.getMonth();
         int day = mDatePicker.getDayOfMonth();
-        GregorianCalendar gregorianCalendar = new GregorianCalendar();
-        gregorianCalendar.set(year, month, day);
-        return gregorianCalendar.getTime();
+         return new GregorianCalendar(year, month, day).getTime();
     }
 
     private void sendResult(Date date) {

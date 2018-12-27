@@ -1,4 +1,4 @@
-package project.com.maktab.hw_6;
+package project.com.maktab.hw_6.controller.fragment;
 
 
 import android.content.Intent;
@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import project.com.maktab.hw_6.R;
+import project.com.maktab.hw_6.controller.activity.CrudTaskActivity;
 import project.com.maktab.hw_6.model.Task;
 import project.com.maktab.hw_6.model.TaskRepository;
 

@@ -1,4 +1,4 @@
-package project.com.maktab.hw_6;
+package project.com.maktab.hw_6.controller.fragment;
 
 
 import android.app.AlertDialog;

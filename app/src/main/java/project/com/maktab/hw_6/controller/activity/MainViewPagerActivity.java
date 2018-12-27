@@ -1,4 +1,4 @@
-package project.com.maktab.hw_6;
+package project.com.maktab.hw_6.controller.activity;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
@@ -6,13 +6,14 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import project.com.maktab.hw_6.R;
+import project.com.maktab.hw_6.controller.fragment.TaskListFragment;
 import project.com.maktab.hw_6.model.Task;
 import project.com.maktab.hw_6.model.TaskRepository;
 

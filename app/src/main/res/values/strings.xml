@@ -19,4 +19,5 @@
     <string name="toast_req_success">your request successfully done!</string>
     <string name="title_warning">title can\'t be empty please fill it</string>
     <string name="crime_date_picker">crime date picker:</string>
+    <string name="crime_time_picker">crime time picker:</string>
 </resources>

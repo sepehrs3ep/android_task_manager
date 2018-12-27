@@ -1,4 +1,4 @@
-package project.com.maktab.hw_6;
+package project.com.maktab.hw_6.controller.activity;
 
 import android.content.Context;
 import android.content.Intent;
@@ -7,6 +7,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
 import java.util.UUID;
+
+import project.com.maktab.hw_6.R;
+import project.com.maktab.hw_6.controller.fragment.CrudTaskFragment;
 
 public class CrudTaskActivity extends AppCompatActivity {
     private static final String ID_EXTRA = "project.com.maktab.hw_6.id_extra";
