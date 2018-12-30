@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import io.paperdb.Paper;
 import project.com.maktab.hw_6.R;
 import project.com.maktab.hw_6.controller.activity.CrudTaskActivity;
 import project.com.maktab.hw_6.model.Task;
@@ -40,7 +41,6 @@ public class TaskListFragment extends Fragment {
     private TaskAdapter mTaskAdapter;
     private int mListType;
     private int mPosition;
-    private List<Task> mTaskList;
 
 
     public TaskListFragment() {
@@ -62,20 +62,15 @@ public class TaskListFragment extends Fragment {
     }
 
     private void updateUI() {
-        List<Task> list = null;
-        if (mListType == 0)
-            list = TaskRepository.getInstance().getList();
-        if (mListType == 1)
-            list = TaskRepository.getInstance().getDoneTaskList();
-        if (mListType == -1)
-            list = TaskRepository.getInstance().getUnDoneTaskList();
-        mTaskList = list;
+        List<Task> list = getTaskList();
+
         if (mTaskAdapter == null) {
             mTaskAdapter = new TaskAdapter(list);
             mRecyclerView.setAdapter(mTaskAdapter);
         } else {
             mTaskAdapter.setTaskList(list);
             mTaskAdapter.notifyDataSetChanged();
+//            updateSubtitle();
         }
         if (list == null || list.size() == 0) {
             mRecyclerView.setVisibility(View.GONE);
@@ -84,6 +79,18 @@ public class TaskListFragment extends Fragment {
             mRecyclerView.setVisibility(View.VISIBLE);
             mNoTaskImageView.setVisibility(View.GONE);
         }
+    }
+
+    @Nullable
+    private List<Task> getTaskList() {
+        List<Task> list = null;
+        if (mListType == 0)
+            list = TaskRepository.getInstance().getList();
+        if (mListType == 1)
+            list = TaskRepository.getInstance().getDoneTaskList();
+        if (mListType == -1)
+            list = TaskRepository.getInstance().getUnDoneTaskList();
+        return list;
     }
 
     @Override
@@ -106,6 +113,7 @@ public class TaskListFragment extends Fragment {
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRecyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL));
         updateUI();
+//        updateSubtitle();
         return view;
     }
 
@@ -141,8 +149,10 @@ public class TaskListFragment extends Fragment {
                 fragment.setOnYesNoClick(new AlertDialogFragment.OnYesNoClick() {
                     @Override
                     public void onYesClicked() {
+                        Paper.book().destroy();
                         TaskRepository.getInstance().clearLists();
                         updateUI();
+
                     }
 
                     @Override
@@ -152,15 +162,21 @@ public class TaskListFragment extends Fragment {
                 });
                 return true;
             case R.id.menu_subtitle_tasks:
-                AppCompatActivity activity = (AppCompatActivity) getActivity();
-                int count = mTaskList.size();
-                String subtitle = getString(R.string.subtitle_format, String.valueOf(count));
-                activity.getSupportActionBar().setSubtitle(subtitle);
+                updateSubtitle();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
 
+    }
+
+    public void updateSubtitle() {
+        List<Task> list = getTaskList();
+        AppCompatActivity activity = null;
+        activity = (AppCompatActivity) getActivity();
+        int count = list.size();
+        String subtitle = getString(R.string.subtitle_format, String.valueOf(count));
+        activity.getSupportActionBar().setSubtitle(subtitle);
     }
 
     private class TaskViewHolder extends RecyclerView.ViewHolder {
@@ -185,12 +201,13 @@ public class TaskListFragment extends Fragment {
 
         public void bind(Task task) {
             mTask = task;
-            String imageText = "";
+
+            Character imageText;
             String taskTitleText = task.getTitle();
 
             mTextViewTitle.setText(taskTitleText);
-            imageText = taskTitleText.substring(0, 1);
-            mTextViewImage.setText(imageText);
+            imageText = taskTitleText.charAt(0);
+            mTextViewImage.setText(imageText.toString());
 
         }
     }
@@ -208,6 +225,7 @@ public class TaskListFragment extends Fragment {
         public TaskAdapter(List<Task> tasks) {
             this.mTaskList = tasks;
             mSearchTaskList = new ArrayList<>();
+            mSearchTaskList.clear();
             mSearchTaskList.addAll(mTaskList);
         }
 
@@ -223,7 +241,9 @@ public class TaskListFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull TaskViewHolder taskViewHolder, int i) {
             Task task = mSearchTaskList.get(i);
-            taskViewHolder.bind(task);
+            if (task != null || task.getTitle() != null)
+                taskViewHolder.bind(task);
+            else TaskRepository.getInstance().removeTask(task.getID());
 
         }
 

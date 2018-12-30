@@ -11,6 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ public class MainViewPagerActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private FloatingActionButton mFloatingActionButton;
     public static final String PAPER_TASK_LIST = "paper_task_list";
+    TaskListFragment[] mListFragments=new TaskListFragment[3];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +37,7 @@ public class MainViewPagerActivity extends AppCompatActivity {
         if (Paper.book().contains(PAPER_TASK_LIST)) {
 
             List<Task> list = Paper.book().read(PAPER_TASK_LIST);
+            TaskRepository.getInstance().getList().clear();
             TaskRepository.getInstance().setTaskList(list);
         }
 
@@ -51,12 +54,35 @@ public class MainViewPagerActivity extends AppCompatActivity {
             }
         });
         mViewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
+            private TaskListFragment mCurrentFragment;
+            public TaskListFragment getCurrentFragment() {
+                return mCurrentFragment;
+            }
             @Override
             public Fragment getItem(int i) {
-                if (i == 0) return TaskListFragment.getInstance(-1);
-                if (i == 1) return TaskListFragment.getInstance(1);
-                if (i == 2) return TaskListFragment.getInstance(0);
-                return null;
+                TaskListFragment taskListFragment = null;
+                if (i == 0){
+                    taskListFragment = TaskListFragment.getInstance(-1);
+                    mListFragments[0] = taskListFragment;
+                }
+                if (i == 1) {
+                    taskListFragment = TaskListFragment.getInstance(1);
+                    mListFragments[1] = taskListFragment;
+                }
+                if (i == 2) {
+                    taskListFragment = TaskListFragment.getInstance(0);
+                    mListFragments[2] = taskListFragment;
+                }
+                mCurrentFragment = taskListFragment;
+                return taskListFragment;
+            }
+
+            @Override
+            public void setPrimaryItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+                if (getCurrentFragment() != object) {
+                    mCurrentFragment = ((TaskListFragment) object);
+                }
+                super.setPrimaryItem(container, position, object);
             }
 
             @Override
@@ -78,6 +104,25 @@ public class MainViewPagerActivity extends AppCompatActivity {
                 return POSITION_NONE;
             }
         });
+
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+            mListFragments[i].updateSubtitle();
+//                getActionBar().setSubtitle("" + i );
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
+
         mTabLayout.setupWithViewPager(mViewPager);
     }
 
@@ -86,4 +131,5 @@ public class MainViewPagerActivity extends AppCompatActivity {
         super.onStop();
         Paper.book().write(PAPER_TASK_LIST, TaskRepository.getInstance().getList());
     }
+
 }

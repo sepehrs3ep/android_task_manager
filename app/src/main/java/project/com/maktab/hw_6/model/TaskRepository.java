@@ -26,7 +26,7 @@ public class TaskRepository {
 
     public void clearLists() {
         mTaskList.clear();
-        Paper.book().destroy();
+
     }
 
     public void removeTask(UUID id) {
