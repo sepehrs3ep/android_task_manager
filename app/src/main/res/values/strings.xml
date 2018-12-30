@@ -18,8 +18,8 @@
     <string name="toast_crud_success">your item added successfully!</string>
     <string name="toast_req_success">your request successfully done!</string>
     <string name="title_warning">title can\'t be empty please fill it</string>
-    <string name="crime_date_picker">crime date picker:</string>
-    <string name="crime_time_picker">crime time picker:</string>
+    <string name="task_date_picker">task date picker:</string>
+    <string name="task_time_picker">task time picker:</string>
     <string name="clear_list_menu">clear all lists</string>
     <string name="clear_list_toast">are you sure you want delete all your lists?</string>
     <string name="menu_subtitle">show subtitle</string>

@@ -182,12 +182,16 @@ public class TaskListFragment extends Fragment {
     private class TaskViewHolder extends RecyclerView.ViewHolder {
         private TextView mTextViewTitle;
         private TextView mTextViewImage;
+        private ImageView mImageViewDone;
+        private ImageView mImageViewUndone;
         private Task mTask;
 
         public TaskViewHolder(@NonNull final View itemView) {
             super(itemView);
             mTextViewTitle = itemView.findViewById(R.id.item_title);
             mTextViewImage = itemView.findViewById(R.id.item_circle_view);
+            mImageViewDone = itemView.findViewById(R.id.done_image_view);
+            mImageViewUndone = itemView.findViewById(R.id.undone_image_view);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -208,68 +212,72 @@ public class TaskListFragment extends Fragment {
             mTextViewTitle.setText(taskTitleText);
             imageText = taskTitleText.charAt(0);
             mTextViewImage.setText(imageText.toString());
+            if (task.getTaskType() == 1)
+                mImageViewUndone.setVisibility(View.GONE);
+            else mImageViewDone.setVisibility(View.GONE);
+
 
         }
     }
 
-    private class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> {
-        private List<Task> mTaskList;
-        private List<Task> mSearchTaskList;
+        private class TaskAdapter extends RecyclerView.Adapter<TaskViewHolder> {
+            private List<Task> mTaskList;
+            private List<Task> mSearchTaskList;
 
-        public void setTaskList(List<Task> taskList) {
-            mTaskList = taskList;
-            mSearchTaskList.clear();
-            mSearchTaskList.addAll(mTaskList);
-        }
-
-        public TaskAdapter(List<Task> tasks) {
-            this.mTaskList = tasks;
-            mSearchTaskList = new ArrayList<>();
-            mSearchTaskList.clear();
-            mSearchTaskList.addAll(mTaskList);
-        }
-
-
-        @NonNull
-        @Override
-        public TaskViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-            View view = LayoutInflater.from(getActivity()).inflate(R.layout.task_list_item, viewGroup, false);
-            TaskViewHolder taskViewHolder = new TaskViewHolder(view);
-            return taskViewHolder;
-        }
-
-        @Override
-        public void onBindViewHolder(@NonNull TaskViewHolder taskViewHolder, int i) {
-            Task task = mSearchTaskList.get(i);
-            if (task != null || task.getTitle() != null)
-                taskViewHolder.bind(task);
-            else TaskRepository.getInstance().removeTask(task.getID());
-
-        }
-
-
-        @Override
-        public int getItemCount() {
-            return mSearchTaskList.size();
-        }
-
-        public void filter(String text) {
-            mSearchTaskList.clear();
-            if (text.isEmpty()) {
+            public void setTaskList(List<Task> taskList) {
+                mTaskList = taskList;
+                mSearchTaskList.clear();
                 mSearchTaskList.addAll(mTaskList);
-            } else {
-                text = text.toLowerCase();
-                for (Task item : mTaskList) {
-                    if (item.getTitle().toLowerCase().contains(text)) {
-                        mSearchTaskList.add(item);
+            }
+
+            public TaskAdapter(List<Task> tasks) {
+                this.mTaskList = tasks;
+                mSearchTaskList = new ArrayList<>();
+                mSearchTaskList.clear();
+                mSearchTaskList.addAll(mTaskList);
+            }
+
+
+            @NonNull
+            @Override
+            public TaskViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+                View view = LayoutInflater.from(getActivity()).inflate(R.layout.task_list_item, viewGroup, false);
+                TaskViewHolder taskViewHolder = new TaskViewHolder(view);
+                return taskViewHolder;
+            }
+
+            @Override
+            public void onBindViewHolder(@NonNull TaskViewHolder taskViewHolder, int i) {
+                Task task = mSearchTaskList.get(i);
+                if (task != null || task.getTitle() != null)
+                    taskViewHolder.bind(task);
+                else TaskRepository.getInstance().removeTask(task.getID());
+
+            }
+
+
+            @Override
+            public int getItemCount() {
+                return mSearchTaskList.size();
+            }
+
+            public void filter(String text) {
+                mSearchTaskList.clear();
+                if (text.isEmpty()) {
+                    mSearchTaskList.addAll(mTaskList);
+                } else {
+                    text = text.toLowerCase();
+                    for (Task item : mTaskList) {
+                        if (item.getTitle().toLowerCase().contains(text)) {
+                            mSearchTaskList.add(item);
+                        }
                     }
                 }
+                notifyDataSetChanged();
+
+
             }
-            notifyDataSetChanged();
-
-
         }
     }
-}
 
 

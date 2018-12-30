@@ -70,7 +70,7 @@ public class DatePickerFragment extends DialogFragment {
 
 
         return new AlertDialog.Builder(getActivity())
-                .setTitle(R.string.crime_date_picker)
+                .setTitle(R.string.task_date_picker)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
