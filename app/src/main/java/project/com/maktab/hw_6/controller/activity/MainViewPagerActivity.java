@@ -113,7 +113,7 @@ public class MainViewPagerActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int i) {
-            mListFragments[i].updateSubtitle();
+//            mListFragments[i].updateSubtitle();
 //                getActionBar().setSubtitle("" + i );
             }
 
