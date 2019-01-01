@@ -1,6 +1,7 @@
 package project.com.maktab.hw_6.controller.activity;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -25,13 +26,14 @@ public class MainViewPagerActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private FloatingActionButton mFloatingActionButton;
     public static final String PAPER_TASK_LIST = "paper_task_list";
-    TaskListFragment[] mListFragments=new TaskListFragment[3];
+    TaskListFragment[] mListFragments = new TaskListFragment[3];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_view_pager);
         Paper.init(MainViewPagerActivity.this);
+
         if (Paper.book().contains(PAPER_TASK_LIST)) {
 
             List<Task> list = Paper.book().read(PAPER_TASK_LIST);
@@ -54,14 +56,16 @@ public class MainViewPagerActivity extends AppCompatActivity {
         });
         mViewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
             private TaskListFragment mCurrentFragment;
+
             public TaskListFragment getCurrentFragment() {
                 return mCurrentFragment;
             }
+
             @Override
             public Fragment getItem(int i) {
                 TaskListFragment taskListFragment = null;
-                if (i == 0){
-                    taskListFragment = TaskListFragment.getInstance( TaskType.UNDONE);
+                if (i == 0) {
+                    taskListFragment = TaskListFragment.getInstance(TaskType.UNDONE);
                     mListFragments[0] = taskListFragment;
                 }
                 if (i == 1) {
@@ -112,7 +116,10 @@ public class MainViewPagerActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int i) {
-            mListFragments[i].updateSubtitle();
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                    //Do some stuff
+                    mListFragments[i].updateSubtitle();
+                }
 //                getActionBar().setSubtitle("" + i );
             }
 
