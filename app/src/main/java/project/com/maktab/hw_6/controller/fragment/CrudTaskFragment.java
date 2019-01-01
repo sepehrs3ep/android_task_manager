@@ -53,7 +53,7 @@ public class CrudTaskFragment extends Fragment {
     private Button mDateButton;
     private Button mTimeButton;
     private boolean mFromFloatButton;
-    private Task mTask;
+    private static Task mTask;
     private static String mTaskTitle = "";
 
     public static CrudTaskFragment getInstance(UUID id, boolean hasExtra) {
@@ -102,7 +102,39 @@ public class CrudTaskFragment extends Fragment {
         mButtonEditCrud = mLayoutButtonSheet.findViewById(R.id.crud_edit);
         mButtonDoneCrud = mLayoutButtonSheet.findViewById(R.id.crud_done);
         mButtonDeleteCrud = mLayoutButtonSheet.findViewById(R.id.crud_delete);
+        mEditTextTitle.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mTask.setTitle(s.toString());
+            }
+
+            //check back button pressed for edit.
+            @Override
+            public void afterTextChanged(Editable s) {
+                IS_EMPTY = s.length() == 0;
+            }
+        });
+        mEditTextDesc.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                mTask.setDescription(s.toString());
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
         if (mFromFloatButton) {
             mButtonAddCrud.setVisibility(View.VISIBLE);
             mButtonDoneCrud.setVisibility(View.GONE);
@@ -131,39 +163,7 @@ public class CrudTaskFragment extends Fragment {
             mEditTextTitle.setText(mTask.getTitle());
             mEditTextDesc.setText(mTask.getDescription());
 
-            mEditTextTitle.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    mTask.setTitle(s.toString());
-
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-                    IS_EMPTY = s.length() == 0;
-                }
-            });
-            mEditTextDesc.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence s, int start, int before, int count) {
-                    mTask.setDescription(s.toString());
-                }
-
-                @Override
-                public void afterTextChanged(Editable s) {
-
-                }
-            });
             mButtonEditCrud.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -200,6 +200,7 @@ public class CrudTaskFragment extends Fragment {
 
                 }
             });
+
             if (mTask.getTaskType() == 1)
                 mButtonDoneCrud.setEnabled(false);
 
@@ -296,6 +297,16 @@ public class CrudTaskFragment extends Fragment {
 
 
         }
+    }
+
+    //check back pressed for add button
+    public static boolean onBackPressed() {
+        mTaskTitle = mTask.getTitle();
+        if (mTaskTitle == null || mTaskTitle.equals("") || mTaskTitle.length() <= 0) {
+            TaskRepository.getInstance().removeTask(mTask.getID());
+            return true;
+        }
+        return false;
     }
 
 

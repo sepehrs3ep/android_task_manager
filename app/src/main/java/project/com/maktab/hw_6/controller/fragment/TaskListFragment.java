@@ -207,7 +207,6 @@ public class TaskListFragment extends Fragment {
         public void bind(Task task) {
 
                 mTask = task;
-
                 String taskTitleText = task.getTitle() == null ? "@" : task.getTitle();
                 mTextViewTitle.setText(taskTitleText);
                 mTextViewImage.setText(taskTitleText.charAt(0)+"");
