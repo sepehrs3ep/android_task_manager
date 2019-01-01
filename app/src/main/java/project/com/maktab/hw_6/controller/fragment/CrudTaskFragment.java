@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -16,6 +18,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -42,6 +45,7 @@ public class CrudTaskFragment extends Fragment {
     private Button mButtonDeleteCrud;
     private Button mButtonDoneCrud;
     private EditText mEditTextTitle;
+    private LinearLayout mLayoutButtonSheet;
     private EditText mEditTextDesc;
     private Button mDateButton;
     private Button mTimeButton;
@@ -76,13 +80,14 @@ public class CrudTaskFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_crud_task, container, false);
-        mButtonAddCrud = view.findViewById(R.id.crud_add);
-        mButtonDeleteCrud = view.findViewById(R.id.crud_delete);
-        mButtonDoneCrud = view.findViewById(R.id.crud_done);
-        mButtonEditCrud = view.findViewById(R.id.crud_edit);
+        View view = inflater.inflate(R.layout.coordinate_view, container, false);
+//        mButtonAddCrud = view.findViewById(R.id.crud_add);
+//        mButtonDeleteCrud = view.findViewById(R.id.crud_delete);
+//        mButtonDoneCrud = view.findViewById(R.id.crud_done);
+//        mButtonEditCrud = view.findViewById(R.id.crud_edit);
         mEditTextTitle = view.findViewById(R.id.title_edit_text);
         mEditTextDesc = view.findViewById(R.id.desc_edit_text);
+        mLayoutButtonSheet = view.findViewById(R.id.bottom_sheet);
         final Drawable descDrawble = mEditTextDesc.getBackground();
 //        mEditTextTitle.setBackgroundColor(descDrawble.getColor());
         mEditTextTitle.setBackground(descDrawble);
@@ -90,12 +95,19 @@ public class CrudTaskFragment extends Fragment {
         mTimeButton = view.findViewById(R.id.time_button);
         setDateButton();
         setTimeButton();
+        mButtonAddCrud = mLayoutButtonSheet.findViewById(R.id.crud_add);
+        mButtonEditCrud = mLayoutButtonSheet.findViewById(R.id.crud_edit);
+        mButtonDoneCrud = mLayoutButtonSheet.findViewById(R.id.crud_done);
+        mButtonDeleteCrud = mLayoutButtonSheet.findViewById(R.id.crud_delete);
 
         if (mFromFloatButton) {
-            mButtonAddCrud.setEnabled(true);
-            mButtonDoneCrud.setEnabled(false);
+            mButtonAddCrud.setVisibility(View.VISIBLE);
+            mButtonDoneCrud.setVisibility(View.GONE);
+            mButtonEditCrud.setVisibility(View.GONE);
+            mButtonDeleteCrud.setVisibility(View.GONE);
+           /* mButtonDoneCrud.setEnabled(false);
             mButtonDeleteCrud.setEnabled(false);
-            mButtonEditCrud.setEnabled(false);
+            mButtonEditCrud.setEnabled(false);*/
             mButtonAddCrud.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -119,10 +131,14 @@ public class CrudTaskFragment extends Fragment {
         }
         if (!mFromFloatButton) {
             final Toast toast = Toast.makeText(getActivity(), R.string.toast_req_success, Toast.LENGTH_SHORT);
-            mButtonEditCrud.setEnabled(true);
+            /*mButtonEditCrud.setEnabled(true);
             mButtonDeleteCrud.setEnabled(true);
             mButtonDoneCrud.setEnabled(true);
-            mButtonAddCrud.setEnabled(false);
+            mButtonAddCrud.setEnabled(false);*/
+            mButtonEditCrud.setVisibility(View.VISIBLE);
+            mButtonDeleteCrud.setVisibility(View.VISIBLE);
+            mButtonDoneCrud.setVisibility(View.VISIBLE);
+            mButtonAddCrud.setVisibility(View.GONE);
             mEditTextTitle.setText(mTask.getTitle());
             mEditTextDesc.setText(mTask.getDescription());
 
@@ -158,6 +174,7 @@ public class CrudTaskFragment extends Fragment {
 
                 }
             });
+
             mButtonEditCrud.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -272,6 +289,7 @@ public class CrudTaskFragment extends Fragment {
 
         }
     }
+
 
 }
 
