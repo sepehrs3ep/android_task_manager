@@ -6,51 +6,59 @@
     android:layout_height="wrap_content"
     android:background="@android:color/darker_gray"
     android:orientation="vertical"
-    app:behavior_peekHeight="60dp"
+    app:behavior_peekHeight="40dp"
     app:layout_behavior="android.support.design.widget.BottomSheetBehavior">
     <!--app:behavior_hideable="true"-->
 
     <Button
+        android:drawableLeft="@drawable/ic_add_crud"
         android:id="@+id/crud_add"
         android:onClick="buttonHandel"
-        android:textSize="25sp"
+        android:textSize="20sp"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="40dp"
+        android:fontFamily="cursive"
       android:background="@android:color/holo_green_light"
         android:gravity="center"
         android:text="@string/crud_add"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/black" />
 
     <Button
+        android:drawableLeft="@drawable/ic_done_crud"
         android:id="@+id/crud_done"
         android:onClick="buttonHandel"
-        android:textSize="25sp"
-        android:background="@android:color/black"
+        android:fontFamily="cursive"
+        android:textSize="20sp"
+        android:background="@android:color/holo_blue_light"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="40dp"
         android:gravity="center"
         android:text="@string/crud_done"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/black" />
     <Button
+        android:drawableLeft="@drawable/ic_edit_crud"
         android:id="@+id/crud_edit"
         android:onClick="buttonHandel"
-        android:textSize="25sp"
+        android:textSize="20sp"
+        android:fontFamily="cursive"
         android:background="@android:color/darker_gray"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="40dp"
         android:gravity="center"
         android:text="@string/crud_edit"
-        android:textColor="@android:color/white" />
+        android:textColor="@android:color/black" />
     <Button
+        android:drawableLeft="@drawable/ic_delete_crud"
         android:id="@+id/crud_delete"
         android:onClick="buttonHandel"
-        android:textSize="25sp"
+        android:textSize="20sp"
         android:gravity="center"
-        android:textColor="@android:color/white"
+        android:textColor="@android:color/black"
         android:text="@string/crud_delete"
+        android:fontFamily="cursive"
         android:background="@android:color/holo_red_light"
         android:layout_width="match_parent"
-        android:layout_height="60dp" />
+        android:layout_height="40dp" />
 
 
 </LinearLayout>
