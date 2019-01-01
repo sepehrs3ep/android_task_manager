@@ -100,6 +100,7 @@ public class TaskListFragment extends Fragment {
         false >> doneList*/
         mListType = getArguments().getInt(ARGS_LIST_TYPE);
         setHasOptionsMenu(true);
+//        setRetainInstance(true);
 
     }
 

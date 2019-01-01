@@ -23,7 +23,6 @@ import project.com.maktab.hw_6.model.Task;
 import project.com.maktab.hw_6.model.TaskRepository;
 
 public class MainViewPagerActivity extends AppCompatActivity {
-    private TabLayout mTabLayout;
     private ViewPager mViewPager;
     private FloatingActionButton mFloatingActionButton;
     public static final String PAPER_TASK_LIST = "paper_task_list";
@@ -41,7 +40,7 @@ public class MainViewPagerActivity extends AppCompatActivity {
             TaskRepository.getInstance().setTaskList(list);
         }
 
-        mTabLayout = findViewById(R.id.tab_layout);
+        TabLayout tabLayout = findViewById(R.id.tab_layout);
         mViewPager = findViewById(R.id.view_pager);
         mFloatingActionButton = findViewById(R.id.float_button_add);
         mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -77,13 +76,13 @@ public class MainViewPagerActivity extends AppCompatActivity {
                 return taskListFragment;
             }
 
-            @Override
+        /*    @Override
             public void setPrimaryItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
                 if (getCurrentFragment() != object) {
                     mCurrentFragment = ((TaskListFragment) object);
                 }
                 super.setPrimaryItem(container, position, object);
-            }
+            }*/
 
             @Override
             public int getCount() {
@@ -113,7 +112,7 @@ public class MainViewPagerActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int i) {
-//            mListFragments[i].updateSubtitle();
+            mListFragments[i].updateSubtitle();
 //                getActionBar().setSubtitle("" + i );
             }
 
@@ -123,7 +122,7 @@ public class MainViewPagerActivity extends AppCompatActivity {
             }
         });
 
-        mTabLayout.setupWithViewPager(mViewPager);
+        tabLayout.setupWithViewPager(mViewPager);
     }
 
     @Override

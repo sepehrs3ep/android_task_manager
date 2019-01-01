@@ -31,7 +31,10 @@ public class TaskRepository {
 
     public void removeTask(UUID id) {
         for (int i = 0; i < mTaskList.size(); i++) {
-            if (mTaskList.get(i).getID().equals(id)) mTaskList.remove(i);
+            if (mTaskList.get(i).getID().equals(id)) {
+                mTaskList.remove(i);
+                break;
+            }
         }
     }
 
