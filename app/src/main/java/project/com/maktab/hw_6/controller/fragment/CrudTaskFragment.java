@@ -2,6 +2,8 @@ package project.com.maktab.hw_6.controller.fragment;
 
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -40,6 +42,7 @@ public class CrudTaskFragment extends Fragment {
     private static final String DATE_TAG = "date_tag";
     private static final String TIME_TAG = "time_tag";
     private static final int TIME_REQ_CODE = -1;
+    public static boolean IS_EMPTY = false;
     private Button mButtonAddCrud;
     private Button mButtonEditCrud;
     private Button mButtonDeleteCrud;
@@ -51,7 +54,7 @@ public class CrudTaskFragment extends Fragment {
     private Button mTimeButton;
     private boolean mFromFloatButton;
     private Task mTask;
-    private String mTaskTitle;
+    private static String mTaskTitle = "";
 
     public static CrudTaskFragment getInstance(UUID id, boolean hasExtra) {
         CrudTaskFragment fragment = new CrudTaskFragment();
@@ -77,7 +80,7 @@ public class CrudTaskFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.coordinate_view, container, false);
@@ -111,21 +114,7 @@ public class CrudTaskFragment extends Fragment {
             mButtonAddCrud.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String title = mEditTextTitle.getText().toString();
-                    if (title == null || title.equals("")) {
-                        Snackbar.make(getView(), R.string.title_warning, Snackbar.LENGTH_SHORT).show();
-                        mEditTextTitle.setBackgroundColor(Color.RED);
-                    } else {
-//                        mEditTextTitle.setBackgroundColor(descDrawble.getColor());
-                        mEditTextTitle.setBackground(descDrawble);
-                        String desc = mEditTextDesc.getText().toString();
-                        mTask.setTitle(title);
-                        mTask.setDescription(desc);
-                        mTask.setTaskType(-1);
-                        Toast.makeText(getActivity(), R.string.toast_crud_success, Toast.LENGTH_SHORT).show();
-                        getActivity().finish();
-
-                    }
+                    addTask(descDrawble);
                 }
             });
         }
@@ -151,11 +140,12 @@ public class CrudTaskFragment extends Fragment {
                 @Override
                 public void onTextChanged(CharSequence s, int start, int before, int count) {
                     mTask.setTitle(s.toString());
+
                 }
 
                 @Override
                 public void afterTextChanged(Editable s) {
-
+                    IS_EMPTY = s.length() == 0;
                 }
             });
             mEditTextDesc.addTextChangedListener(new TextWatcher() {
@@ -174,7 +164,6 @@ public class CrudTaskFragment extends Fragment {
 
                 }
             });
-
             mButtonEditCrud.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -251,6 +240,25 @@ public class CrudTaskFragment extends Fragment {
 
 
         return view;
+    }
+
+
+    private void addTask(Drawable descDrawble) {
+        String title = mEditTextTitle.getText().toString();
+        if (title == null || title.equals("")) {
+            Snackbar.make(getView(), R.string.title_warning, Snackbar.LENGTH_SHORT).show();
+            mEditTextTitle.setBackgroundColor(Color.RED);
+        } else {
+//                        mEditTextTitle.setBackgroundColor(descDrawble.getColor());
+            mEditTextTitle.setBackground(descDrawble);
+            String desc = mEditTextDesc.getText().toString();
+            mTask.setTitle(title);
+            mTask.setDescription(desc);
+//            TaskRepository.getInstance().addTask(mTask);
+            Toast.makeText(getActivity(), R.string.toast_crud_success, Toast.LENGTH_SHORT).show();
+            getActivity().finish();
+
+        }
     }
 
     private void setTimeButton() {

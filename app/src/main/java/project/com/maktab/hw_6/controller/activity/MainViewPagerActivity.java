@@ -47,6 +47,7 @@ public class MainViewPagerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Task task = new Task();
+                task.setTaskType(-1);
                 TaskRepository.getInstance().addTask(task);
                 Intent intent = CrudTaskActivity.newIntent(MainViewPagerActivity.this, task.getID(), true);
                 startActivity(intent);
