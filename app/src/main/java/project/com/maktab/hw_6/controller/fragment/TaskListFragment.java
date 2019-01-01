@@ -205,17 +205,16 @@ public class TaskListFragment extends Fragment {
         }
 
         public void bind(Task task) {
-            mTask = task;
 
-            Character imageText;
-            String taskTitleText = task.getTitle();
+                mTask = task;
 
-            mTextViewTitle.setText(taskTitleText);
-            imageText = taskTitleText.charAt(0);
-            mTextViewImage.setText(imageText.toString());
-            if (task.getTaskType() == 1)
-                mImageViewUndone.setVisibility(View.GONE);
-            else mImageViewDone.setVisibility(View.GONE);
+                String taskTitleText = task.getTitle() == null ? "@" : task.getTitle();
+                mTextViewTitle.setText(taskTitleText);
+                mTextViewImage.setText(taskTitleText.charAt(0)+"");
+
+                if (task.getTaskType() == 1)
+                    mImageViewUndone.setVisibility(View.GONE);
+                else mImageViewDone.setVisibility(View.GONE);
 
 
         }
