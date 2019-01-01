@@ -2,15 +2,11 @@ package project.com.maktab.hw_6.controller.fragment;
 
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.BottomSheetBehavior;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
@@ -30,6 +26,7 @@ import java.util.UUID;
 import project.com.maktab.hw_6.R;
 import project.com.maktab.hw_6.model.Task;
 import project.com.maktab.hw_6.model.TaskRepository;
+import project.com.maktab.hw_6.model.TaskType;
 
 
 /**
@@ -82,17 +79,12 @@ public class CrudTaskFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.coordinate_view, container, false);
-//        mButtonAddCrud = view.findViewById(R.id.crud_add);
-//        mButtonDeleteCrud = view.findViewById(R.id.crud_delete);
-//        mButtonDoneCrud = view.findViewById(R.id.crud_done);
-//        mButtonEditCrud = view.findViewById(R.id.crud_edit);
+
         mEditTextTitle = view.findViewById(R.id.title_edit_text);
         mEditTextDesc = view.findViewById(R.id.desc_edit_text);
         mLayoutButtonSheet = view.findViewById(R.id.bottom_sheet);
         final Drawable descDrawble = mEditTextDesc.getBackground();
-//        mEditTextTitle.setBackgroundColor(descDrawble.getColor());
         mEditTextTitle.setBackground(descDrawble);
         mDateButton = view.findViewById(R.id.date_button);
         mTimeButton = view.findViewById(R.id.time_button);
@@ -140,9 +132,7 @@ public class CrudTaskFragment extends Fragment {
             mButtonDoneCrud.setVisibility(View.GONE);
             mButtonEditCrud.setVisibility(View.GONE);
             mButtonDeleteCrud.setVisibility(View.GONE);
-           /* mButtonDoneCrud.setEnabled(false);
-            mButtonDeleteCrud.setEnabled(false);
-            mButtonEditCrud.setEnabled(false);*/
+
             mButtonAddCrud.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -152,10 +142,7 @@ public class CrudTaskFragment extends Fragment {
         }
         if (!mFromFloatButton) {
             final Toast toast = Toast.makeText(getActivity(), R.string.toast_req_success, Toast.LENGTH_SHORT);
-            /*mButtonEditCrud.setEnabled(true);
-            mButtonDeleteCrud.setEnabled(true);
-            mButtonDoneCrud.setEnabled(true);
-            mButtonAddCrud.setEnabled(false);*/
+
             mButtonEditCrud.setVisibility(View.VISIBLE);
             mButtonDeleteCrud.setVisibility(View.VISIBLE);
             mButtonDoneCrud.setVisibility(View.VISIBLE);
@@ -201,7 +188,7 @@ public class CrudTaskFragment extends Fragment {
                 }
             });
 
-            if (mTask.getTaskType() == 1)
+            if (mTask.getTaskType() == TaskType.DONE)
                 mButtonDoneCrud.setEnabled(false);
 
             mButtonDoneCrud.setOnClickListener(new View.OnClickListener() {
@@ -211,7 +198,7 @@ public class CrudTaskFragment extends Fragment {
                     if (title == null || title.equals("")) {
                         checkTitle();
                     } else {
-                        mTask.setTaskType(1);
+                        mTask.setTaskType(TaskType.DONE);
                         toast.show();
                         getActivity().finish();
 

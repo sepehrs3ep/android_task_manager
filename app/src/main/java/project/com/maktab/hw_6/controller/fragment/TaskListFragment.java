@@ -29,6 +29,7 @@ import project.com.maktab.hw_6.R;
 import project.com.maktab.hw_6.controller.activity.CrudTaskActivity;
 import project.com.maktab.hw_6.model.Task;
 import project.com.maktab.hw_6.model.TaskRepository;
+import project.com.maktab.hw_6.model.TaskType;
 
 
 /**
@@ -39,7 +40,7 @@ public class TaskListFragment extends Fragment {
     private ImageView mNoTaskImageView;
     private static final String ARGS_LIST_TYPE = "args_list_type";
     private TaskAdapter mTaskAdapter;
-    private int mListType;
+    private TaskType mListType;
     private int mPosition;
 
 
@@ -47,9 +48,9 @@ public class TaskListFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static TaskListFragment getInstance(int listType) {
+    public static TaskListFragment getInstance(TaskType listType) {
         Bundle args = new Bundle();
-        args.putInt(ARGS_LIST_TYPE, listType);
+        args.putSerializable(ARGS_LIST_TYPE,listType);
         TaskListFragment fragment = new TaskListFragment();
         fragment.setArguments(args);
         return fragment;
@@ -84,11 +85,11 @@ public class TaskListFragment extends Fragment {
     @Nullable
     private List<Task> getTaskList() {
         List<Task> list = null;
-        if (mListType == 0)
+        if (mListType == TaskType.ALL)
             list = TaskRepository.getInstance().getList();
-        if (mListType == 1)
+        if (mListType == TaskType.DONE)
             list = TaskRepository.getInstance().getDoneTaskList();
-        if (mListType == -1)
+        if (mListType == TaskType.UNDONE)
             list = TaskRepository.getInstance().getUnDoneTaskList();
         return list;
     }
@@ -98,7 +99,7 @@ public class TaskListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         /*true>> all list
         false >> doneList*/
-        mListType = getArguments().getInt(ARGS_LIST_TYPE);
+        mListType = (TaskType) getArguments().getSerializable(ARGS_LIST_TYPE);
         setHasOptionsMenu(true);
 //        setRetainInstance(true);
 
@@ -211,7 +212,7 @@ public class TaskListFragment extends Fragment {
                 mTextViewTitle.setText(taskTitleText);
                 mTextViewImage.setText(taskTitleText.charAt(0)+"");
 
-                if (task.getTaskType() == 1)
+                if (task.getTaskType() == TaskType.DONE)
                     mImageViewUndone.setVisibility(View.GONE);
                 else mImageViewDone.setVisibility(View.GONE);
 

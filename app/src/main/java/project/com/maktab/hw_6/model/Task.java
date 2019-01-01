@@ -8,14 +8,16 @@ public class Task {
     private String mDescription;
     private Date mDate;
     private UUID mID;
-    private int taskType;
+//    private int taskType;
+    private TaskType mTaskType;
 
-    public int getTaskType() {
-        return taskType;
+
+    public TaskType getTaskType() {
+        return mTaskType;
     }
 
-    public void setTaskType(int taskType) {
-        this.taskType = taskType;
+    public void setTaskType(TaskType taskType) {
+        this.mTaskType = taskType;
     }
 
     public Date getDate() {

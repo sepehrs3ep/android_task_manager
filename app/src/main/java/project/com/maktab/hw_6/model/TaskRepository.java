@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import io.paperdb.Paper;
-import project.com.maktab.hw_6.controller.activity.MainViewPagerActivity;
-
 public class TaskRepository {
     private static TaskRepository mInstance;
 
@@ -41,7 +38,7 @@ public class TaskRepository {
     public List<Task> getDoneTaskList() {
         List<Task> doneTaskList = new ArrayList<>();
         for (Task task : mTaskList) {
-            if (task.getTaskType() == 1)
+            if (task.getTaskType() == TaskType.DONE)
                 doneTaskList.add(task);
         }
         return doneTaskList;
@@ -50,7 +47,7 @@ public class TaskRepository {
     public List<Task> getUnDoneTaskList() {
         List<Task> unDoneTaskList = new ArrayList<>();
         for (Task task : mTaskList) {
-            if (task.getTaskType() == -1)
+            if (task.getTaskType() == TaskType.UNDONE)
                 unDoneTaskList.add(task);
         }
         return unDoneTaskList;

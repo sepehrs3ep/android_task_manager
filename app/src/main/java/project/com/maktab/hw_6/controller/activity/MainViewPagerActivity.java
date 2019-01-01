@@ -11,9 +11,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.paperdb.Paper;
@@ -21,6 +19,7 @@ import project.com.maktab.hw_6.R;
 import project.com.maktab.hw_6.controller.fragment.TaskListFragment;
 import project.com.maktab.hw_6.model.Task;
 import project.com.maktab.hw_6.model.TaskRepository;
+import project.com.maktab.hw_6.model.TaskType;
 
 public class MainViewPagerActivity extends AppCompatActivity {
     private ViewPager mViewPager;
@@ -47,7 +46,7 @@ public class MainViewPagerActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Task task = new Task();
-                task.setTaskType(-1);
+                task.setTaskType(TaskType.UNDONE);
                 TaskRepository.getInstance().addTask(task);
                 Intent intent = CrudTaskActivity.newIntent(MainViewPagerActivity.this, task.getID(), true);
                 startActivity(intent);
@@ -62,15 +61,15 @@ public class MainViewPagerActivity extends AppCompatActivity {
             public Fragment getItem(int i) {
                 TaskListFragment taskListFragment = null;
                 if (i == 0){
-                    taskListFragment = TaskListFragment.getInstance(-1);
+                    taskListFragment = TaskListFragment.getInstance( TaskType.UNDONE);
                     mListFragments[0] = taskListFragment;
                 }
                 if (i == 1) {
-                    taskListFragment = TaskListFragment.getInstance(1);
+                    taskListFragment = TaskListFragment.getInstance(TaskType.DONE);
                     mListFragments[1] = taskListFragment;
                 }
                 if (i == 2) {
-                    taskListFragment = TaskListFragment.getInstance(0);
+                    taskListFragment = TaskListFragment.getInstance(TaskType.ALL);
                     mListFragments[2] = taskListFragment;
                 }
                 mCurrentFragment = taskListFragment;
