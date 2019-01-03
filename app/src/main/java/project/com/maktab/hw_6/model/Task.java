@@ -10,14 +10,14 @@ public class Task {
     private Date mDate;
     private UUID mID;
 //    private int taskType;
-    private TaskType mTaskType;
+    private int mTaskType;
 
 
-    public TaskType getTaskType() {
+    public int getTaskType() {
         return mTaskType;
     }
 
-    public void setTaskType(TaskType taskType) {
+    public void setTaskType(int taskType) {
         this.mTaskType = taskType;
     }
 

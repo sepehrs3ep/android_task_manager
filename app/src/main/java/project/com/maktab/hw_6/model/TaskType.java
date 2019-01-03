@@ -1,12 +1,13 @@
 package project.com.maktab.hw_6.model;
 
-public enum TaskType {
+public final class TaskType {
     /**
      * UNDONE = 0;
      * DONE = 1;
      * ALL = 2;
      */
-    UNDONE,
-    DONE,
-    ALL
+    public static final int UNDONE = 0;
+    public static final int DONE = 1;
+    public static final int ALL = 2;
+
 }
