@@ -40,12 +40,7 @@ public class CrudTaskFragment extends Fragment {
     private static final String TIME_TAG = "time_tag";
     private static final int TIME_REQ_CODE = -1;
     public static boolean IS_EMPTY = false;
-    private Button mButtonAddCrud;
-    private Button mButtonEditCrud;
-    private Button mButtonDeleteCrud;
-    private Button mButtonDoneCrud;
     private EditText mEditTextTitle;
-    private LinearLayout mLayoutButtonSheet;
     private EditText mEditTextDesc;
     private Button mDateButton;
     private Button mTimeButton;
@@ -83,17 +78,17 @@ public class CrudTaskFragment extends Fragment {
 
         mEditTextTitle = view.findViewById(R.id.title_edit_text);
         mEditTextDesc = view.findViewById(R.id.desc_edit_text);
-        mLayoutButtonSheet = view.findViewById(R.id.bottom_sheet);
-        final Drawable descDrawble = mEditTextDesc.getBackground();
-        mEditTextTitle.setBackground(descDrawble);
+        LinearLayout layoutButtonSheet = view.findViewById(R.id.bottom_sheet);
+        final Drawable colorDrawable = mEditTextDesc.getBackground();
+        mEditTextTitle.setBackground(colorDrawable);
         mDateButton = view.findViewById(R.id.date_button);
         mTimeButton = view.findViewById(R.id.time_button);
+        Button buttonAddCrud = layoutButtonSheet.findViewById(R.id.crud_add);
+        Button buttonEditCrud = layoutButtonSheet.findViewById(R.id.crud_edit);
+        Button buttonDoneCrud = layoutButtonSheet.findViewById(R.id.crud_done);
+        Button buttonDeleteCrud = layoutButtonSheet.findViewById(R.id.crud_delete);
         setDateButton();
         setTimeButton();
-        mButtonAddCrud = mLayoutButtonSheet.findViewById(R.id.crud_add);
-        mButtonEditCrud = mLayoutButtonSheet.findViewById(R.id.crud_edit);
-        mButtonDoneCrud = mLayoutButtonSheet.findViewById(R.id.crud_done);
-        mButtonDeleteCrud = mLayoutButtonSheet.findViewById(R.id.crud_delete);
         mEditTextTitle.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -128,44 +123,44 @@ public class CrudTaskFragment extends Fragment {
             }
         });
         if (mFromFloatButton) {
-            mButtonAddCrud.setVisibility(View.VISIBLE);
-            mButtonDoneCrud.setVisibility(View.GONE);
-            mButtonEditCrud.setVisibility(View.GONE);
-            mButtonDeleteCrud.setVisibility(View.GONE);
+            buttonAddCrud.setVisibility(View.VISIBLE);
+            buttonDoneCrud.setVisibility(View.GONE);
+            buttonEditCrud.setVisibility(View.GONE);
+            buttonDeleteCrud.setVisibility(View.GONE);
 
-            mButtonAddCrud.setOnClickListener(new View.OnClickListener() {
+            buttonAddCrud.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    addTask(descDrawble);
+                    addTask(colorDrawable);
                 }
             });
         }
         if (!mFromFloatButton) {
             final Toast toast = Toast.makeText(getActivity(), R.string.toast_req_success, Toast.LENGTH_SHORT);
 
-            mButtonEditCrud.setVisibility(View.VISIBLE);
-            mButtonDeleteCrud.setVisibility(View.VISIBLE);
-            mButtonDoneCrud.setVisibility(View.VISIBLE);
-            mButtonAddCrud.setVisibility(View.GONE);
+            buttonEditCrud.setVisibility(View.VISIBLE);
+            buttonDeleteCrud.setVisibility(View.VISIBLE);
+            buttonDoneCrud.setVisibility(View.VISIBLE);
+            buttonAddCrud.setVisibility(View.GONE);
             mEditTextTitle.setText(mTask.getTitle());
             mEditTextDesc.setText(mTask.getDescription());
 
 
-            mButtonEditCrud.setOnClickListener(new View.OnClickListener() {
+            buttonEditCrud.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String title = mTask.getTitle();
                     if (title == null || title.equals("")) {
                         checkTitle();
                     } else {
-                        mEditTextTitle.setBackground(descDrawble);
+                        mEditTextTitle.setBackground(colorDrawable);
                         toast.show();
                         getActivity().finish();
 
                     }
                 }
             });
-            mButtonDeleteCrud.setOnClickListener(new View.OnClickListener() {
+            buttonDeleteCrud.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     AlertDialogFragment deleteAlert = AlertDialogFragment.getInstance("Are you sure you want to delete this item?");
@@ -189,9 +184,9 @@ public class CrudTaskFragment extends Fragment {
             });
 
             if (mTask.getTaskType() == TaskType.DONE)
-                mButtonDoneCrud.setEnabled(false);
+                buttonDoneCrud.setEnabled(false);
 
-            mButtonDoneCrud.setOnClickListener(new View.OnClickListener() {
+            buttonDoneCrud.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String title = mTask.getTitle();

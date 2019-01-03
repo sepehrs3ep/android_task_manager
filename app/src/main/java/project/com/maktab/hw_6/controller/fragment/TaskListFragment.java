@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import io.paperdb.Paper;
 import project.com.maktab.hw_6.R;
 import project.com.maktab.hw_6.controller.activity.CrudTaskActivity;
 import project.com.maktab.hw_6.model.Task;
@@ -36,12 +35,13 @@ import project.com.maktab.hw_6.model.TaskType;
  * A simple {@link Fragment} subclass.
  */
 public class TaskListFragment extends Fragment {
+    private static final String SUBTITLE_STATUS = "subtitleStatus";
     private RecyclerView mRecyclerView;
     private ImageView mNoTaskImageView;
     private static final String ARGS_LIST_TYPE = "args_list_type";
     private TaskAdapter mTaskAdapter;
     private TaskType mListType;
-    private int mPosition;
+    private boolean mClickedShowSub = false;
 
 
     public TaskListFragment() {
@@ -50,7 +50,7 @@ public class TaskListFragment extends Fragment {
 
     public static TaskListFragment getInstance(TaskType listType) {
         Bundle args = new Bundle();
-        args.putSerializable(ARGS_LIST_TYPE,listType);
+        args.putSerializable(ARGS_LIST_TYPE, listType);
         TaskListFragment fragment = new TaskListFragment();
         fragment.setArguments(args);
         return fragment;
@@ -60,6 +60,7 @@ public class TaskListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         updateUI();
+        updateSubtitle();
     }
 
     private void updateUI() {
@@ -101,7 +102,9 @@ public class TaskListFragment extends Fragment {
         false >> doneList*/
         mListType = (TaskType) getArguments().getSerializable(ARGS_LIST_TYPE);
         setHasOptionsMenu(true);
-//        setRetainInstance(true);
+
+        if (savedInstanceState != null)
+            mClickedShowSub = savedInstanceState.getBoolean(SUBTITLE_STATUS);
 
     }
 
@@ -123,6 +126,9 @@ public class TaskListFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
         inflater.inflate(R.menu.task_list_fragment, menu);
+
+        MenuItem subtitleItem = menu.findItem(R.id.menu_subtitle_tasks);
+        subtitleItem.setTitle(mClickedShowSub ? R.string.hide_subtitle : R.string.menu_subtitle);
 
         MenuItem searchItem = menu.findItem(R.id.action_search);
         SearchView searchView = (SearchView) searchItem.getActionView();
@@ -151,7 +157,6 @@ public class TaskListFragment extends Fragment {
                 fragment.setOnYesNoClick(new AlertDialogFragment.OnYesNoClick() {
                     @Override
                     public void onYesClicked() {
-                        Paper.book().destroy();
                         TaskRepository.getInstance().clearLists();
                         updateUI();
 
@@ -164,6 +169,8 @@ public class TaskListFragment extends Fragment {
                 });
                 return true;
             case R.id.menu_subtitle_tasks:
+                mClickedShowSub = !mClickedShowSub;
+                getActivity().invalidateOptionsMenu();
                 updateSubtitle();
                 return true;
             default:
@@ -174,11 +181,16 @@ public class TaskListFragment extends Fragment {
 
     public void updateSubtitle() {
         List<Task> list = getTaskList();
-        AppCompatActivity activity = null;
-        activity = (AppCompatActivity) getActivity();
         int count = list.size();
-        String subtitle = getString(R.string.subtitle_format, String.valueOf(count));
-        activity.getSupportActionBar().setSubtitle(subtitle);
+        String subtitleText;
+        if (count == 0)
+            subtitleText = getString(R.string.zero_task);
+        else
+            subtitleText = getResources().getQuantityString(R.plurals.subtitle, count, count);
+        if (!mClickedShowSub)
+            subtitleText = null;
+        AppCompatActivity activity = (AppCompatActivity) getActivity();
+        activity.getSupportActionBar().setSubtitle(subtitleText);
     }
 
     private class TaskViewHolder extends RecyclerView.ViewHolder {
@@ -199,7 +211,6 @@ public class TaskListFragment extends Fragment {
                 public void onClick(View v) {
                     UUID id = mTask.getID();
                     Intent intent = CrudTaskActivity.newIntent(getActivity(), id, false);
-                    mPosition = getAdapterPosition();
                     startActivity(intent);
                 }
             });
@@ -207,14 +218,14 @@ public class TaskListFragment extends Fragment {
 
         public void bind(Task task) {
 
-                mTask = task;
-                String taskTitleText = task.getTitle() == null ? "@" : task.getTitle();
-                mTextViewTitle.setText(taskTitleText);
-                mTextViewImage.setText(taskTitleText.charAt(0)+"");
+            mTask = task;
+            String taskTitleText = task.getTitle() == null ? "@" : task.getTitle();
+            mTextViewTitle.setText(taskTitleText);
+            mTextViewImage.setText(taskTitleText.charAt(0) + "");
 
-                if (task.getTaskType() == TaskType.DONE)
-                    mImageViewUndone.setVisibility(View.GONE);
-                else mImageViewDone.setVisibility(View.GONE);
+            if (task.getTaskType() == TaskType.DONE)
+                mImageViewUndone.setVisibility(View.GONE);
+            else mImageViewDone.setVisibility(View.GONE);
 
 
         }
@@ -277,6 +288,12 @@ public class TaskListFragment extends Fragment {
 
 
         }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(SUBTITLE_STATUS, mClickedShowSub);
     }
 }
 

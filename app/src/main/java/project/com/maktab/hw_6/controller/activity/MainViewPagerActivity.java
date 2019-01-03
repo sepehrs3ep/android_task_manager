@@ -12,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 
 import java.util.List;
 
@@ -25,7 +26,6 @@ import project.com.maktab.hw_6.model.TaskType;
 public class MainViewPagerActivity extends AppCompatActivity {
     private ViewPager mViewPager;
     private FloatingActionButton mFloatingActionButton;
-    public static final String PAPER_TASK_LIST = "paper_task_list";
     TaskListFragment[] mListFragments = new TaskListFragment[3];
 
     @Override
@@ -34,12 +34,6 @@ public class MainViewPagerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main_view_pager);
         Paper.init(MainViewPagerActivity.this);
 
-        if (Paper.book().contains(PAPER_TASK_LIST)) {
-
-            List<Task> list = Paper.book().read(PAPER_TASK_LIST);
-            TaskRepository.getInstance().getList().clear();
-            TaskRepository.getInstance().setTaskList(list);
-        }
 
         TabLayout tabLayout = findViewById(R.id.tab_layout);
         mViewPager = findViewById(R.id.view_pager);
@@ -55,11 +49,6 @@ public class MainViewPagerActivity extends AppCompatActivity {
             }
         });
         mViewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
-            private TaskListFragment mCurrentFragment;
-
-            public TaskListFragment getCurrentFragment() {
-                return mCurrentFragment;
-            }
 
             @Override
             public Fragment getItem(int i) {
@@ -76,7 +65,6 @@ public class MainViewPagerActivity extends AppCompatActivity {
                     taskListFragment = TaskListFragment.getInstance(TaskType.ALL);
                     mListFragments[2] = taskListFragment;
                 }
-                mCurrentFragment = taskListFragment;
                 return taskListFragment;
             }
 
@@ -116,11 +104,8 @@ public class MainViewPagerActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int i) {
-                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                    //Do some stuff
+                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT)
                     mListFragments[i].updateSubtitle();
-                }
-//                getActionBar().setSubtitle("" + i );
             }
 
             @Override
@@ -131,11 +116,4 @@ public class MainViewPagerActivity extends AppCompatActivity {
 
         tabLayout.setupWithViewPager(mViewPager);
     }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Paper.book().write(PAPER_TASK_LIST, TaskRepository.getInstance().getList());
-    }
-
 }

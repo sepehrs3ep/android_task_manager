@@ -7,9 +7,6 @@ import java.util.UUID;
 public class TaskRepository {
     private static TaskRepository mInstance;
 
-    public void setTaskList(List<Task> taskList) {
-        mTaskList = taskList;
-    }
 
     private List<Task> mTaskList;
 
