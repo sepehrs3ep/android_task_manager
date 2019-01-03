@@ -20,8 +20,6 @@ import project.com.maktab.hw_6.model.TaskRepository;
 public class CrudTaskActivity extends AppCompatActivity {
     private static final String ID_EXTRA = "project.com.maktab.hw_6.id_extra";
     private static final String HOME_STAUS_EXTRA = "project.com.maktab.hw_6.id.home_status_extra";
-    private boolean mFromAddButton = false;
-    private UUID mCurrentId;
 
 
     public static Intent newIntent(Context context, UUID id, boolean status) {
@@ -35,28 +33,15 @@ public class CrudTaskActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crud_task);
-        mFromAddButton = false;
-        mFromAddButton = getIntent().getBooleanExtra(HOME_STAUS_EXTRA, false);
 
+        boolean fromAddButton = getIntent().getBooleanExtra(HOME_STAUS_EXTRA, false);
 
-        UUID id = (UUID) getIntent().getSerializableExtra(ID_EXTRA);
+        UUID currentId = (UUID) getIntent().getSerializableExtra(ID_EXTRA);
+
         FragmentManager fragmentManager = getSupportFragmentManager();
-        if (mFromAddButton) {
-            if (fragmentManager.findFragmentById(R.id.crud_fragment_container) == null) {
-                fragmentManager.beginTransaction()
-                        .add(R.id.crud_fragment_container, CrudTaskFragment.getInstance(id, true))
-                        .commit();
-            }
-
-
-        } else {
-            if (fragmentManager.findFragmentById(R.id.crud_fragment_container) == null) {
-                fragmentManager.beginTransaction()
-                        .add(R.id.crud_fragment_container, CrudTaskFragment.getInstance(id, false))
-
-                        .commit();
-            }
-        }
+        fragmentManager.beginTransaction()
+                .replace(R.id.crud_fragment_container, CrudTaskFragment.getInstance(currentId, fromAddButton))
+                .commit();
     }
 
     @Override

@@ -26,6 +26,9 @@
     <string name="subtitle_format">%1$d tasks</string>
     <string name="hide_subtitle">hide subtitle</string>
     <string name="zero_task">0 task</string>
+    <string name="undone_task">Undone</string>
+    <string name="done_task">Done</string>
+    <string name="all_task">All</string>
     <plurals name="subtitle">
         <item quantity="one">%1$d task</item>
         <item quantity="other">%1$d tasks</item>

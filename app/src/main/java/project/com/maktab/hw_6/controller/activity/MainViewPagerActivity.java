@@ -24,21 +24,18 @@ import project.com.maktab.hw_6.model.TaskRepository;
 import project.com.maktab.hw_6.model.TaskType;
 
 public class MainViewPagerActivity extends AppCompatActivity {
-    private ViewPager mViewPager;
-    private FloatingActionButton mFloatingActionButton;
     TaskListFragment[] mListFragments = new TaskListFragment[3];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_view_pager);
-        Paper.init(MainViewPagerActivity.this);
-
 
         TabLayout tabLayout = findViewById(R.id.tab_layout);
-        mViewPager = findViewById(R.id.view_pager);
-        mFloatingActionButton = findViewById(R.id.float_button_add);
-        mFloatingActionButton.setOnClickListener(new View.OnClickListener() {
+        ViewPager viewPager = findViewById(R.id.view_pager);
+
+        FloatingActionButton floatingActionButton = findViewById(R.id.float_button_add);
+        floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Task task = new Task();
@@ -48,7 +45,7 @@ public class MainViewPagerActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        mViewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
+        viewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
 
             @Override
             public Fragment getItem(int i) {
@@ -68,13 +65,6 @@ public class MainViewPagerActivity extends AppCompatActivity {
                 return taskListFragment;
             }
 
-        /*    @Override
-            public void setPrimaryItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
-                if (getCurrentFragment() != object) {
-                    mCurrentFragment = ((TaskListFragment) object);
-                }
-                super.setPrimaryItem(container, position, object);
-            }*/
 
             @Override
             public int getCount() {
@@ -84,9 +74,9 @@ public class MainViewPagerActivity extends AppCompatActivity {
             @Nullable
             @Override
             public CharSequence getPageTitle(int position) {
-                if (position == 0) return "Undone";
-                if (position == 1) return "Done";
-                if (position == 2) return "All";
+                if (position == 0) return getString(R.string.undone_task);
+                if (position == 1) return getString(R.string.done_task);
+                if (position == 2) return getString(R.string.all_task);
                 return "";
             }
 
@@ -96,7 +86,7 @@ public class MainViewPagerActivity extends AppCompatActivity {
             }
         });
 
-        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
 
@@ -114,6 +104,6 @@ public class MainViewPagerActivity extends AppCompatActivity {
             }
         });
 
-        tabLayout.setupWithViewPager(mViewPager);
+        tabLayout.setupWithViewPager(viewPager);
     }
 }
