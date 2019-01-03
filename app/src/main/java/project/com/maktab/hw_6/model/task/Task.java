@@ -11,7 +11,15 @@ public class Task {
     private UUID mID;
 //    private int taskType;
     private int mTaskType;
+    private UUID mUserID;
 
+    public UUID getUserID() {
+        return mUserID;
+    }
+
+    public void setUserID(UUID userID) {
+        mUserID = userID;
+    }
 
     public int getTaskType() {
         return mTaskType;

@@ -12,6 +12,17 @@ public class TaskBaseHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
+        db.execSQL(
+                " create table task " + " (" +
+                        "_id integer primary key autoincrement " + ", "
+                        + TaskDbSchema.TaskTable.Cols.UUID + ", "
+                        + TaskDbSchema.TaskTable.Cols.TITLE + ", "
+                        + TaskDbSchema.TaskTable.Cols.DESCRIPTION + ", "
+                        + TaskDbSchema.TaskTable.Cols.DATE + ", "
+                        + TaskDbSchema.TaskTable.Cols.TYPE
+                        + " )"
+        );
     }
 
     @Override
