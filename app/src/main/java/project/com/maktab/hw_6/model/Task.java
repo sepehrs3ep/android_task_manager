@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.UUID;
 
 public class Task {
+
     private String mTitle;
     private String mDescription;
     private Date mDate;

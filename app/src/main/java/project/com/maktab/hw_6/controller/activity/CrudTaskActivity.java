@@ -33,7 +33,6 @@ public class CrudTaskActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_crud_task);
-
         boolean fromAddButton = getIntent().getBooleanExtra(HOME_STAUS_EXTRA, false);
 
         UUID currentId = (UUID) getIntent().getSerializableExtra(ID_EXTRA);
