@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".controller.activity.CrudTaskActivity" />
-        <activity android:name=".controller.activity.SingleFragmentActivity" />
+        <activity android:name=".controller.activity.SingleFragmentActivity"/>
         <activity android:name=".controller.activity.LoginActivity"></activity>
     </application>
 

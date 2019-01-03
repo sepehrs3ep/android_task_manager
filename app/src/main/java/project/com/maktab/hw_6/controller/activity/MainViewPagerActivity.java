@@ -36,7 +36,7 @@ public class MainViewPagerActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Task task = new Task();
                 task.setTaskType(TaskType.UNDONE);
-                TaskRepository.getInstance().addTask(task);
+                TaskRepository.getInstance(MainViewPagerActivity.this).addTask(task);
                 Intent intent = CrudTaskActivity.newIntent(MainViewPagerActivity.this, task.getID(), true);
                 startActivity(intent);
             }

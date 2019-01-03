@@ -2,6 +2,7 @@ package project.com.maktab.hw_6.controller.fragment;
 
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -67,7 +68,7 @@ public class CrudTaskFragment extends Fragment {
         super.onCreate(savedInstanceState);
         UUID id = (UUID) getArguments().getSerializable(ARGS_EXTRA_ID);
         mFromFloatButton = getArguments().getBoolean(ARGS_EXTRA_HAS_EXTRA);
-        mTask = TaskRepository.getInstance().getTaskByID(id);
+        mTask = TaskRepository.getInstance(getActivity()).getTaskByID(id);
         mTaskTitle = mTask.getTitle();
     }
 
@@ -168,7 +169,7 @@ public class CrudTaskFragment extends Fragment {
                     deleteAlert.setOnYesNoClick(new AlertDialogFragment.OnYesNoClick() {
                         @Override
                         public void onYesClicked() {
-                            TaskRepository.getInstance().removeTask(mTask.getID());
+                            TaskRepository.getInstance(getActivity()).removeTask(mTask.getID());
                             toast.show();
                             getActivity().finish();
                         }
@@ -238,10 +239,17 @@ public class CrudTaskFragment extends Fragment {
             mTask.setTitle(title);
             mTask.setDescription(desc);
 //            TaskRepository.getInstance().addTask(mTask);
+            TaskRepository.getInstance(getActivity()).updateTask(mTask);
             Toast.makeText(getActivity(), R.string.toast_crud_success, Toast.LENGTH_SHORT).show();
             getActivity().finish();
 
         }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        TaskRepository.getInstance(getActivity()).updateTask(mTask);
     }
 
     private void setTimeButton() {
@@ -282,10 +290,10 @@ public class CrudTaskFragment extends Fragment {
     }
 
     //check back pressed for add button
-    public static boolean onBackPressed() {
+    public static boolean onBackPressed(Context context) {
         mTaskTitle = mTask.getTitle();
         if (mTaskTitle == null || mTaskTitle.equals("") || mTaskTitle.length() <= 0) {
-            TaskRepository.getInstance().removeTask(mTask.getID());
+            TaskRepository.getInstance(context).removeTask(mTask.getID());
             return true;
         }
         return false;

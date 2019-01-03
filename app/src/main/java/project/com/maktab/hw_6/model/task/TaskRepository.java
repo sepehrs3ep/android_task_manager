@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.CursorWrapper;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,14 +27,19 @@ public class TaskRepository {
 
     public void addTask(Task task) {
         ContentValues values = getContentValues(task);
+        Log.d("yeh test","add test" + values.toString());
         mDatabase.insert(TaskDbSchema.TaskTable.NAME, null, values);
     }
 
     public void updateTask(Task task) {
-        ContentValues values = new ContentValues();
+        ContentValues values = getContentValues(task);
         String whereClause = TaskDbSchema.TaskTable.Cols.UUID + " = ? ";
         String[] whereArgs = new String[]{task.getID().toString()};
+
+        Log.d("yeh test","update test" + values.toString());
         mDatabase.update(TaskDbSchema.TaskTable.NAME, values, whereClause, whereArgs);
+
+
     }
 
     public void clearLists() {
@@ -54,9 +60,11 @@ public class TaskRepository {
 
 
     public List<Task> getUnDoneTaskList() {
+        List<Task> unDoneList = new ArrayList<>();
         String whereClause = TaskDbSchema.TaskTable.Cols.TYPE + " = ? ";
         String[] whereArgs = new String[]{"0"};
-        return cursorGetList(whereClause, whereArgs);
+        unDoneList = cursorGetList(whereClause,whereArgs);
+        return unDoneList;
     }
 
 
@@ -80,7 +88,27 @@ public class TaskRepository {
     }
 
     public List<Task> getList() {
-        return cursorGetList(null, null);
+//        return cursorGetList(null, null);
+        List<Task> crimes = new ArrayList<>();
+        TaskCursorWrapper cursor = queryTask(null, null);
+
+        try {
+            if (cursor.getCount() == 0)
+                return crimes;
+
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+
+                crimes.add(cursor.getTask());
+
+                cursor.moveToNext();
+            }
+        } finally {
+            cursor.close();
+        }
+
+        return crimes;
+
     }
 
     private List<Task> cursorGetList(String whereClause, String[] whereArgs) {

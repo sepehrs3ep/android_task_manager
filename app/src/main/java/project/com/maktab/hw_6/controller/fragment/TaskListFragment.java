@@ -87,11 +87,11 @@ public class TaskListFragment extends Fragment {
     private List<Task> getTaskList() {
         List<Task> list = null;
         if (mListType == TaskType.ALL)
-            list = TaskRepository.getInstance().getList();
+            list = TaskRepository.getInstance(getActivity()).getList();
         if (mListType == TaskType.DONE)
-            list = TaskRepository.getInstance().getDoneTaskList();
+            list = TaskRepository.getInstance(getActivity()).getDoneTaskList();
         if (mListType == TaskType.UNDONE)
-            list = TaskRepository.getInstance().getUnDoneTaskList();
+            list = TaskRepository.getInstance(getActivity()).getUnDoneTaskList();
         return list;
     }
 
@@ -157,7 +157,7 @@ public class TaskListFragment extends Fragment {
                 fragment.setOnYesNoClick(new AlertDialogFragment.OnYesNoClick() {
                     @Override
                     public void onYesClicked() {
-                        TaskRepository.getInstance().clearLists();
+                        TaskRepository.getInstance(getActivity()).clearLists();
                         updateUI();
 
                     }
@@ -262,7 +262,7 @@ public class TaskListFragment extends Fragment {
             Task task = mSearchTaskList.get(i);
             if (task != null || task.getTitle() != null)
                 taskViewHolder.bind(task);
-            else TaskRepository.getInstance().removeTask(task.getID());
+            else TaskRepository.getInstance(getActivity()).removeTask(task.getID());
 
         }
 
