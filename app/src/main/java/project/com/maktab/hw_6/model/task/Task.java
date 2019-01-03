@@ -9,7 +9,7 @@ public class Task {
     private String mDescription;
     private Date mDate;
     private UUID mID;
-//    private int taskType;
+    //    private int taskType;
     private int mTaskType;
     private UUID mUserID;
 
@@ -38,11 +38,16 @@ public class Task {
     }
 
 
-
-    public Task(){
-        mID = UUID.randomUUID();
+    public Task(UUID id) {
+        this.mID = id;
         mDate = new Date();
+
     }
+
+    public Task() {
+        this(UUID.randomUUID());
+    }
+
     public UUID getID() {
         return mID;
     }
