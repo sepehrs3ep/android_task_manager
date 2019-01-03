@@ -12,16 +12,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 
-import java.util.List;
-
-import io.paperdb.Paper;
 import project.com.maktab.hw_6.R;
 import project.com.maktab.hw_6.controller.fragment.TaskListFragment;
-import project.com.maktab.hw_6.model.Task;
-import project.com.maktab.hw_6.model.TaskRepository;
-import project.com.maktab.hw_6.model.TaskType;
+import project.com.maktab.hw_6.model.task.Task;
+import project.com.maktab.hw_6.model.task.TaskRepository;
+import project.com.maktab.hw_6.model.task.TaskType;
 
 public class MainViewPagerActivity extends AppCompatActivity {
     TaskListFragment[] mListFragments = new TaskListFragment[3];

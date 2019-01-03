@@ -1,4 +1,4 @@
-package project.com.maktab.hw_6.model;
+package project.com.maktab.hw_6.model.task;
 
 import java.util.ArrayList;
 import java.util.List;

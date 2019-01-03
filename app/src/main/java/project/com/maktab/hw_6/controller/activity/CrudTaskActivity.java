@@ -6,16 +6,12 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Toast;
 
-import java.util.List;
 import java.util.UUID;
 
 import project.com.maktab.hw_6.R;
 import project.com.maktab.hw_6.controller.fragment.CrudTaskFragment;
-import project.com.maktab.hw_6.model.Task;
-import project.com.maktab.hw_6.model.TaskRepository;
 
 public class CrudTaskActivity extends AppCompatActivity {
     private static final String ID_EXTRA = "project.com.maktab.hw_6.id_extra";

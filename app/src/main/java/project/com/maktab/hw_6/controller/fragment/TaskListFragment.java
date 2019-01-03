@@ -26,9 +26,9 @@ import java.util.UUID;
 
 import project.com.maktab.hw_6.R;
 import project.com.maktab.hw_6.controller.activity.CrudTaskActivity;
-import project.com.maktab.hw_6.model.Task;
-import project.com.maktab.hw_6.model.TaskRepository;
-import project.com.maktab.hw_6.model.TaskType;
+import project.com.maktab.hw_6.model.task.Task;
+import project.com.maktab.hw_6.model.task.TaskRepository;
+import project.com.maktab.hw_6.model.task.TaskType;
 
 
 /**
