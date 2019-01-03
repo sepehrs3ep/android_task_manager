@@ -29,6 +29,12 @@
     <string name="undone_task">Undone</string>
     <string name="done_task">Done</string>
     <string name="all_task">All</string>
+    <string name="user_name">enter your user name</string>
+    <string name="password">enter your password</string>
+    <string name="sign_up">sign up</string>
+    <string name="sign_in">sign in</string>
+
+
     <plurals name="subtitle">
         <item quantity="one">%1$d task</item>
         <item quantity="other">%1$d tasks</item>

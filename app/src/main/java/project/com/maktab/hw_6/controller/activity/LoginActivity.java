@@ -8,6 +8,7 @@ import project.com.maktab.hw_6.controller.fragment.LoginFragment;
 
 public class LoginActivity extends SingleFragmentActivity {
 
+
     @Override
     public Fragment createFragment() {
         LoginFragment fragment = LoginFragment.newInstance();
