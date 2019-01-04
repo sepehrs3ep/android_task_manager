@@ -29,7 +29,6 @@ public class TaskDbSchema {
 
         public static final class Cols {
 
-            public static final String UUID = "uuid";
             public static final String USER_NAME = "userName";
             public static final String PASSWORD = "password";
 

@@ -3,9 +3,14 @@ package project.com.maktab.hw_6.model.user;
 import java.util.UUID;
 
 public class User {
-    private UUID mId;
     private String mName;
     private String mPassword;
+
+    public int getId() {
+        return mId;
+    }
+
+    private int mId;
 
     public String getName() {
         return mName;
@@ -23,13 +28,7 @@ public class User {
         mPassword = password;
     }
 
-    public User() {
-        this(UUID.randomUUID());
-    }
 
-    public User(UUID id) {
-        mId = id;
-    }
 
 
 }

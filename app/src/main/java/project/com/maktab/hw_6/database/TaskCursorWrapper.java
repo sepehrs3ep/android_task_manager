@@ -1,4 +1,4 @@
-package project.com.maktab.hw_6.model.task;
+package project.com.maktab.hw_6.database;
 
 import android.database.Cursor;
 import android.database.CursorWrapper;
@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import project.com.maktab.hw_6.database.TaskDbSchema;
+import project.com.maktab.hw_6.model.task.Task;
 
 public class TaskCursorWrapper extends CursorWrapper {
     /**

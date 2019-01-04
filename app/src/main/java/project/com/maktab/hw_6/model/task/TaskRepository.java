@@ -3,7 +3,6 @@ package project.com.maktab.hw_6.model.task;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.CursorWrapper;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -12,6 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 import project.com.maktab.hw_6.database.TaskBaseHelper;
+import project.com.maktab.hw_6.database.TaskCursorWrapper;
 import project.com.maktab.hw_6.database.TaskDbSchema;
 
 public class TaskRepository {
@@ -61,8 +61,9 @@ public class TaskRepository {
 
     public List<Task> getUnDoneTaskList() {
         List<Task> unDoneList = new ArrayList<>();
+        int undone = 0;
         String whereClause = TaskDbSchema.TaskTable.Cols.TYPE + " = ? ";
-        String[] whereArgs = new String[]{"0"};
+        String[] whereArgs = new String[]{String.valueOf(undone)};
         unDoneList = cursorGetList(whereClause,whereArgs);
         return unDoneList;
     }
