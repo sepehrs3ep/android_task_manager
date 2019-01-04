@@ -40,7 +40,7 @@ public class TaskListFragment extends Fragment {
     private ImageView mNoTaskImageView;
     private static final String ARGS_LIST_TYPE = "args_list_type";
     private TaskAdapter mTaskAdapter;
-    private int mListType;
+    private boolean mListType;
     private boolean mClickedShowSub = false;
 
 
@@ -48,7 +48,7 @@ public class TaskListFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static TaskListFragment getInstance(int listType) {
+    public static TaskListFragment getInstance(boolean listType) {
         Bundle args = new Bundle();
         args.putSerializable(ARGS_LIST_TYPE, listType);
         TaskListFragment fragment = new TaskListFragment();
@@ -100,7 +100,7 @@ public class TaskListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         /*true>> all list
         false >> doneList*/
-        mListType = getArguments().getInt(ARGS_LIST_TYPE);
+        mListType = getArguments().getBoolean(ARGS_LIST_TYPE, false);
         setHasOptionsMenu(true);
 
         if (savedInstanceState != null)

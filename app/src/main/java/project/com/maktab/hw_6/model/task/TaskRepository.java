@@ -27,7 +27,7 @@ public class TaskRepository {
 
     public void addTask(Task task) {
         ContentValues values = getContentValues(task);
-        Log.d("yeh test","add test" + values.toString());
+        Log.d("yeh test", "add test" + values.toString());
         mDatabase.insert(TaskDbSchema.TaskTable.NAME, null, values);
     }
 
@@ -36,7 +36,7 @@ public class TaskRepository {
         String whereClause = TaskDbSchema.TaskTable.Cols.UUID + " = ? ";
         String[] whereArgs = new String[]{task.getID().toString()};
 
-        Log.d("yeh test","update test" + values.toString());
+        Log.d("yeh test", "update test" + values.toString());
         mDatabase.update(TaskDbSchema.TaskTable.NAME, values, whereClause, whereArgs);
 
 
@@ -61,10 +61,9 @@ public class TaskRepository {
 
     public List<Task> getUnDoneTaskList() {
         List<Task> unDoneList = new ArrayList<>();
-        int undone = 0;
         String whereClause = TaskDbSchema.TaskTable.Cols.TYPE + " = ? ";
-        String[] whereArgs = new String[]{String.valueOf(undone)};
-        unDoneList = cursorGetList(whereClause,whereArgs);
+        String[] whereArgs = new String[]{"0"};
+        unDoneList = cursorGetList(whereClause, whereArgs);
         return unDoneList;
     }
 
@@ -142,7 +141,7 @@ public class TaskRepository {
         values.put(TaskDbSchema.TaskTable.Cols.TITLE, task.getTitle());
         values.put(TaskDbSchema.TaskTable.Cols.DESCRIPTION, task.getDescription());
         values.put(TaskDbSchema.TaskTable.Cols.DATE, task.getDate().getTime());
-        values.put(TaskDbSchema.TaskTable.Cols.TYPE, task.getTaskType());
+        values.put(TaskDbSchema.TaskTable.Cols.TYPE, task.getTaskType()? 1 : 0);
 
         return values;
     }

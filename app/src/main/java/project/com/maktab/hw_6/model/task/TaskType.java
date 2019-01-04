@@ -6,8 +6,8 @@ public final class TaskType {
      * DONE = 1;
      * ALL = 2;
      */
-    public static final int UNDONE = 0;
-    public static final int DONE = 1;
-    public static final int ALL = 2;
+    public static final boolean UNDONE = false;
+    public static final boolean ALL = false;
+    public static final boolean DONE = true;
 
 }

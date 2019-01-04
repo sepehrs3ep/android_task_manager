@@ -10,7 +10,7 @@ public class Task {
     private Date mDate;
     private UUID mID;
     //    private int taskType;
-    private int mTaskType;
+    private boolean mTaskType;
     private UUID mUserID;
 
     public UUID getUserID() {
@@ -21,11 +21,11 @@ public class Task {
         mUserID = userID;
     }
 
-    public int getTaskType() {
+    public boolean getTaskType() {
         return mTaskType;
     }
 
-    public void setTaskType(int taskType) {
+    public void setTaskType(boolean taskType) {
         this.mTaskType = taskType;
     }
 
