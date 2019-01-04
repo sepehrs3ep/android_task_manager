@@ -54,16 +54,17 @@ public class TaskRepository {
 
     public List<Task> getDoneTaskList() {
         String whereClause = TaskDbSchema.TaskTable.Cols.TYPE + " = ? ";
-        String[] whereArgs = new String[]{"1"};
-        return cursorGetList(whereClause, whereArgs);
+        String[] whereArgs = new String[]{"done"};
+        List<Task> list = new ArrayList<>();
+        return cursorGetList(list, whereClause, whereArgs);
     }
 
 
     public List<Task> getUnDoneTaskList() {
         List<Task> unDoneList = new ArrayList<>();
         String whereClause = TaskDbSchema.TaskTable.Cols.TYPE + " = ? ";
-        String[] whereArgs = new String[]{"0"};
-        unDoneList = cursorGetList(whereClause, whereArgs);
+        String[] whereArgs = new String[]{"undone"};
+        unDoneList = cursorGetList(unDoneList, whereClause, whereArgs);
         return unDoneList;
     }
 
@@ -71,7 +72,7 @@ public class TaskRepository {
     public Task getTaskByID(UUID id) {
         String whereClause = TaskDbSchema.TaskTable.Cols.UUID + " = ? ";
         String[] args = new String[]{id.toString()};
-        Task task;
+        Task task = null;
 
         try (TaskCursorWrapper cursorWrapper = queryTask(whereClause, args)) {
 
@@ -83,6 +84,8 @@ public class TaskRepository {
             task = cursorWrapper.getTask();
 
 
+        } catch (Exception ex) {
+            ex.printStackTrace();
         }
         return task;
     }
@@ -103,6 +106,9 @@ public class TaskRepository {
 
                 cursor.moveToNext();
             }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+
         } finally {
             cursor.close();
         }
@@ -111,8 +117,7 @@ public class TaskRepository {
 
     }
 
-    private List<Task> cursorGetList(String whereClause, String[] whereArgs) {
-        List<Task> list = new ArrayList<>();
+    private List<Task> cursorGetList(List<Task> list, String whereClause, String[] whereArgs) {
         try (TaskCursorWrapper cursorWrapper = queryTask(whereClause, whereArgs)) {
             if (cursorWrapper.getCount() == 0) return list;
 
@@ -141,7 +146,7 @@ public class TaskRepository {
         values.put(TaskDbSchema.TaskTable.Cols.TITLE, task.getTitle());
         values.put(TaskDbSchema.TaskTable.Cols.DESCRIPTION, task.getDescription());
         values.put(TaskDbSchema.TaskTable.Cols.DATE, task.getDate().getTime());
-        values.put(TaskDbSchema.TaskTable.Cols.TYPE, task.getTaskType()? 1 : 0);
+        values.put(TaskDbSchema.TaskTable.Cols.TYPE, task.getTaskType());
 
         return values;
     }

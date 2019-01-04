@@ -9,23 +9,22 @@ public class Task {
     private String mDescription;
     private Date mDate;
     private UUID mID;
-    //    private int taskType;
-    private boolean mTaskType;
-    private UUID mUserID;
+    private String mTaskType;
+    private int mUserID;
 
-    public UUID getUserID() {
+    public int getUserID() {
         return mUserID;
     }
 
-    public void setUserID(UUID userID) {
+    public void setUserID(int userID) {
         mUserID = userID;
     }
 
-    public boolean getTaskType() {
+    public String getTaskType() {
         return mTaskType;
     }
 
-    public void setTaskType(boolean taskType) {
+    public void setTaskType(String taskType) {
         this.mTaskType = taskType;
     }
 
