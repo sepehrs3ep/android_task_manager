@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.util.UUID;
@@ -49,15 +50,24 @@ public class CrudTaskActivity extends AppCompatActivity {
 
     }
 
-/*    @Override
+
+    @Override
     public void onBackPressed() {
         if (CrudTaskFragment.IS_EMPTY)
             Snackbar.make(findViewById(android.R.id.content), R.string.title_warning, Snackbar.LENGTH_SHORT).show();
+
         else {
-            if (CrudTaskFragment.onBackPressed(CrudTaskActivity.this))
+            if (CrudTaskFragment.onBackPressed(CrudTaskActivity.this)) {
+
                 Toast.makeText(this, "no item added", Toast.LENGTH_SHORT).show();
-            super.onBackPressed();
+                super.onBackPressed();
+            }
+
         }
-    }*/
+        if (CrudTaskFragment.mStay) {
+            Log.d("CrudTask", "should stay now !");
+        }
+
+    }
 }
 

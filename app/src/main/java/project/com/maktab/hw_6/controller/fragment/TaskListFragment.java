@@ -40,7 +40,7 @@ public class TaskListFragment extends Fragment {
     private ImageView mNoTaskImageView;
     private static final String ARGS_LIST_TYPE = "args_list_type";
     private TaskAdapter mTaskAdapter;
-    private int mListType;
+    private String mListType;
     private boolean mClickedShowSub = false;
 
 
@@ -48,9 +48,9 @@ public class TaskListFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static TaskListFragment getInstance(int listType) {
+    public static TaskListFragment getInstance(String listType) {
         Bundle args = new Bundle();
-        args.putInt(ARGS_LIST_TYPE, listType);
+        args.putString(ARGS_LIST_TYPE, listType);
         TaskListFragment fragment = new TaskListFragment();
         fragment.setArguments(args);
         return fragment;
@@ -86,11 +86,11 @@ public class TaskListFragment extends Fragment {
     @Nullable
     private List<Task> getTaskList() {
         List<Task> list = null;
-        if (mListType==1)
+        if (mListType.equals(TaskType.ALL))
             list = TaskRepository.getInstance(getActivity()).getList();
-        if (mListType==0)
+        if (mListType.equals(TaskType.DONE))
             list = TaskRepository.getInstance(getActivity()).getDoneTaskList();
-        if (mListType==-1)
+        if (mListType.equals(TaskType.UNDONE))
             list = TaskRepository.getInstance(getActivity()).getUnDoneTaskList();
         return list;
     }
@@ -100,7 +100,7 @@ public class TaskListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         /*true>> all list
         false >> doneList*/
-        mListType = getArguments().getInt(ARGS_LIST_TYPE,1);
+        mListType = getArguments().getString(ARGS_LIST_TYPE);
         setHasOptionsMenu(true);
 
         if (savedInstanceState != null)

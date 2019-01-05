@@ -3,13 +3,17 @@ package project.com.maktab.hw_6.controller.fragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -47,6 +51,7 @@ public class CrudTaskFragment extends Fragment {
     private Button mTimeButton;
     private boolean mFromFloatButton;
     private static Task mTask;
+    public static boolean mStay;
     private static String mTaskTitle = "";
 
     public static CrudTaskFragment getInstance(UUID id, boolean hasExtra) {
@@ -252,12 +257,6 @@ public class CrudTaskFragment extends Fragment {
         }
     }
 
-   /* @Override
-    public void onPause() {
-        super.onPause();
-        TaskRepository.getInstance(getActivity()).updateTask(mTask);
-    }*/
-
     private void setTimeButton() {
         final SimpleDateFormat timeFormat = new SimpleDateFormat("HH-mm");
         String timeOutput = timeFormat.format(mTask.getDate());
@@ -296,13 +295,40 @@ public class CrudTaskFragment extends Fragment {
     }
 
     //check back pressed for add button
-    public static boolean onBackPressed(Context context) {
+    public static boolean onBackPressed(final Context context) {
         mTaskTitle = mTask.getTitle();
+        if (mTaskTitle.length() > 0) {
+            mStay = true;
+            final Activity activity = (Activity) context;
+            final AlertDialog alertDialog = new AlertDialog.Builder(context)
+                    .setMessage("save your changes?")
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            TaskRepository.getInstance(context).updateTask(mTask);
+                            activity.finish();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            TaskRepository.getInstance(context).removeTask(mTask.getID());
+                            activity.finish();
+                        }
+                    })
+                    .create();
+            alertDialog.show();
+
+        }
+
+
         if (mTaskTitle == null || mTaskTitle.equals("") || mTaskTitle.length() <= 0) {
             TaskRepository.getInstance(context).removeTask(mTask.getID());
             return true;
         }
         return false;
+
+
     }
 
 

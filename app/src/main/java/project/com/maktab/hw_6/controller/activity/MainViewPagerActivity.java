@@ -49,15 +49,15 @@ public class MainViewPagerActivity extends AppCompatActivity {
             public Fragment getItem(int i) {
                 TaskListFragment taskListFragment = null;
                 if (i == 0) {
-                    taskListFragment = TaskListFragment.getInstance(-1);
+                    taskListFragment = TaskListFragment.getInstance(TaskType.UNDONE);
                     mListFragments[0] = taskListFragment;
                 }
                 if (i == 1) {
-                    taskListFragment = TaskListFragment.getInstance(0);
+                    taskListFragment = TaskListFragment.getInstance(TaskType.DONE);
                     mListFragments[1] = taskListFragment;
                 }
                 if (i == 2) {
-                    taskListFragment = TaskListFragment.getInstance(1);
+                    taskListFragment = TaskListFragment.getInstance(TaskType.ALL);
                     mListFragments[2] = taskListFragment;
                 }
                 return taskListFragment;
@@ -84,7 +84,7 @@ public class MainViewPagerActivity extends AppCompatActivity {
             }
         });
 
-/*        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
 
@@ -100,7 +100,7 @@ public class MainViewPagerActivity extends AppCompatActivity {
             public void onPageScrollStateChanged(int i) {
 
             }
-        });*/
+        });
         mTabLayout.setupWithViewPager(mViewPager);
     }
 }
