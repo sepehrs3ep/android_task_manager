@@ -56,11 +56,12 @@ public class TaskRepository {
     }
 
     public List<Task> getDoneTaskList(long userId) {
-        String whereClause = TaskDbSchema.TaskTable.Cols.TYPE + " = ? AND " +
-                TaskDbSchema.UserTable.Cols._ID + " = ? ";
-        String[] whereArgs = new String[]{"done", String.valueOf(userId)};
         List<Task> crimes = new ArrayList<>();
-        TaskCursorWrapper cursor = queryTask(whereClause, whereArgs);
+        String[] whereArgs = new String[]{"done", String.valueOf(userId)};
+        String search_query = " select * from " + TaskDbSchema.TaskTable.NAME +
+                " where " + TaskDbSchema.TaskTable.Cols.TYPE + " = ? AND " +
+                " cast(" + TaskDbSchema.TaskTable.Cols.USER_ID + " as text) = ? ";
+        TaskCursorWrapper cursor = new TaskCursorWrapper(mDatabase.rawQuery(search_query, whereArgs));
 
         try {
             if (cursor.getCount() == 0)
@@ -85,12 +86,15 @@ public class TaskRepository {
 
 
     public List<Task> getUnDoneTaskList(long userId) {
-        String whereClause = TaskDbSchema.TaskTable.Cols.TYPE + " = ? AND " +
-                TaskDbSchema.UserTable.Cols._ID + " = ? ";
-        String[] whereArgs = new String[]{"undone", String.valueOf(userId)};
         List<Task> crimes = new ArrayList<>();
-        TaskCursorWrapper cursor = queryTask(whereClause, whereArgs);
-
+       /* String whereClause = TaskDbSchema.TaskTable.Cols.TYPE + " = ? AND " +
+                TaskDbSchema.TaskTable.Cols.USER_ID + " = ? ";
+        TaskCursorWrapper cursor = queryTask(whereClause, whereArgs);*/
+        String[] whereArgs = new String[]{"undone", Long.toString(userId)};
+        String search_query = " select * from " + TaskDbSchema.TaskTable.NAME +
+                " where " + TaskDbSchema.TaskTable.Cols.TYPE + " = ? AND " +
+                " cast(" + TaskDbSchema.TaskTable.Cols.USER_ID + " as text) = ? ";
+        TaskCursorWrapper cursor = new TaskCursorWrapper(mDatabase.rawQuery(search_query, whereArgs));
         try {
             if (cursor.getCount() == 0)
                 return crimes;
@@ -137,10 +141,12 @@ public class TaskRepository {
 
     public List<Task> getList(long userId) {
 //        return cursorGetList(null, null);
-        String whereClause = TaskDbSchema.UserTable.Cols._ID + " = ? ";
-        String[] whereArgs = new String[]{String.valueOf(userId)};
         List<Task> crimes = new ArrayList<>();
-        TaskCursorWrapper cursor = queryTask(whereClause, whereArgs);
+        String[] whereArgs = new String[]{String.valueOf(userId)};
+        String search_query = " select * from " + TaskDbSchema.TaskTable.NAME +
+                " where " +
+                " cast(" + TaskDbSchema.TaskTable.Cols.USER_ID + " as text) = ? ";
+        TaskCursorWrapper cursor = new TaskCursorWrapper(mDatabase.rawQuery(search_query, whereArgs));
 
         try {
             if (cursor.getCount() == 0)
@@ -196,7 +202,7 @@ public class TaskRepository {
         values.put(TaskDbSchema.TaskTable.Cols.DESCRIPTION, task.getDescription());
         values.put(TaskDbSchema.TaskTable.Cols.DATE, task.getDate().getTime());
         values.put(TaskDbSchema.TaskTable.Cols.TYPE, task.getTaskType());
-        values.put(TaskDbSchema.TaskTable.Cols.USER_ID,task.getUserID());
+        values.put(TaskDbSchema.TaskTable.Cols.USER_ID, task.getUserID());
 
         return values;
     }
