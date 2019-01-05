@@ -196,6 +196,7 @@ public class TaskRepository {
         values.put(TaskDbSchema.TaskTable.Cols.DESCRIPTION, task.getDescription());
         values.put(TaskDbSchema.TaskTable.Cols.DATE, task.getDate().getTime());
         values.put(TaskDbSchema.TaskTable.Cols.TYPE, task.getTaskType());
+        values.put(TaskDbSchema.TaskTable.Cols.USER_ID,task.getUserID());
 
         return values;
     }

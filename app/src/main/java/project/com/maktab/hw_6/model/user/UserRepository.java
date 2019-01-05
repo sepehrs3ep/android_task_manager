@@ -19,7 +19,7 @@ public class UserRepository {
         mDatabase = new TaskBaseHelper(context).getWritableDatabase();
     }
 
-    private long login(User user) {
+    public long login(User user) {
         String whereClause = TaskDbSchema.UserTable.Cols.USER_NAME + " = ? AND " +
                 TaskDbSchema.UserTable.Cols.PASSWORD + " = ? ";
         String[] whereArgs = new String[]{
@@ -46,7 +46,7 @@ public class UserRepository {
         return -1;
     }
 
-    private long createUser(User user) {
+    public long createUser(User user) {
         ContentValues values = getContentValues(user);
         long id = mDatabase.insert(TaskDbSchema.UserTable.NAME, null, values);
         return id;

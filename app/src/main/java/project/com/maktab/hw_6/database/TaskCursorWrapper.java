@@ -26,12 +26,14 @@ public class TaskCursorWrapper extends CursorWrapper {
         String description = getString(getColumnIndex(TaskDbSchema.TaskTable.Cols.DESCRIPTION));
         Date date = new Date(getLong(getColumnIndex(TaskDbSchema.TaskTable.Cols.DATE)));
         String type = getString(getColumnIndex(TaskDbSchema.TaskTable.Cols.TYPE));
+        long userId = getLong(getColumnIndex(TaskDbSchema.TaskTable.Cols.USER_ID));
 
         Task task = new Task(id);
         task.setTitle(title);
         task.setDescription(description);
         task.setDate(date);
         task.setTaskType(type);
+        task.setUserID(userId);
 
         return task;
     }

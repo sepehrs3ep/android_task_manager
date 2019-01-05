@@ -20,7 +20,8 @@ public class TaskBaseHelper extends SQLiteOpenHelper {
                         + TaskDbSchema.TaskTable.Cols.TITLE + ", "
                         + TaskDbSchema.TaskTable.Cols.DESCRIPTION + ", "
                         + TaskDbSchema.TaskTable.Cols.DATE + ", "
-                        + TaskDbSchema.TaskTable.Cols.TYPE
+                        + TaskDbSchema.TaskTable.Cols.TYPE + ", "
+                        + TaskDbSchema.TaskTable.Cols.USER_ID
                         + " )"
         );
         db.execSQL(" create table " + TaskDbSchema.UserTable.NAME + " (" +

@@ -38,7 +38,7 @@ public class CrudTaskActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_single_fragment);
+        setContentView(R.layout.activity_crud_task);
         mFromAddButton = getIntent().getBooleanExtra(HOME_STATUS_EXTRA, false);
         mCurrentId = (UUID) getIntent().getSerializableExtra(ID_EXTRA);
 
