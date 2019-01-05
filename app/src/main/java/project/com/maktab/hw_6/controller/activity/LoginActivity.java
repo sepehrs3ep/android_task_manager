@@ -1,4 +1,3 @@
-/*
 package project.com.maktab.hw_6.controller.activity;
 
 import android.support.v4.app.Fragment;
@@ -21,4 +20,3 @@ public class LoginActivity extends SingleFragmentActivity {
         super.onCreate(savedInstanceState);
     }
 }
-*/

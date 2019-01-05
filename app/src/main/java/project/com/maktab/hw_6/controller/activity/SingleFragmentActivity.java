@@ -1,4 +1,3 @@
-/*
 package project.com.maktab.hw_6.controller.activity;
 
 import android.support.v4.app.Fragment;
@@ -18,10 +17,9 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
-                .replace(R.id.fragment_container, createFragment())
+                .replace(R.id.single_activity_fragment_container, createFragment())
                 .commit();
 
 
     }
 }
-*/
