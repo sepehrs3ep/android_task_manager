@@ -10,13 +10,13 @@ public class Task {
     private Date mDate;
     private UUID mID;
     private String mTaskType;
-    private int mUserID;
+    private long mUserID;
 
-    public int getUserID() {
+    public long getUserID() {
         return mUserID;
     }
 
-    public void setUserID(int userID) {
+    public void setUserID(long userID) {
         mUserID = userID;
     }
 

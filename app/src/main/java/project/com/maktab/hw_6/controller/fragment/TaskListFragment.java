@@ -39,8 +39,10 @@ public class TaskListFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private ImageView mNoTaskImageView;
     private static final String ARGS_LIST_TYPE = "args_list_type";
+    private static final String USER_ID_ARGS = "user_id_args";
     private TaskAdapter mTaskAdapter;
     private String mListType;
+    private long mUserId;
     private boolean mClickedShowSub = false;
 
 
@@ -48,9 +50,10 @@ public class TaskListFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static TaskListFragment getInstance(String listType) {
+    public static TaskListFragment getInstance(String listType,long userId) {
         Bundle args = new Bundle();
         args.putString(ARGS_LIST_TYPE, listType);
+        args.putLong(USER_ID_ARGS,userId);
         TaskListFragment fragment = new TaskListFragment();
         fragment.setArguments(args);
         return fragment;
@@ -87,11 +90,11 @@ public class TaskListFragment extends Fragment {
     private List<Task> getTaskList() {
         List<Task> list = null;
         if (mListType.equals(TaskType.ALL))
-            list = TaskRepository.getInstance(getActivity()).getList();
+            list = TaskRepository.getInstance(getActivity()).getList(mUserId);
         if (mListType.equals(TaskType.DONE))
-            list = TaskRepository.getInstance(getActivity()).getDoneTaskList();
+            list = TaskRepository.getInstance(getActivity()).getDoneTaskList(mUserId);
         if (mListType.equals(TaskType.UNDONE))
-            list = TaskRepository.getInstance(getActivity()).getUnDoneTaskList();
+            list = TaskRepository.getInstance(getActivity()).getUnDoneTaskList(mUserId);
         return list;
     }
 
@@ -101,6 +104,7 @@ public class TaskListFragment extends Fragment {
         /*true>> all list
         false >> doneList*/
         mListType = getArguments().getString(ARGS_LIST_TYPE);
+        mUserId = getArguments().getLong(USER_ID_ARGS);
         setHasOptionsMenu(true);
 
         if (savedInstanceState != null)
@@ -157,7 +161,7 @@ public class TaskListFragment extends Fragment {
                 fragment.setOnYesNoClick(new AlertDialogFragment.OnYesNoClick() {
                     @Override
                     public void onYesClicked() {
-                        TaskRepository.getInstance(getActivity()).clearLists();
+                        TaskRepository.getInstance(getActivity()).clearLists(mUserId);
                         updateUI();
 
                     }
