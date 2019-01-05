@@ -55,17 +55,57 @@ public class TaskRepository {
     public List<Task> getDoneTaskList() {
         String whereClause = TaskDbSchema.TaskTable.Cols.TYPE + " = ? ";
         String[] whereArgs = new String[]{"done"};
-        List<Task> list = new ArrayList<>();
-        return cursorGetList(list, whereClause, whereArgs);
+        List<Task> crimes = new ArrayList<>();
+        TaskCursorWrapper cursor = queryTask(whereClause, whereArgs);
+
+        try {
+            if (cursor.getCount() == 0)
+                return crimes;
+
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+
+                crimes.add(cursor.getTask());
+
+                cursor.moveToNext();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+
+        } finally {
+            cursor.close();
+        }
+
+        return crimes;
     }
 
 
     public List<Task> getUnDoneTaskList() {
-        List<Task> unDoneList = new ArrayList<>();
         String whereClause = TaskDbSchema.TaskTable.Cols.TYPE + " = ? ";
         String[] whereArgs = new String[]{"undone"};
-        unDoneList = cursorGetList(unDoneList, whereClause, whereArgs);
-        return unDoneList;
+        List<Task> crimes = new ArrayList<>();
+        TaskCursorWrapper cursor = queryTask(whereClause, whereArgs);
+
+        try {
+            if (cursor.getCount() == 0)
+                return crimes;
+
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+
+                crimes.add(cursor.getTask());
+
+                cursor.moveToNext();
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+
+        } finally {
+            cursor.close();
+        }
+
+        return crimes;
+
     }
 
 
@@ -117,7 +157,7 @@ public class TaskRepository {
 
     }
 
-    private List<Task> cursorGetList(List<Task> list, String whereClause, String[] whereArgs) {
+ /*   private List<Task> cursorGetList(List<Task> list, String whereClause, String[] whereArgs) {
         try (TaskCursorWrapper cursorWrapper = queryTask(whereClause, whereArgs)) {
             if (cursorWrapper.getCount() == 0) return list;
 
@@ -130,12 +170,14 @@ public class TaskRepository {
 
         }
         return list;
-    }
+    }*/
 
 
     public static TaskRepository getInstance(Context context) {
         if (mInstance == null)
             mInstance = new TaskRepository(context);
+
+
         return mInstance;
     }
 

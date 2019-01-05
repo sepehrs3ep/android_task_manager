@@ -21,41 +21,43 @@ import project.com.maktab.hw_6.model.task.TaskType;
 
 public class MainViewPagerActivity extends AppCompatActivity {
     TaskListFragment[] mListFragments = new TaskListFragment[3];
+    private ViewPager mViewPager;
+    private TabLayout mTabLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_view_pager);
 
-        TabLayout tabLayout = findViewById(R.id.tab_layout);
-        ViewPager viewPager = findViewById(R.id.view_pager);
+        mTabLayout = findViewById(R.id.tab_layout);
+        mViewPager = findViewById(R.id.view_pager);
 
         FloatingActionButton floatingActionButton = findViewById(R.id.float_button_add);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Task task = new Task();
-                task.setTaskType(TaskType.UNDONE);
+                task.setTaskType("undone");
                 TaskRepository.getInstance(MainViewPagerActivity.this).addTask(task);
                 Intent intent = CrudTaskActivity.newIntent(MainViewPagerActivity.this, task.getID(), true);
                 startActivity(intent);
             }
         });
-        viewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
+        mViewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
 
             @Override
             public Fragment getItem(int i) {
                 TaskListFragment taskListFragment = null;
                 if (i == 0) {
-                    taskListFragment = TaskListFragment.getInstance(TaskType.UNDONE);
+                    taskListFragment = TaskListFragment.getInstance(-1);
                     mListFragments[0] = taskListFragment;
                 }
                 if (i == 1) {
-                    taskListFragment = TaskListFragment.getInstance(TaskType.DONE);
+                    taskListFragment = TaskListFragment.getInstance(0);
                     mListFragments[1] = taskListFragment;
                 }
                 if (i == 2) {
-                    taskListFragment = TaskListFragment.getInstance(TaskType.ALL);
+                    taskListFragment = TaskListFragment.getInstance(1);
                     mListFragments[2] = taskListFragment;
                 }
                 return taskListFragment;
@@ -82,7 +84,7 @@ public class MainViewPagerActivity extends AppCompatActivity {
             }
         });
 
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+/*        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
 
@@ -98,8 +100,7 @@ public class MainViewPagerActivity extends AppCompatActivity {
             public void onPageScrollStateChanged(int i) {
 
             }
-        });
-
-        tabLayout.setupWithViewPager(viewPager);
+        });*/
+        mTabLayout.setupWithViewPager(mViewPager);
     }
 }

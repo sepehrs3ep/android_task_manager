@@ -40,7 +40,7 @@ public class TaskListFragment extends Fragment {
     private ImageView mNoTaskImageView;
     private static final String ARGS_LIST_TYPE = "args_list_type";
     private TaskAdapter mTaskAdapter;
-    private String mListType;
+    private int mListType;
     private boolean mClickedShowSub = false;
 
 
@@ -48,9 +48,9 @@ public class TaskListFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static TaskListFragment getInstance(String listType) {
+    public static TaskListFragment getInstance(int listType) {
         Bundle args = new Bundle();
-        args.putString(ARGS_LIST_TYPE, listType);
+        args.putInt(ARGS_LIST_TYPE, listType);
         TaskListFragment fragment = new TaskListFragment();
         fragment.setArguments(args);
         return fragment;
@@ -86,11 +86,11 @@ public class TaskListFragment extends Fragment {
     @Nullable
     private List<Task> getTaskList() {
         List<Task> list = null;
-        if (mListType.equals(TaskType.ALL))
+        if (mListType==1)
             list = TaskRepository.getInstance(getActivity()).getList();
-        else if (mListType.equals(TaskType.DONE))
+        if (mListType==0)
             list = TaskRepository.getInstance(getActivity()).getDoneTaskList();
-        else if (mListType.equals(TaskType.UNDONE))
+        if (mListType==-1)
             list = TaskRepository.getInstance(getActivity()).getUnDoneTaskList();
         return list;
     }
@@ -100,7 +100,7 @@ public class TaskListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         /*true>> all list
         false >> doneList*/
-        mListType = getArguments().getString(ARGS_LIST_TYPE);
+        mListType = getArguments().getInt(ARGS_LIST_TYPE,1);
         setHasOptionsMenu(true);
 
         if (savedInstanceState != null)
@@ -223,7 +223,7 @@ public class TaskListFragment extends Fragment {
             mTextViewTitle.setText(taskTitleText);
             mTextViewImage.setText(taskTitleText.charAt(0) + "");
 
-            if (task.getTaskType() == TaskType.DONE)
+            if (task.getTaskType().equals("done"))
                 mImageViewUndone.setVisibility(View.GONE);
             else mImageViewDone.setVisibility(View.GONE);
 

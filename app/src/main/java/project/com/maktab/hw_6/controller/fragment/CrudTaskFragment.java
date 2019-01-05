@@ -80,8 +80,8 @@ public class CrudTaskFragment extends Fragment {
         mEditTextTitle = view.findViewById(R.id.title_edit_text);
         mEditTextDesc = view.findViewById(R.id.desc_edit_text);
         LinearLayout layoutButtonSheet = view.findViewById(R.id.bottom_sheet);
-        final Drawable colorDrawable = mEditTextDesc.getBackground();
-        mEditTextTitle.setBackground(colorDrawable);
+        /*final Drawable colorDrawable = mEditTextDesc.getBackground();
+        mEditTextTitle.setBackground(colorDrawable);*/
         mDateButton = view.findViewById(R.id.date_button);
         mTimeButton = view.findViewById(R.id.time_button);
         Button buttonAddCrud = layoutButtonSheet.findViewById(R.id.crud_add);
@@ -132,10 +132,14 @@ public class CrudTaskFragment extends Fragment {
             buttonAddCrud.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    addTask(colorDrawable);
+                    addTask();
                 }
             });
         }
+        /*
+        check and separate from float button from check on that button is a boolean
+        that come from main view pager activity.
+         */
         if (!mFromFloatButton) {
             final Toast toast = Toast.makeText(getActivity(), R.string.toast_req_success, Toast.LENGTH_SHORT);
 
@@ -154,7 +158,8 @@ public class CrudTaskFragment extends Fragment {
                     if (title == null || title.equals("")) {
                         checkTitle();
                     } else {
-                        mEditTextTitle.setBackground(colorDrawable);
+                        mEditTextTitle.setBackgroundColor(Color.WHITE);
+                        TaskRepository.getInstance(getActivity()).updateTask(mTask);
                         toast.show();
                         getActivity().finish();
 
@@ -184,7 +189,7 @@ public class CrudTaskFragment extends Fragment {
                 }
             });
 
-            if (mTask.getTaskType() == TaskType.DONE)
+            if (mTask.getTaskType().equals(TaskType.DONE))
                 buttonDoneCrud.setEnabled(false);
 
             buttonDoneCrud.setOnClickListener(new View.OnClickListener() {
@@ -195,6 +200,7 @@ public class CrudTaskFragment extends Fragment {
                         checkTitle();
                     } else {
                         mTask.setTaskType(TaskType.DONE);
+                        TaskRepository.getInstance(getActivity()).updateTask(mTask);
                         toast.show();
                         getActivity().finish();
 
@@ -227,14 +233,14 @@ public class CrudTaskFragment extends Fragment {
     }
 
 
-    private void addTask(Drawable descDrawble) {
+    private void addTask() {
         String title = mEditTextTitle.getText().toString();
         if (title == null || title.equals("")) {
             Snackbar.make(getView(), R.string.title_warning, Snackbar.LENGTH_SHORT).show();
             mEditTextTitle.setBackgroundColor(Color.RED);
         } else {
 //                        mEditTextTitle.setBackgroundColor(descDrawble.getColor());
-            mEditTextTitle.setBackground(descDrawble);
+            mEditTextTitle.setBackgroundColor(Color.WHITE);
             String desc = mEditTextDesc.getText().toString();
             mTask.setTitle(title);
             mTask.setDescription(desc);
@@ -246,11 +252,11 @@ public class CrudTaskFragment extends Fragment {
         }
     }
 
-    @Override
+   /* @Override
     public void onPause() {
         super.onPause();
         TaskRepository.getInstance(getActivity()).updateTask(mTask);
-    }
+    }*/
 
     private void setTimeButton() {
         final SimpleDateFormat timeFormat = new SimpleDateFormat("HH-mm");
