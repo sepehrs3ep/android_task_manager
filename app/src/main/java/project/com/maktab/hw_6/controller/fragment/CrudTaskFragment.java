@@ -49,10 +49,11 @@ public class CrudTaskFragment extends Fragment {
     private EditText mEditTextDesc;
     private Button mDateButton;
     private Button mTimeButton;
-    private boolean mFromFloatButton;
+    private static boolean mFromFloatButton;
     private static Task mTask;
     public static boolean mStay;
-    private static String mTaskTitle = "";
+    private static String mRawTextTitle = "";
+    private String mTaskTitle = "";
 
     public static CrudTaskFragment getInstance(UUID id, boolean hasExtra) {
         CrudTaskFragment fragment = new CrudTaskFragment();
@@ -75,6 +76,7 @@ public class CrudTaskFragment extends Fragment {
         mFromFloatButton = getArguments().getBoolean(ARGS_EXTRA_HAS_EXTRA);
         mTask = TaskRepository.getInstance(getActivity()).getTaskByID(id);
         mTaskTitle = mTask.getTitle();
+        mRawTextTitle = mTaskTitle;
     }
 
     @Override
@@ -296,31 +298,20 @@ public class CrudTaskFragment extends Fragment {
 
     //check back pressed for add button
     public static boolean onBackPressed(final Context context) {
-        mTaskTitle = mTask.getTitle();
+        String mTaskTitle = mTask.getTitle();
+        final Activity activity = (Activity) context;
         if (mTaskTitle.length() > 0) {
-            mStay = true;
-            final Activity activity = (Activity) context;
-            final AlertDialog alertDialog = new AlertDialog.Builder(context)
-                    .setMessage("save your changes?")
-                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            TaskRepository.getInstance(context).updateTask(mTask);
-                            activity.finish();
-                        }
-                    })
-                    .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            TaskRepository.getInstance(context).removeTask(mTask.getID());
-                            activity.finish();
-                        }
-                    })
-                    .create();
-            alertDialog.show();
+
+            if (mFromFloatButton)
+                checkForChangesBack(context, activity);
+            else {
+                if (mRawTextTitle.equals(mTaskTitle))
+                    activity.finish();
+                else checkForChangesBack(context, activity);
+
+            }
 
         }
-
 
         if (mTaskTitle == null || mTaskTitle.equals("") || mTaskTitle.length() <= 0) {
             TaskRepository.getInstance(context).removeTask(mTask.getID());
@@ -329,6 +320,29 @@ public class CrudTaskFragment extends Fragment {
         return false;
 
 
+    }
+
+    private static void checkForChangesBack(final Context context, final Activity activity) {
+        mStay = true;
+        final AlertDialog alertDialog = new AlertDialog.Builder(context)
+                .setMessage("save your changes?")
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        TaskRepository.getInstance(context).updateTask(mTask);
+                        activity.finish();
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        if (mFromFloatButton)
+                            TaskRepository.getInstance(context).removeTask(mTask.getID());
+                        activity.finish();
+                    }
+                })
+                .create();
+        alertDialog.show();
     }
 
 
