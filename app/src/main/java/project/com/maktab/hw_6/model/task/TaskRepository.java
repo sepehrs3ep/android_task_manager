@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.provider.ContactsContract;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -43,10 +44,11 @@ public class TaskRepository {
     }
 
     public void clearLists(long userId) {
-//        mDatabase.execSQL(" delete from " + TaskDbSchema.TaskTable.NAME);
-        String whereClause = TaskDbSchema.UserTable.Cols._ID + " = ? ";
-        String[] whereArgs = new String[]{String.valueOf(userId)};
-        mDatabase.delete(TaskDbSchema.UserTable.NAME, whereClause, whereArgs);
+        mDatabase.execSQL(" delete from " + TaskDbSchema.TaskTable.NAME
+                + " where cast ( " + TaskDbSchema.TaskTable.Cols.USER_ID + " as text ) "
+                + " = " + String.valueOf(userId)
+        );
+
     }
 
     public void removeTask(UUID id) {
