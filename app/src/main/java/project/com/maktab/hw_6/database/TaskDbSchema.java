@@ -31,6 +31,7 @@ public class TaskDbSchema {
 
             public static final String USER_NAME = "userName";
             public static final String PASSWORD = "password";
+            public static final String _ID = "_id";
 
 
         }

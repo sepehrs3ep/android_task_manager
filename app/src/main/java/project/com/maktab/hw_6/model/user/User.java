@@ -5,12 +5,12 @@ import java.util.UUID;
 public class User {
     private String mName;
     private String mPassword;
+    private int mId;
 
     public int getId() {
         return mId;
     }
 
-    private int mId;
 
     public String getName() {
         return mName;

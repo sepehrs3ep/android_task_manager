@@ -19,7 +19,6 @@ public class UserCursorWrapper extends CursorWrapper {
 
         String name = getString(getColumnIndex(TaskDbSchema.UserTable.Cols.USER_NAME));
         String password = getString(getColumnIndex(TaskDbSchema.UserTable.Cols.PASSWORD));
-
         User user = new User();
         user.setName(name);
         user.setPassword(password);

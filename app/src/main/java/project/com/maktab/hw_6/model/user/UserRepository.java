@@ -2,15 +2,15 @@ package project.com.maktab.hw_6.model.user;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import project.com.maktab.hw_6.database.TaskBaseHelper;
-import project.com.maktab.hw_6.database.TaskCursorWrapper;
 import project.com.maktab.hw_6.database.TaskDbSchema;
 import project.com.maktab.hw_6.database.UserCursorWrapper;
 
 public class UserRepository {
-    private static UserRepository mIntsance;
+    private static UserRepository mInstance;
     private Context mContext;
     private SQLiteDatabase mDatabase;
 
@@ -18,25 +18,45 @@ public class UserRepository {
         mContext = context.getApplicationContext();
         mDatabase = new TaskBaseHelper(context).getWritableDatabase();
     }
-/*
-    private int login(User user) {
-        UserCursorWrapper cursorWrapper = mDatabase.query(TaskDbSchema.UserTable.NAME,,)
 
-        if(cursorWrapper.getUser().getId()==user.getId())
+    private long login(User user) {
+        String whereClause = TaskDbSchema.UserTable.Cols.USER_NAME + " = ? AND " +
+                TaskDbSchema.UserTable.Cols.PASSWORD + " = ? ";
+        String[] whereArgs = new String[]{
+                user.getName(),
+                user.getPassword()
+        };
+        String[] cols = new String[]{
+                TaskDbSchema.UserTable.Cols._ID
+        };
+        Cursor cursor = mDatabase.query(TaskDbSchema.UserTable.NAME, cols,
+                whereClause, whereArgs, null, null, null);
+        try {
+            if (cursor.getCount() > 0) {
+                cursor.moveToFirst();
+                long id = cursor.getLong(cursor.getColumnIndex(TaskDbSchema.UserTable.Cols._ID));
+                return id;
 
+            }
+        } finally {
+
+            cursor.close();
+        }
 
         return -1;
-    }*/
+    }
 
-    private void createUser(User user) {
+    private long createUser(User user) {
         ContentValues values = getContentValues(user);
-        mDatabase.insert(TaskDbSchema.UserTable.NAME, null, values);
+        long id = mDatabase.insert(TaskDbSchema.UserTable.NAME, null, values);
+        return id;
     }
 
     public static UserRepository getInstance(Context context) {
-        if (mIntsance == null)
-            mIntsance = new UserRepository(context);
-        return mIntsance;
+        if (mInstance == null)
+            mInstance = new UserRepository(context);
+
+        return mInstance;
     }
 
     private ContentValues getContentValues(User user) {
@@ -46,4 +66,6 @@ public class UserRepository {
 
         return values;
     }
+
+
 }
