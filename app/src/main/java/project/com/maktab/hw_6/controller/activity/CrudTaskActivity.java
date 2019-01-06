@@ -49,8 +49,7 @@ public class CrudTaskActivity extends AppCompatActivity {
 
     }
 
-
-    @Override
+    /*@Override
     public void onBackPressed() {
         if (CrudTaskFragment.IS_EMPTY)
             Snackbar.make(findViewById(android.R.id.content), R.string.title_warning, Snackbar.LENGTH_SHORT).show();
@@ -67,6 +66,7 @@ public class CrudTaskActivity extends AppCompatActivity {
             Log.d("CrudTask", "should stay now !");
         }
 
-    }
+    }*/
+
 }
 

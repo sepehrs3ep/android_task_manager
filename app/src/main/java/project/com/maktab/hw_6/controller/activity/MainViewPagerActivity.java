@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import project.com.maktab.hw_6.R;
+import project.com.maktab.hw_6.controller.fragment.CrudTaskFragment;
 import project.com.maktab.hw_6.controller.fragment.TaskListFragment;
 import project.com.maktab.hw_6.model.task.Task;
 import project.com.maktab.hw_6.model.task.TaskRepository;
@@ -51,8 +52,11 @@ public class MainViewPagerActivity extends AppCompatActivity {
                 task.setTaskType("undone");
                 task.setUserID(mUserId);
                 TaskRepository.getInstance(MainViewPagerActivity.this).addTask(task);
+                /*
                 Intent intent = CrudTaskActivity.newIntent(MainViewPagerActivity.this, task.getID(), true);
-                startActivity(intent);
+                startActivity(intent);*/
+                CrudTaskFragment fragment = CrudTaskFragment.getInstance(task.getID(), true);
+                fragment.show(getSupportFragmentManager(), "add Task");
             }
         });
         mViewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
@@ -61,15 +65,15 @@ public class MainViewPagerActivity extends AppCompatActivity {
             public Fragment getItem(int i) {
                 TaskListFragment taskListFragment = null;
                 if (i == 0) {
-                    taskListFragment = TaskListFragment.getInstance(TaskType.UNDONE,mUserId);
+                    taskListFragment = TaskListFragment.getInstance(TaskType.UNDONE, mUserId);
                     mListFragments[0] = taskListFragment;
                 }
                 if (i == 1) {
-                    taskListFragment = TaskListFragment.getInstance(TaskType.DONE,mUserId);
+                    taskListFragment = TaskListFragment.getInstance(TaskType.DONE, mUserId);
                     mListFragments[1] = taskListFragment;
                 }
                 if (i == 2) {
-                    taskListFragment = TaskListFragment.getInstance(TaskType.ALL,mUserId);
+                    taskListFragment = TaskListFragment.getInstance(TaskType.ALL, mUserId);
                     mListFragments[2] = taskListFragment;
                 }
                 return taskListFragment;

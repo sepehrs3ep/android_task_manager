@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
@@ -35,7 +36,7 @@ import project.com.maktab.hw_6.model.task.TaskType;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class CrudTaskFragment extends Fragment {
+public class CrudTaskFragment extends DialogFragment {
     private static final String ARGS_EXTRA_ID = "args_extra_id";
     private static final String ARGS_EXTRA_HAS_EXTRA = "args_extra_has_extra";
     private static final int DATE_REQ_CODE = 1;
@@ -169,7 +170,7 @@ public class CrudTaskFragment extends Fragment {
                         mEditTextTitle.setBackgroundColor(Color.WHITE);
                         TaskRepository.getInstance(getActivity()).updateTask(mTask);
                         toast.show();
-                        getActivity().finish();
+                        dismiss();
 
                     }
                 }
@@ -184,7 +185,7 @@ public class CrudTaskFragment extends Fragment {
                         public void onYesClicked() {
                             TaskRepository.getInstance(getActivity()).removeTask(mTask.getID());
                             toast.show();
-                            getActivity().finish();
+                            dismiss();
                         }
 
                         @Override
@@ -210,7 +211,7 @@ public class CrudTaskFragment extends Fragment {
                         mTask.setTaskType(TaskType.DONE);
                         TaskRepository.getInstance(getActivity()).updateTask(mTask);
                         toast.show();
-                        getActivity().finish();
+                        dismiss();
 
                     }
 
@@ -265,7 +266,7 @@ public class CrudTaskFragment extends Fragment {
 //            TaskRepository.getInstance().addTask(mTask);
             TaskRepository.getInstance(getActivity()).updateTask(mTask);
             Toast.makeText(getActivity(), R.string.toast_crud_success, Toast.LENGTH_SHORT).show();
-            getActivity().finish();
+            dismiss();
 
         }
     }
@@ -309,7 +310,7 @@ public class CrudTaskFragment extends Fragment {
     }
 
     //check back pressed for add button
-    public static boolean onBackPressed(final Context context) {
+ /*   public static boolean onBackPressed(final Context context) {
         String mTaskTitle = mTask.getTitle();
         final Activity activity = (Activity) context;
         if (mTaskTitle.length() > 0) {
@@ -355,7 +356,7 @@ public class CrudTaskFragment extends Fragment {
                 })
                 .create();
         alertDialog.show();
-    }
+    }*/
 
 
 }

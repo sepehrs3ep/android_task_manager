@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -28,6 +29,8 @@ public class CrudShowDialogFragment extends DialogFragment {
     private TextView mTaskDate;
     private TextView mTaskTime;
     private static final String ID_SHOW_ARGS = "idShowArgs";
+    private Button mNavigateEditBtn;
+    private UUID mId;
 
     public static CrudShowDialogFragment newInstance(UUID id) {
 
@@ -45,8 +48,8 @@ public class CrudShowDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UUID id = (UUID) getArguments().getSerializable(ID_SHOW_ARGS);
-        mTask = TaskRepository.getInstance(getActivity()).getTaskByID(id);
+        mId = (UUID) getArguments().getSerializable(ID_SHOW_ARGS);
+        mTask = TaskRepository.getInstance(getActivity()).getTaskByID(mId);
         setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Holo_Light_Dialog_NoActionBar_MinWidth);
     }
 
@@ -60,13 +63,19 @@ public class CrudShowDialogFragment extends DialogFragment {
         mTaskDesc = view.findViewById(R.id.desc_show_crud_dialog);
         mTaskDate = view.findViewById(R.id.date_show_crud_dialog);
         mTaskTime = view.findViewById(R.id.time_show_crud_dialog);
-
+        mNavigateEditBtn = view.findViewById(R.id.edit_show_curd_btn);
         mTaskTitle.setText(mTask.getTitle());
         mTaskDesc.setText(mTask.getDescription());
         setDateTextView();
         setTimeTextView();
 
-
+        mNavigateEditBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CrudTaskFragment fragment = CrudTaskFragment.getInstance(mId, false);
+                fragment.show(getFragmentManager(), "goto edit");
+            }
+        });
         return view;
     }
 
