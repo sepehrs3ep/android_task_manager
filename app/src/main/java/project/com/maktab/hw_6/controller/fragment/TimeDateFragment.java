@@ -1,6 +1,8 @@
 package project.com.maktab.hw_6.controller.fragment;
 
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TabItem;
@@ -19,6 +21,7 @@ import android.widget.TimePicker;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 
 import project.com.maktab.hw_6.R;
 
@@ -33,7 +36,11 @@ public class TimeDateFragment extends DialogFragment {
     private static final String MULTI_DIALOG_ARGS = "multi_dialog_args";
     private Button mOkBtn;
     private Button mCancelBtn;
+    private static final String CALENDER_EXTRA = "project.com.maktab.hw_6.controller.fragment.calenderExtra";
 
+    public static String getCalenderExtra() {
+        return CALENDER_EXTRA;
+    }
 
     public TimeDateFragment() {
         // Required empty public constructor
@@ -55,7 +62,7 @@ public class TimeDateFragment extends DialogFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(final LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.time_and_date_picker, container, false);
         mTabLayout = view.findViewById(R.id.multi_tabLayout);
@@ -117,7 +124,16 @@ public class TimeDateFragment extends DialogFragment {
         mOkBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                int year = mDatePicker.getYear();
+                int month = mDatePicker.getMonth();
+                int day = mDatePicker.getDayOfMonth();
+                int hour = mTimePicker.getHour();
+                int minutes = mTimePicker.getMinute();
+                Date date = new GregorianCalendar(year, month, day, hour, minutes).getTime();
+                Intent resultIntent = new Intent();
+                resultIntent.putExtra(CALENDER_EXTRA, date);
+                getTargetFragment().onActivityResult(getTargetRequestCode(), Activity.RESULT_OK, resultIntent);
+                getActivity().finish();
             }
         });
 

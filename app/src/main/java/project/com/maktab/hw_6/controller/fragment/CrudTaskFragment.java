@@ -6,13 +6,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -22,6 +19,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
@@ -43,12 +41,14 @@ public class CrudTaskFragment extends Fragment {
     private static final int DATE_REQ_CODE = 1;
     private static final String DATE_TAG = "date_tag";
     private static final String TIME_TAG = "time_tag";
+    private static final int CALENDER_REQ_CODE = 2;
     private static final int TIME_REQ_CODE = -1;
     public static boolean IS_EMPTY = false;
     private EditText mEditTextTitle;
     private EditText mEditTextDesc;
-    private Button mDateButton;
-    private Button mTimeButton;
+    private TextView mDateTextView;
+    private TextView mTimeTextView;
+    private Button mCalenderBtn;
     private static boolean mFromFloatButton;
     private static Task mTask;
     public static boolean mStay;
@@ -89,14 +89,15 @@ public class CrudTaskFragment extends Fragment {
         LinearLayout layoutButtonSheet = view.findViewById(R.id.bottom_sheet);
         /*final Drawable colorDrawable = mEditTextDesc.getBackground();
         mEditTextTitle.setBackground(colorDrawable);*/
-        mDateButton = view.findViewById(R.id.date_button);
-        mTimeButton = view.findViewById(R.id.time_button);
+        mDateTextView = view.findViewById(R.id.date_text_view);
+        mTimeTextView = view.findViewById(R.id.time_text_view);
+        mCalenderBtn = view.findViewById(R.id.calender_button);
         Button buttonAddCrud = layoutButtonSheet.findViewById(R.id.crud_add);
         Button buttonEditCrud = layoutButtonSheet.findViewById(R.id.crud_edit);
         Button buttonDoneCrud = layoutButtonSheet.findViewById(R.id.crud_done);
         Button buttonDeleteCrud = layoutButtonSheet.findViewById(R.id.crud_delete);
-        setDateButton();
-        setTimeButton();
+        setDateTextView();
+        setTimeTextView();
         mEditTextTitle.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -218,22 +219,30 @@ public class CrudTaskFragment extends Fragment {
 
 
         }
-        mTimeButton.setOnClickListener(new View.OnClickListener() {
+   /*     mTimeTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-             /*   TimePickerFragment fragment = TimePickerFragment.newInstance(mTask.getDate());
+             *//*   TimePickerFragment fragment = TimePickerFragment.newInstance(mTask.getDate());
                 fragment.setTargetFragment(CrudTaskFragment.this, TIME_REQ_CODE);
-                fragment.show(getFragmentManager(), TIME_TAG);*/
+                fragment.show(getFragmentManager(), TIME_TAG);*//*
              TimeDateFragment fragment = new TimeDateFragment();
              fragment.show(getFragmentManager(),"tag");
             }
         });
-        mDateButton.setOnClickListener(new View.OnClickListener() {
+        mDateTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 DatePickerFragment fragment = DatePickerFragment.newInstance(mTask.getDate());
                 fragment.setTargetFragment(CrudTaskFragment.this, DATE_REQ_CODE);
                 fragment.show(getFragmentManager(), DATE_TAG);
+            }
+        });*/
+        mCalenderBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TimeDateFragment fragment = TimeDateFragment.newInstance(mTask.getDate());
+                fragment.setTargetFragment(CrudTaskFragment.this, CALENDER_REQ_CODE);
+                fragment.show(getFragmentManager(), "calenderTag");
             }
         });
 
@@ -261,16 +270,16 @@ public class CrudTaskFragment extends Fragment {
         }
     }
 
-    private void setTimeButton() {
+    private void setTimeTextView() {
         final SimpleDateFormat timeFormat = new SimpleDateFormat("HH-mm");
         String timeOutput = timeFormat.format(mTask.getDate());
-        mTimeButton.setText(timeOutput);
+        mTimeTextView.setText(timeOutput);
     }
 
-    private void setDateButton() {
+    private void setDateTextView() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd,E");
         String dateOutput = dateFormat.format(mTask.getDate());
-        mDateButton.setText(dateOutput);
+        mDateTextView.setText(dateOutput);
     }
 
     public void checkTitle() {
@@ -283,19 +292,20 @@ public class CrudTaskFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != Activity.RESULT_OK) return;
-        if (requestCode == DATE_REQ_CODE) {
-            Date date = (Date) data.getSerializableExtra(DatePickerFragment.getDatePickerExtra());
+        if (requestCode == CALENDER_REQ_CODE) {
+            Date date = (Date) data.getSerializableExtra(TimeDateFragment.getCalenderExtra());
             mTask.setDate(date);
-            setDateButton();
+            setDateTextView();
+            setTimeTextView();
 
         }
-        if (requestCode == TIME_REQ_CODE) {
+       /* if (requestCode == TIME_REQ_CODE) {
             Date date = (Date) data.getSerializableExtra(TimePickerFragment.getTimeExtra());
             mTask.setDate(date);
-            setTimeButton();
+            setTimeTextView();
 
 
-        }
+        }*/
     }
 
     //check back pressed for add button
