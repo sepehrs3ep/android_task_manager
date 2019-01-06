@@ -225,7 +225,7 @@ public class CrudTaskFragment extends Fragment {
              *//*   TimePickerFragment fragment = TimePickerFragment.newInstance(mTask.getDate());
                 fragment.setTargetFragment(CrudTaskFragment.this, TIME_REQ_CODE);
                 fragment.show(getFragmentManager(), TIME_TAG);*//*
-             TimeDateFragment fragment = new TimeDateFragment();
+             DateDialogFragment fragment = new DateDialogFragment();
              fragment.show(getFragmentManager(),"tag");
             }
         });
@@ -240,7 +240,7 @@ public class CrudTaskFragment extends Fragment {
         mCalenderBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimeDateFragment fragment = TimeDateFragment.newInstance(mTask.getDate());
+                DateDialogFragment fragment = DateDialogFragment.newInstance(mTask.getDate());
                 fragment.setTargetFragment(CrudTaskFragment.this, CALENDER_REQ_CODE);
                 fragment.show(getFragmentManager(), "calenderTag");
             }
@@ -293,7 +293,7 @@ public class CrudTaskFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != Activity.RESULT_OK) return;
         if (requestCode == CALENDER_REQ_CODE) {
-            Date date = (Date) data.getSerializableExtra(TimeDateFragment.getCalenderExtra());
+            Date date = (Date) data.getSerializableExtra(DateDialogFragment.getCalenderExtra());
             mTask.setDate(date);
             setDateTextView();
             setTimeTextView();
