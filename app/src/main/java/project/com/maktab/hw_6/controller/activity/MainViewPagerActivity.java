@@ -95,7 +95,7 @@ public class MainViewPagerActivity extends AppCompatActivity {
                 return POSITION_NONE;
             }
         });
-
+/*
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int i, float v, int i1) {
@@ -112,7 +112,7 @@ public class MainViewPagerActivity extends AppCompatActivity {
             public void onPageScrollStateChanged(int i) {
 
             }
-        });
+        });*/
         mTabLayout.setupWithViewPager(mViewPager);
     }
 }

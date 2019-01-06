@@ -221,9 +221,11 @@ public class CrudTaskFragment extends Fragment {
         mTimeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TimePickerFragment fragment = TimePickerFragment.newInstance(mTask.getDate());
+             /*   TimePickerFragment fragment = TimePickerFragment.newInstance(mTask.getDate());
                 fragment.setTargetFragment(CrudTaskFragment.this, TIME_REQ_CODE);
-                fragment.show(getFragmentManager(), TIME_TAG);
+                fragment.show(getFragmentManager(), TIME_TAG);*/
+             TimeDateFragment fragment = new TimeDateFragment();
+             fragment.show(getFragmentManager(),"tag");
             }
         });
         mDateButton.setOnClickListener(new View.OnClickListener() {
