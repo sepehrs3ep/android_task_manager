@@ -214,8 +214,10 @@ public class TaskListFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     UUID id = mTask.getID();
-                    Intent intent = CrudTaskActivity.newIntent(getActivity(), id, false);
-                    startActivity(intent);
+                    /*Intent intent = CrudTaskActivity.newIntent(getActivity(), id, false);
+                    startActivity(intent);*/
+                    CrudShowDialogFragment fragment = CrudShowDialogFragment.newInstance(id);
+                    fragment.show(getFragmentManager(),"showCrud");
                 }
             });
         }
