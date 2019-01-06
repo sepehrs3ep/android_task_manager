@@ -73,6 +73,7 @@ public class CrudShowDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 CrudTaskFragment fragment = CrudTaskFragment.getInstance(mId, false);
+                dismiss();
                 fragment.show(getFragmentManager(), "goto edit");
             }
         });

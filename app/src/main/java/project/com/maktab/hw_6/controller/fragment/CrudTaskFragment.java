@@ -2,6 +2,7 @@ package project.com.maktab.hw_6.controller.fragment;
 
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,6 +29,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import project.com.maktab.hw_6.R;
+import project.com.maktab.hw_6.controller.activity.MainViewPagerActivity;
 import project.com.maktab.hw_6.model.task.Task;
 import project.com.maktab.hw_6.model.task.TaskRepository;
 import project.com.maktab.hw_6.model.task.TaskType;
@@ -68,6 +70,18 @@ public class CrudTaskFragment extends DialogFragment {
 
     public CrudTaskFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        Dialog dialog = getDialog();
+        if (dialog != null)
+        {
+            int width = ViewGroup.LayoutParams.MATCH_PARENT;
+            int height = ViewGroup.LayoutParams.MATCH_PARENT;
+            dialog.getWindow().setLayout(width, height);
+        }
     }
 
     @Override
@@ -357,7 +371,6 @@ public class CrudTaskFragment extends DialogFragment {
                 .create();
         alertDialog.show();
     }*/
-
 
 }
 

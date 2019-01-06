@@ -22,7 +22,7 @@ import project.com.maktab.hw_6.model.task.TaskRepository;
 import project.com.maktab.hw_6.model.task.TaskType;
 
 public class MainViewPagerActivity extends AppCompatActivity {
-    TaskListFragment[] mListFragments = new TaskListFragment[3];
+    static TaskListFragment[] mListFragments = new TaskListFragment[3];
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private long mUserId;
@@ -32,6 +32,12 @@ public class MainViewPagerActivity extends AppCompatActivity {
         Intent intent = new Intent(context, MainViewPagerActivity.class);
         intent.putExtra(USER_ID_EXTRA, userId);
         return intent;
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override
@@ -41,7 +47,6 @@ public class MainViewPagerActivity extends AppCompatActivity {
 
         mTabLayout = findViewById(R.id.tab_layout);
         mViewPager = findViewById(R.id.view_pager);
-
         mUserId = getIntent().getLongExtra(USER_ID_EXTRA, 1);
 
         FloatingActionButton floatingActionButton = findViewById(R.id.float_button_add);
@@ -96,7 +101,13 @@ public class MainViewPagerActivity extends AppCompatActivity {
 
             @Override
             public int getItemPosition(@NonNull Object object) {
-                return POSITION_NONE;
+                /*return POSITION_NONE;*/
+                TaskListFragment f = (TaskListFragment) object;
+                if (f != null) {
+                    f.update();
+                }
+                return super.getItemPosition(object);
+
             }
         });
 /*
@@ -119,4 +130,6 @@ public class MainViewPagerActivity extends AppCompatActivity {
         });*/
         mTabLayout.setupWithViewPager(mViewPager);
     }
+
+
 }
