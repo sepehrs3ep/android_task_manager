@@ -1,7 +1,6 @@
 package project.com.maktab.hw_6.controller.fragment;
 
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -25,8 +24,6 @@ import java.util.List;
 import java.util.UUID;
 
 import project.com.maktab.hw_6.R;
-import project.com.maktab.hw_6.Updateable;
-import project.com.maktab.hw_6.controller.activity.CrudTaskActivity;
 import project.com.maktab.hw_6.model.task.Task;
 import project.com.maktab.hw_6.model.task.TaskRepository;
 import project.com.maktab.hw_6.model.task.TaskType;
@@ -35,7 +32,7 @@ import project.com.maktab.hw_6.model.task.TaskType;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class TaskListFragment extends Fragment implements Updateable {
+public class TaskListFragment extends Fragment {
     private static final String SUBTITLE_STATUS = "subtitleStatus";
     private RecyclerView mRecyclerView;
     private ImageView mNoTaskImageView;
@@ -65,9 +62,10 @@ public class TaskListFragment extends Fragment implements Updateable {
         super.onResume();
         updateUI();
         updateSubtitle();
+//        ((MainViewPagerActivity) getContext()).setAdapter(selected);
     }
 
-    private void updateUI() {
+    public void updateUI() {
         List<Task> list = getTaskList();
 
         if (mTaskAdapter == null) {
@@ -198,10 +196,7 @@ public class TaskListFragment extends Fragment implements Updateable {
         activity.getSupportActionBar().setSubtitle(subtitleText);
     }
 
-    @Override
-    public void update() {
-        updateUI();
-    }
+
 
     private class TaskViewHolder extends RecyclerView.ViewHolder {
         private TextView mTextViewTitle;

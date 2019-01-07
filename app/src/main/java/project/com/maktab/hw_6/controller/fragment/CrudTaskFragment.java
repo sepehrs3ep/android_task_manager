@@ -8,6 +8,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
@@ -28,6 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
+import project.com.maktab.hw_6.MyDialogCloseListener;
 import project.com.maktab.hw_6.R;
 import project.com.maktab.hw_6.controller.activity.MainViewPagerActivity;
 import project.com.maktab.hw_6.model.task.Task;
@@ -49,6 +51,7 @@ public class CrudTaskFragment extends DialogFragment {
     public static boolean IS_EMPTY = false;
     private EditText mEditTextTitle;
     private EditText mEditTextDesc;
+    int positioin;
     private TextView mDateTextView;
     private TextView mTimeTextView;
     private Button mCalenderBtn;
@@ -72,6 +75,14 @@ public class CrudTaskFragment extends DialogFragment {
         // Required empty public constructor
     }
 
+
+    @Override
+    public void onDismiss(DialogInterface dialog) {
+        Activity activity = getActivity();
+        if(activity instanceof MyDialogCloseListener)
+            ((MyDialogCloseListener)activity).handleDialogClose(dialog);
+    }
+
     @Override
     public void onStart() {
         super.onStart();
@@ -93,6 +104,8 @@ public class CrudTaskFragment extends DialogFragment {
         mTaskTitle = mTask.getTitle();
         mRawTextTitle = mTaskTitle;
     }
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -312,7 +325,6 @@ public class CrudTaskFragment extends DialogFragment {
             mTask.setDate(date);
             setDateTextView();
             setTimeTextView();
-
         }
        /* if (requestCode == TIME_REQ_CODE) {
             Date date = (Date) data.getSerializableExtra(TimePickerFragment.getTimeExtra());
