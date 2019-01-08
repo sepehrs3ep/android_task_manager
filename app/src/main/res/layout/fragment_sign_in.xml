@@ -20,7 +20,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/user_name_edit_text"
+        android:id="@+id/login_user_name_et"
         style="?android:attr/listSeparatorTextViewStyle"
         android:layout_width="wrap_content"
         android:layout_height="22dp"
@@ -37,7 +37,7 @@
         app:layout_constraintTop_toBottomOf="@+id/todo_image" />
 
     <EditText
-        android:id="@+id/password_edit_text"
+        android:id="@+id/login_password_et"
         style="?android:attr/listSeparatorTextViewStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -50,11 +50,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.546"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/user_name_edit_text" />
+        app:layout_constraintTop_toBottomOf="@+id/login_user_name_et" />
 
 
     <Button
-        android:id="@+id/sign_in_btn"
+        android:id="@+id/login_sign_in_btn"
         android:layout_width="85dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -64,7 +64,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/password_edit_text" />
+        app:layout_constraintTop_toBottomOf="@+id/login_password_et" />
 
     <TextView
         android:id="@+id/textView2"
@@ -76,10 +76,10 @@
         android:text="don't have account? (create account)"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sign_in_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/login_sign_in_btn" />
 
     <Button
-        android:id="@+id/sign_up_btn"
+        android:id="@+id/login_sign_up_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -88,7 +88,7 @@
         android:text="@string/sign_up"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView2"
-        app:layout_constraintTop_toBottomOf="@+id/sign_in_btn" />
+        app:layout_constraintTop_toBottomOf="@+id/login_sign_in_btn" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/floatingGeustButton"

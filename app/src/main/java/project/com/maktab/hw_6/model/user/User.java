@@ -6,7 +6,7 @@ import java.util.UUID;
 public class User {
     private String mName;
     private String mPassword;
-    private int mId;
+    private long mId;
     private UUID mUserUUID;
     private Date mUserDate;
     private String mEmail;
@@ -17,6 +17,10 @@ public class User {
 
     public void setEmail(String email) {
         mEmail = email;
+    }
+
+    public void setId(long id) {
+        mId = id;
     }
 
     public User(UUID id){
@@ -40,7 +44,7 @@ public class User {
         return mUserUUID;
     }
 
-    public int getId() {
+    public long getId() {
         return mId;
     }
 

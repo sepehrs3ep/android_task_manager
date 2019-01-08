@@ -25,12 +25,14 @@ public class UserCursorWrapper extends CursorWrapper {
         UUID uuid = UUID.fromString(getString(getColumnIndex(TaskDbSchema.UserTable.Cols.UUID)));
         Date date  = new Date(getLong(getColumnIndex(TaskDbSchema.UserTable.Cols.DATE)));
         String email = getString(getColumnIndex(TaskDbSchema.UserTable.Cols.EMAIL));
+        long _id = getLong(getColumnIndex(TaskDbSchema.UserTable.Cols._ID));
 
 
         User user = new User(uuid);
         user.setName(name);
         user.setPassword(password);
         user.setEmail(email);
+        user.setId(_id);
         user.setUserDate(date);
 
 

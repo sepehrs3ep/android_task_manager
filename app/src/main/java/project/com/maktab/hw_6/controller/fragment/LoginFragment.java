@@ -25,7 +25,7 @@ import project.com.maktab.hw_6.model.user.UserRepository;
 public class LoginFragment extends Fragment {
     private EditText mUserNameEt;
     private EditText mPasswordEt;
-    private Button mSignUpBtn;
+    private Button mLoginSignUpBtn;
     private Button mSignInBtn;
     private User mUser;
 
@@ -55,10 +55,10 @@ public class LoginFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_sign_in, container, false);
-        mUserNameEt = view.findViewById(R.id.user_name_edit_text);
-        mPasswordEt = view.findViewById(R.id.password_edit_text);
-        mSignUpBtn = view.findViewById(R.id.sign_up_btn);
-        mSignInBtn = view.findViewById(R.id.sign_in_btn);
+        mUserNameEt = view.findViewById(R.id.login_user_name_et);
+        mPasswordEt = view.findViewById(R.id.login_password_et);
+        mLoginSignUpBtn = view.findViewById(R.id.login_sign_up_btn);
+        mSignInBtn = view.findViewById(R.id.login_sign_in_btn);
 
         mUserNameEt.addTextChangedListener(new TextWatcher() {
             @Override
@@ -93,11 +93,13 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        mSignUpBtn.setOnClickListener(new View.OnClickListener() {
+        mLoginSignUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                long id = UserRepository.getInstance(getActivity()).createUser(mUser);
-                sendIntent(id);
+              /*  long id = UserRepository.getInstance(getActivity()).createUser(mUser);
+                sendIntent(id);*/
+              SignUpDialogFragment fragment = new SignUpDialogFragment();
+              fragment.show(getFragmentManager(),"signUp");
             }
         });
         mSignInBtn.setOnClickListener(new View.OnClickListener() {

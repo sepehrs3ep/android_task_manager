@@ -23,19 +23,20 @@ public class UserRepository {
         String whereClause = TaskDbSchema.UserTable.Cols.USER_NAME + " = ? AND " +
                 TaskDbSchema.UserTable.Cols.PASSWORD + " = ? ";
         String[] whereArgs = new String[]{
-                user.getName(),
+                user.getName().toLowerCase(),
                 user.getPassword()
         };
         String[] cols = new String[]{
                 TaskDbSchema.UserTable.Cols._ID
         };
-        Cursor cursor = mDatabase.query(TaskDbSchema.UserTable.NAME, cols,
-                whereClause, whereArgs, null, null, null);
+        /*Cursor cursor = mDatabase.query(TaskDbSchema.UserTable.NAME, cols,
+                whereClause, whereArgs, null, null, null);*/
+        UserCursorWrapper cursor = userQuery(whereClause,whereArgs,cols);
         try {
             if (cursor.getCount() > 0) {
                 cursor.moveToFirst();
-                long id = cursor.getLong(cursor.getColumnIndex(TaskDbSchema.UserTable.Cols._ID));
-                return id;
+//                long id = cursor.getLong(cursor.getColumnIndex(TaskDbSchema.UserTable.Cols._ID));
+                return cursor.getUser().getId();
 
             }
         } finally {
@@ -47,6 +48,22 @@ public class UserRepository {
     }
 
     public long createUser(User user) {
+        String whereClause = TaskDbSchema.UserTable.Cols.USER_NAME + " = ? " ;
+        String[] args = new String[]{
+                user.getName().toLowerCase()
+        };
+
+
+            UserCursorWrapper cursor = userQuery(whereClause,args,null);
+        try {
+
+            if(cursor.getCount()>0)
+                return -1;
+        } finally {
+            cursor.close();
+        }
+
+
         ContentValues values = getContentValues(user);
         long id = mDatabase.insert(TaskDbSchema.UserTable.NAME, null, values);
         return id;
@@ -61,13 +78,18 @@ public class UserRepository {
 
     private ContentValues getContentValues(User user) {
         ContentValues values = new ContentValues();
-        values.put(TaskDbSchema.UserTable.Cols.USER_NAME, user.getName());
+        values.put(TaskDbSchema.UserTable.Cols.USER_NAME, user.getName().toLowerCase());
         values.put(TaskDbSchema.UserTable.Cols.PASSWORD, user.getPassword());
         values.put(TaskDbSchema.UserTable.Cols.EMAIL,user.getEmail());
         values.put(TaskDbSchema.UserTable.Cols.DATE,user.getUserDate().getTime());
         values.put(TaskDbSchema.UserTable.Cols.UUID,user.getUserUUID().toString());
 
         return values;
+    }
+    private UserCursorWrapper userQuery(String whereClause,String[] args,String[] cols){
+        Cursor cursor = mDatabase.query(TaskDbSchema.UserTable.NAME,cols,
+                whereClause,args,null,null,null);
+        return new UserCursorWrapper(cursor);
     }
 
 
