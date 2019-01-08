@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.UUID;
+
 import project.com.maktab.hw_6.database.TaskBaseHelper;
 import project.com.maktab.hw_6.database.TaskDbSchema;
 import project.com.maktab.hw_6.database.UserCursorWrapper;
@@ -20,30 +22,43 @@ public class UserRepository {
     }
 
     public User getUser(long id) {
-        User user;
+        User user1;
         String search_query = " select * from " + TaskDbSchema.TaskTable.NAME +
                 " where " +
                 " cast(" + TaskDbSchema.UserTable.Cols._ID + " as text) = ? ";
         String[] args = new String[]{
                 String.valueOf(id)
         };
-        UserCursorWrapper cursorWrapper = new UserCursorWrapper(mDatabase.rawQuery(search_query, args));
+        Cursor cursorWrapper = mDatabase.rawQuery(search_query, args);
 
         try {
             if (cursorWrapper.getCount() <= 0) return null;
 
             cursorWrapper.moveToFirst();
 
-            user = cursorWrapper.getUser();
+            String name = cursorWrapper.getString(cursorWrapper.getColumnIndex(TaskDbSchema.UserTable.Cols.USER_NAME));
+            String password = cursorWrapper.getString(cursorWrapper.getColumnIndex(TaskDbSchema.UserTable.Cols.PASSWORD));
+            UUID uuid = UUID.fromString(cursorWrapper.getString(cursorWrapper.getColumnIndex(TaskDbSchema.UserTable.Cols.UUID)));
+            user1 = new User(uuid);
+            user1.setName(name);
+            user1.setPassword(password);
+
 
         } finally {
             cursorWrapper.close();
 
         }
 
-        return user;
+        return user1;
     }
+    public void deleteAccount(long id){
+        String search_query = " delete from " + TaskDbSchema.TaskTable.NAME +
+                " where " +
+                " cast(" + TaskDbSchema.UserTable.Cols._ID + " as text) = " + String.valueOf(id);
 
+        mDatabase.execSQL(search_query);
+
+    }
     public long login(User user) {
         String whereClause = TaskDbSchema.UserTable.Cols.USER_NAME + " = ? AND " +
                 TaskDbSchema.UserTable.Cols.PASSWORD + " = ? ";
@@ -71,7 +86,16 @@ public class UserRepository {
 
         return -1;
     }
+    public void updateUser(User user){
+        String whereClause = TaskDbSchema.UserTable.Cols.UUID + " = ? ";
+        String[] args = new String[]{
+                String.valueOf(user.getUserUUID())
+        };
+        ContentValues values = getContentValues(user);
+        mDatabase.update(TaskDbSchema.UserTable.NAME,values,whereClause,args);
 
+
+    }
     public long createUser(User user) {
         String whereClause = TaskDbSchema.UserTable.Cols.USER_NAME + " = ? ";
         String[] args = new String[]{

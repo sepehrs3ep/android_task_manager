@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -19,10 +20,14 @@ import android.view.View;
 import project.com.maktab.hw_6.MyDialogCloseListener;
 import project.com.maktab.hw_6.R;
 import project.com.maktab.hw_6.controller.fragment.CrudTaskFragment;
+import project.com.maktab.hw_6.controller.fragment.LoginFragment;
+import project.com.maktab.hw_6.controller.fragment.SignUpDialogFragment;
 import project.com.maktab.hw_6.controller.fragment.TaskListFragment;
 import project.com.maktab.hw_6.model.task.Task;
 import project.com.maktab.hw_6.model.task.TaskRepository;
 import project.com.maktab.hw_6.model.task.TaskType;
+import project.com.maktab.hw_6.model.user.User;
+import project.com.maktab.hw_6.model.user.UserRepository;
 
 public class MainViewPagerActivity extends AppCompatActivity implements MyDialogCloseListener {
     static TaskListFragment[] mListFragments = new TaskListFragment[3];
@@ -148,4 +153,35 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
     }
 
 
+    @Override
+    public void onBackPressed() {
+//        User user = UserRepository.getInstance(MainViewPagerActivity.this).getUser(mUserId);
+        if(LoginFragment.IS_GEUST){
+            AlertDialog dialog = new AlertDialog.Builder(MainViewPagerActivity.this)
+                    .setTitle("Don't want to create account ? your information will delete if you don't create account")
+                    .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            SignUpDialogFragment fragment  = SignUpDialogFragment.newInstance(mUserId,true);
+                            fragment.show(getSupportFragmentManager(),"geustUser");
+                        }
+                    })
+                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            UserRepository.getInstance(MainViewPagerActivity.this).deleteAccount(mUserId);
+                        }
+                    })
+                    .create();
+            dialog.show();
+
+
+
+
+        }else
+        super.onBackPressed();
+
+
+
+    }
 }

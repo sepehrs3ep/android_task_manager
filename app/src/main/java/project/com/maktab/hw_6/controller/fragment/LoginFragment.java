@@ -4,6 +4,7 @@ package project.com.maktab.hw_6.controller.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import project.com.maktab.hw_6.R;
 import project.com.maktab.hw_6.controller.activity.MainViewPagerActivity;
+import project.com.maktab.hw_6.controller.activity.SingleFragmentActivity;
 import project.com.maktab.hw_6.model.user.User;
 import project.com.maktab.hw_6.model.user.UserRepository;
 
@@ -27,6 +29,8 @@ public class LoginFragment extends Fragment {
     private EditText mPasswordEt;
     private Button mLoginSignUpBtn;
     private Button mSignInBtn;
+    public static boolean IS_GEUST = false;
+    private FloatingActionButton mFloatGeustBtn;
     private User mUser;
 
 
@@ -59,6 +63,7 @@ public class LoginFragment extends Fragment {
         mPasswordEt = view.findViewById(R.id.login_password_et);
         mLoginSignUpBtn = view.findViewById(R.id.login_sign_up_btn);
         mSignInBtn = view.findViewById(R.id.login_sign_in_btn);
+        mFloatGeustBtn = view.findViewById(R.id.floatingGeustButton);
 
         mUserNameEt.addTextChangedListener(new TextWatcher() {
             @Override
@@ -98,7 +103,7 @@ public class LoginFragment extends Fragment {
             public void onClick(View v) {
               /*  long id = UserRepository.getInstance(getActivity()).createUser(mUser);
                 sendIntent(id);*/
-              SignUpDialogFragment fragment = new SignUpDialogFragment();
+              SignUpDialogFragment fragment = SignUpDialogFragment.newInstance(0,false);
               fragment.show(getFragmentManager(),"signUp");
             }
         });
@@ -113,6 +118,17 @@ public class LoginFragment extends Fragment {
             }
         });
 
+        mFloatGeustBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                User user = new User();
+                user.setName("guest");
+                IS_GEUST = true;
+                user.setPassword("admin");
+                long id = UserRepository.getInstance(getActivity()).createUser(user);
+                sendIntent(id);
+            }
+        });
 
         return view;
     }

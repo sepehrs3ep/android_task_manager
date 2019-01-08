@@ -34,9 +34,23 @@ public class SignUpDialogFragment extends DialogFragment {
     private EditText mUserEmail;
     private User mUser;
     private Button mSignUpBtn;
+    public static final String ID_ARGS = "id";
+    public static final String IS_GEUST_ARGS = "isGeust";
+    private long mUserId;
+    private boolean mIsFromGeust;
 
     public SignUpDialogFragment() {
         // Required empty public constructor
+    }
+
+    public static SignUpDialogFragment newInstance(long id, boolean isGeust) {
+
+        Bundle args = new Bundle();
+        args.putLong(ID_ARGS, id);
+        args.putBoolean(IS_GEUST_ARGS, isGeust);
+        SignUpDialogFragment fragment = new SignUpDialogFragment();
+        fragment.setArguments(args);
+        return fragment;
     }
 
     @Override
@@ -54,6 +68,8 @@ public class SignUpDialogFragment extends DialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mUser = new User();
+        mUserId = getArguments().getLong(ID_ARGS);
+        mIsFromGeust = getArguments().getBoolean(IS_GEUST_ARGS, false);
     }
 
     @Override
@@ -65,6 +81,12 @@ public class SignUpDialogFragment extends DialogFragment {
         mUserPassword = view.findViewById(R.id.sign_up_password_et);
         mUserEmail = view.findViewById(R.id.sign_up_email_et);
         mSignUpBtn = view.findViewById(R.id.sign_up_create_account_btn);
+
+        if (mIsFromGeust) {
+            User geustUser = UserRepository.getInstance(getActivity()).getUser(mUserId);
+         /*   mUserName.setText(geustUser.getName());
+            mUserPassword.setText(geustUser.getPassword());*/
+        }
 
         mUserName.addTextChangedListener(new TextWatcher() {
             @Override
@@ -117,12 +139,20 @@ public class SignUpDialogFragment extends DialogFragment {
         mSignUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                long id = UserRepository.getInstance(getActivity()).createUser(mUser);
-                if (id == -1)
-                    Toast.makeText(getActivity(), "this user name already exist", Toast.LENGTH_SHORT).show();
-                else {
-                    sendIntent(id);
+                if (mIsFromGeust) {
+                    UserRepository.getInstance(getActivity()).updateUser(mUser);
+                    sendIntent(mUserId);
                     dismiss();
+                } else {
+
+                    long id = UserRepository.getInstance(getActivity()).createUser(mUser);
+                    if (id == -1)
+                        Toast.makeText(getActivity(), "this user name already exist", Toast.LENGTH_SHORT).show();
+                    else {
+
+                        sendIntent(id);
+                        dismiss();
+                    }
                 }
 
             }
