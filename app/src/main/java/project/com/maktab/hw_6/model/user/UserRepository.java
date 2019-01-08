@@ -63,6 +63,9 @@ public class UserRepository {
         ContentValues values = new ContentValues();
         values.put(TaskDbSchema.UserTable.Cols.USER_NAME, user.getName());
         values.put(TaskDbSchema.UserTable.Cols.PASSWORD, user.getPassword());
+        values.put(TaskDbSchema.UserTable.Cols.EMAIL,user.getEmail());
+        values.put(TaskDbSchema.UserTable.Cols.DATE,user.getUserDate().getTime());
+        values.put(TaskDbSchema.UserTable.Cols.UUID,user.getUserUUID().toString());
 
         return values;
     }

@@ -3,6 +3,9 @@ package project.com.maktab.hw_6.database;
 import android.database.Cursor;
 import android.database.CursorWrapper;
 
+import java.util.Date;
+import java.util.UUID;
+
 import project.com.maktab.hw_6.model.user.User;
 
 public class UserCursorWrapper extends CursorWrapper {
@@ -19,9 +22,17 @@ public class UserCursorWrapper extends CursorWrapper {
 
         String name = getString(getColumnIndex(TaskDbSchema.UserTable.Cols.USER_NAME));
         String password = getString(getColumnIndex(TaskDbSchema.UserTable.Cols.PASSWORD));
-        User user = new User();
+        UUID uuid = UUID.fromString(getString(getColumnIndex(TaskDbSchema.UserTable.Cols.UUID)));
+        Date date  = new Date(getLong(getColumnIndex(TaskDbSchema.UserTable.Cols.DATE)));
+        String email = getString(getColumnIndex(TaskDbSchema.UserTable.Cols.EMAIL));
+
+
+        User user = new User(uuid);
         user.setName(name);
         user.setPassword(password);
+        user.setEmail(email);
+        user.setUserDate(date);
+
 
         return user;
     }

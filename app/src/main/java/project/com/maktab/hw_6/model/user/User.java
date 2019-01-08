@@ -1,11 +1,44 @@
 package project.com.maktab.hw_6.model.user;
 
+import java.util.Date;
 import java.util.UUID;
 
 public class User {
     private String mName;
     private String mPassword;
     private int mId;
+    private UUID mUserUUID;
+    private Date mUserDate;
+    private String mEmail;
+
+    public String getEmail() {
+        return mEmail;
+    }
+
+    public void setEmail(String email) {
+        mEmail = email;
+    }
+
+    public User(UUID id){
+        this.mUserUUID = id;
+        mUserDate = new Date();
+
+    }
+    public User(){
+        this(UUID.randomUUID());
+    }
+
+    public Date getUserDate() {
+        return mUserDate;
+    }
+
+    public void setUserDate(Date userDate) {
+        mUserDate = userDate;
+    }
+
+    public UUID getUserUUID() {
+        return mUserUUID;
+    }
 
     public int getId() {
         return mId;
