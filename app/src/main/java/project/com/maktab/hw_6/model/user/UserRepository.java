@@ -16,7 +16,32 @@ public class UserRepository {
 
     private UserRepository(Context context) {
         mContext = context.getApplicationContext();
-        mDatabase = new TaskBaseHelper(context).getWritableDatabase();
+        mDatabase = new TaskBaseHelper(mContext).getWritableDatabase();
+    }
+
+    public User getUser(long id) {
+        User user;
+        String search_query = " select * from " + TaskDbSchema.TaskTable.NAME +
+                " where " +
+                " cast(" + TaskDbSchema.UserTable.Cols._ID + " as text) = ? ";
+        String[] args = new String[]{
+                String.valueOf(id)
+        };
+        UserCursorWrapper cursorWrapper = new UserCursorWrapper(mDatabase.rawQuery(search_query, args));
+
+        try {
+            if (cursorWrapper.getCount() <= 0) return null;
+
+            cursorWrapper.moveToFirst();
+
+            user = cursorWrapper.getUser();
+
+        } finally {
+            cursorWrapper.close();
+
+        }
+
+        return user;
     }
 
     public long login(User user) {
@@ -31,7 +56,7 @@ public class UserRepository {
         };
         /*Cursor cursor = mDatabase.query(TaskDbSchema.UserTable.NAME, cols,
                 whereClause, whereArgs, null, null, null);*/
-        UserCursorWrapper cursor = userQuery(whereClause,whereArgs,cols);
+        UserCursorWrapper cursor = userQuery(whereClause, whereArgs, cols);
         try {
             if (cursor.getCount() > 0) {
                 cursor.moveToFirst();
@@ -48,16 +73,16 @@ public class UserRepository {
     }
 
     public long createUser(User user) {
-        String whereClause = TaskDbSchema.UserTable.Cols.USER_NAME + " = ? " ;
+        String whereClause = TaskDbSchema.UserTable.Cols.USER_NAME + " = ? ";
         String[] args = new String[]{
                 user.getName().toLowerCase()
         };
 
 
-            UserCursorWrapper cursor = userQuery(whereClause,args,null);
+        UserCursorWrapper cursor = userQuery(whereClause, args, null);
         try {
 
-            if(cursor.getCount()>0)
+            if (cursor.getCount() > 0)
                 return -1;
         } finally {
             cursor.close();
@@ -80,15 +105,16 @@ public class UserRepository {
         ContentValues values = new ContentValues();
         values.put(TaskDbSchema.UserTable.Cols.USER_NAME, user.getName().toLowerCase());
         values.put(TaskDbSchema.UserTable.Cols.PASSWORD, user.getPassword());
-        values.put(TaskDbSchema.UserTable.Cols.EMAIL,user.getEmail());
-        values.put(TaskDbSchema.UserTable.Cols.DATE,user.getUserDate().getTime());
-        values.put(TaskDbSchema.UserTable.Cols.UUID,user.getUserUUID().toString());
+        values.put(TaskDbSchema.UserTable.Cols.EMAIL, user.getEmail());
+        values.put(TaskDbSchema.UserTable.Cols.DATE, user.getUserDate().getTime());
+        values.put(TaskDbSchema.UserTable.Cols.UUID, user.getUserUUID().toString());
 
         return values;
     }
-    private UserCursorWrapper userQuery(String whereClause,String[] args,String[] cols){
-        Cursor cursor = mDatabase.query(TaskDbSchema.UserTable.NAME,cols,
-                whereClause,args,null,null,null);
+
+    private UserCursorWrapper userQuery(String whereClause, String[] args, String[] cols) {
+        Cursor cursor = mDatabase.query(TaskDbSchema.UserTable.NAME, cols,
+                whereClause, args, null, null, null);
         return new UserCursorWrapper(cursor);
     }
 
