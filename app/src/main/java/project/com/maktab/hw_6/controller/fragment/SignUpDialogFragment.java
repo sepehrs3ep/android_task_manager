@@ -21,6 +21,7 @@ import java.util.UUID;
 
 
 import project.com.maktab.hw_6.R;
+import project.com.maktab.hw_6.controller.activity.LoginActivity;
 import project.com.maktab.hw_6.controller.activity.MainViewPagerActivity;
 import project.com.maktab.hw_6.model.user.User;
 import project.com.maktab.hw_6.model.user.UserRepository;
@@ -38,6 +39,7 @@ public class SignUpDialogFragment extends DialogFragment {
     public static final String IS_GEUST_ARGS = "isGeust";
     private long mUserId;
     private boolean mIsFromGeust;
+    private User mGeustUser;
 
     public SignUpDialogFragment() {
         // Required empty public constructor
@@ -70,6 +72,8 @@ public class SignUpDialogFragment extends DialogFragment {
         mUser = new User();
         mUserId = getArguments().getLong(ID_ARGS);
         mIsFromGeust = getArguments().getBoolean(IS_GEUST_ARGS, false);
+        if(mIsFromGeust)
+        mGeustUser = UserRepository.getInstance(getActivity()).getUser(mUserId);
     }
 
     @Override
@@ -83,9 +87,8 @@ public class SignUpDialogFragment extends DialogFragment {
         mSignUpBtn = view.findViewById(R.id.sign_up_create_account_btn);
 
         if (mIsFromGeust) {
-            User geustUser = UserRepository.getInstance(getActivity()).getUser(mUserId);
-         /*   mUserName.setText(geustUser.getName());
-            mUserPassword.setText(geustUser.getPassword());*/
+            mUserName.setText(mGeustUser.getName());
+            mUserPassword.setText(mGeustUser.getPassword());
         }
 
         mUserName.addTextChangedListener(new TextWatcher() {
@@ -113,6 +116,7 @@ public class SignUpDialogFragment extends DialogFragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mUser.setEmail(s.toString());
+
             }
 
             @Override
@@ -129,6 +133,7 @@ public class SignUpDialogFragment extends DialogFragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mUser.setPassword(s.toString());
+
             }
 
             @Override
@@ -140,9 +145,19 @@ public class SignUpDialogFragment extends DialogFragment {
             @Override
             public void onClick(View v) {
                 if (mIsFromGeust) {
-                    UserRepository.getInstance(getActivity()).updateUser(mUser);
-                    sendIntent(mUserId);
+                    String userText = mUserName.getText().toString();
+                    String geustPassword = mUserPassword.getText().toString();
+                    String gesutEmail = mUserEmail.getText().toString();
+                    mGeustUser.setName(userText);
+                    mGeustUser.setPassword(geustPassword);
+                    mGeustUser.setEmail(gesutEmail);
+                    mGeustUser.setId(mUserId);
+
+                    UserRepository.getInstance(getActivity()).updateUser(mGeustUser);
+//                    sendIntent(mUserId);
                     dismiss();
+                    Intent intent = new Intent(getActivity(),LoginActivity.class);
+                    startActivity(intent);
                 } else {
 
                     long id = UserRepository.getInstance(getActivity()).createUser(mUser);

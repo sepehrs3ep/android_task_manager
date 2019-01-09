@@ -31,7 +31,8 @@ public class LoginFragment extends Fragment {
     private Button mSignInBtn;
     public static boolean IS_GEUST = false;
     private FloatingActionButton mFloatGeustBtn;
-    private User mUser;
+    private String mUserName= "";
+    private String mPassword= "";
 
 
     public static LoginFragment newInstance() {
@@ -51,7 +52,6 @@ public class LoginFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mUser = new User();
     }
 
     @Override
@@ -65,7 +65,7 @@ public class LoginFragment extends Fragment {
         mSignInBtn = view.findViewById(R.id.login_sign_in_btn);
         mFloatGeustBtn = view.findViewById(R.id.floatingGeustButton);
 
-        mUserNameEt.addTextChangedListener(new TextWatcher() {
+   /*     mUserNameEt.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -73,7 +73,7 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mUser.setName(s.toString());
+                mUserName.concat(s.toString());
             }
 
             @Override
@@ -89,14 +89,14 @@ public class LoginFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mUser.setPassword(s.toString());
+                mPassword.concat(s.toString());
             }
 
             @Override
             public void afterTextChanged(Editable s) {
 
             }
-        });
+        });*/
 
         mLoginSignUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -110,7 +110,9 @@ public class LoginFragment extends Fragment {
         mSignInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                long id = UserRepository.getInstance(getActivity()).login(mUser);
+                mUserName = mUserNameEt.getText().toString();
+                mPassword = mPasswordEt.getText().toString();
+                long id = UserRepository.getInstance(getActivity()).login(mUserName,mPassword);
                 if (id > 0)
                     sendIntent(id);
                 else

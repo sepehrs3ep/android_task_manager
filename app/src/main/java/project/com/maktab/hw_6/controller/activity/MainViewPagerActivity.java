@@ -170,6 +170,7 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             UserRepository.getInstance(MainViewPagerActivity.this).deleteAccount(mUserId);
+                            finish();
                         }
                     })
                     .create();
