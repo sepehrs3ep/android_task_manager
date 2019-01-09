@@ -72,8 +72,8 @@ public class SignUpDialogFragment extends DialogFragment {
         mUser = new User();
         mUserId = getArguments().getLong(ID_ARGS);
         mIsFromGeust = getArguments().getBoolean(IS_GEUST_ARGS, false);
-        if(mIsFromGeust)
-        mGeustUser = UserRepository.getInstance(getActivity()).getUser(mUserId);
+        if (mIsFromGeust)
+            mGeustUser = UserRepository.getInstance(getActivity()).getUser(mUserId);
     }
 
     @Override
@@ -154,10 +154,11 @@ public class SignUpDialogFragment extends DialogFragment {
                     mGeustUser.setId(mUserId);
 
                     UserRepository.getInstance(getActivity()).updateUser(mGeustUser);
-//                    sendIntent(mUserId);
                     dismiss();
-                    Intent intent = new Intent(getActivity(),LoginActivity.class);
-                    startActivity(intent);
+                    getActivity().finish();
+                    sendIntent(mUserId);
+                    LoginFragment.IS_GEUST = false;
+
                 } else {
 
                     long id = UserRepository.getInstance(getActivity()).createUser(mUser);
