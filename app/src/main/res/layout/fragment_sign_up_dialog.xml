@@ -19,23 +19,32 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <EditText
-        android:id="@+id/sign_up_user_name_et"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/sign_up_user_name_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:hint="enter your user name"
-        android:inputType="textPersonName"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/sign_up_email_layout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.222"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintTop_toBottomOf="@id/imageView">
+
+
+        <EditText
+            android:id="@+id/sign_up_user_name_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="enter your user name"
+            android:inputType="textPersonName" />
+
+
+    </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
-        android:id="@+id/etLoginPasswordLayout"
+        android:id="@+id/sign_up_password_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -45,7 +54,7 @@
         app:layout_constraintBottom_toTopOf="@+id/sign_up_create_account_btn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/sign_up_email_et"
+        app:layout_constraintTop_toBottomOf="@id/sign_up_email_layout"
         app:passwordToggleDrawable="@drawable/ic_show_password"
         app:passwordToggleEnabled="true">
 
@@ -57,21 +66,26 @@
             android:inputType="textPassword" />
     </android.support.design.widget.TextInputLayout>
 
-
-
-    <EditText
-        android:hint="enter your email"
-        android:id="@+id/sign_up_email_et"
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/sign_up_email_layout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:inputType="textEmailAddress"
+        app:layout_constraintBottom_toTopOf="@+id/sign_up_password_layout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sign_up_user_name_et" />
+        app:layout_constraintTop_toBottomOf="@+id/sign_up_user_name_layout">
+
+        <EditText
+            android:id="@+id/sign_up_email_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="enter your email"
+            android:inputType="textEmailAddress" />
+
+    </android.support.design.widget.TextInputLayout>
 
     <Button
         android:id="@+id/sign_up_create_account_btn"
@@ -85,6 +99,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/etLoginPasswordLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/sign_up_password_layout" />
 
 </android.support.constraint.ConstraintLayout>

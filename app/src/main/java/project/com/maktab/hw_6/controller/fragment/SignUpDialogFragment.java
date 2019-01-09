@@ -6,12 +6,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -34,6 +36,7 @@ public class SignUpDialogFragment extends DialogFragment {
     public static final String IS_GUEST_ARGS = "isGuest";
     private long mUserId;
     private boolean mIsFromGuest;
+    private TextInputLayout mPasswordLayout, mEmailLayout, mUsernameLayout;
     private User mUserGuest;
 
     public SignUpDialogFragment() {
@@ -80,65 +83,30 @@ public class SignUpDialogFragment extends DialogFragment {
         mUserPasswordEt = view.findViewById(R.id.sign_up_password_et);
         mUserEmailEt = view.findViewById(R.id.sign_up_email_et);
         mSignUpBtn = view.findViewById(R.id.sign_up_create_account_btn);
+        mPasswordLayout = view.findViewById(R.id.sign_up_password_layout);
+        mEmailLayout = view.findViewById(R.id.sign_up_email_layout);
+        mUsernameLayout = view.findViewById(R.id.sign_up_user_name_layout);
 
-
-
- /*       mUserNameEt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mUser.setName(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        mUserEmailEt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mUser.setEmail(s.toString());
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        mUserPasswordEt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mUser.setPassword(s.toString());
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });*/
         mSignUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String userText = mUserNameEt.getText().toString();
                 String userPassword = mUserPasswordEt.getText().toString();
                 String userEmail = mUserEmailEt.getText().toString();
+                if (!validateName()) {
+                    return;
+                }
+
+                if (!validateEmail()) {
+                    return;
+                }
+
+                if (!validatePassword()) {
+                    return;
+                }
+
+
+
                 if (mIsFromGuest) {
                     provideGuestUser(userText, userPassword, userEmail);
                 } else {
@@ -181,13 +149,62 @@ public class SignUpDialogFragment extends DialogFragment {
         }
     }
 
-    private final boolean isValidEmail(CharSequence target) {
-        return !TextUtils.isEmpty(target) && android.util.Patterns.EMAIL_ADDRESS.matcher(target).matches();
+    private static boolean isValidEmail(String email) {
+        return !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
     private void sendIntent(long id) {
         Intent sendIntent = MainViewPagerActivity.newIntent(getActivity(), id);
         startActivity(sendIntent);
+    }
+
+    private boolean validatePassword() {
+        if (mUserPasswordEt.getText().toString().trim().isEmpty()) {
+            mPasswordLayout.setError("should not be empty!");
+            requestFocus(mUserPasswordEt);
+            return false;
+        } else {
+            mPasswordLayout.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+
+    private boolean validateName() {
+        if (mUserNameEt.getText().toString().trim().isEmpty()) {
+            mUsernameLayout.setError("should not be empty!");
+            requestFocus(mUserNameEt);
+            return false;
+        } else {
+            mUsernameLayout.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+
+    private boolean validateEmail() {
+        String email = mUserEmailEt.getText().toString().trim();
+
+        if (email.isEmpty()) {
+            mEmailLayout.setError("should not be empty!");
+            requestFocus(mUserEmailEt);
+            return false;
+        } else if (!isValidEmail(email)) {
+            mEmailLayout.setError("wrong email type found!");
+            requestFocus(mUserEmailEt);
+            return false;
+        } else {
+            mEmailLayout.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+
+
+    private void requestFocus(View view) {
+        if (view.requestFocus()) {
+            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
     }
 
 }
