@@ -31,7 +31,7 @@ public class UserRepository {
                 String.valueOf(id)
         };
 //        String whereClause = TaskDbSchema.UserTable.Cols.UUID + " = ? ";
-        Cursor cursor = mDatabase.rawQuery(search_query,args);
+        Cursor cursor = mDatabase.rawQuery(search_query, args);
         UserCursorWrapper cursorWrapper = new UserCursorWrapper(cursor);
 //        Cursor cursorWrapper = mDatabase.rawQuery(search_query, args);
 
@@ -56,11 +56,12 @@ public class UserRepository {
 
         return user;
     }
-    public void deleteAccount(long id){
+
+    public void deleteAccount(long id) {
         String userSearch_query = " delete from " + TaskDbSchema.UserTable.NAME +
                 " where " +
                 " cast(" + TaskDbSchema.UserTable.Cols._ID + " as text) = " + String.valueOf(id);
-        String taskSearchQuery =  " delete from " + TaskDbSchema.TaskTable.NAME +
+        String taskSearchQuery = " delete from " + TaskDbSchema.TaskTable.NAME +
                 " where " +
                 " cast(" + TaskDbSchema.UserTable.Cols._ID + " as text) = " + String.valueOf(id);
 
@@ -68,8 +69,9 @@ public class UserRepository {
         mDatabase.execSQL(taskSearchQuery);
 
     }
-    public long login(String userName,String password) {
-        if(checkUserNameExist(userName))return -2;
+
+    public long login(String userName, String password) {
+        if (checkUserNameExist(userName)) return -2;
 
 
         String whereClause = TaskDbSchema.UserTable.Cols.USER_NAME + " = ? AND " +
@@ -98,8 +100,34 @@ public class UserRepository {
 
         return -1;
     }
-    public int updateUser(User user){
-        if(checkUserNameExist(user.getName()))return -1;
+
+    public long getUserId(String username) {
+        long result;
+        String[] cols = new String[]{
+                TaskDbSchema.UserTable.Cols._ID
+        };
+        String whereClause = TaskDbSchema.UserTable.Cols.USER_NAME + " = ? ";
+        String[] args = new String[]{
+                username.toLowerCase()
+        };
+        UserCursorWrapper cursorWrapper = userQuery(whereClause, args, cols);
+
+        try {
+            if (cursorWrapper.getCount() <= 0) return -1;
+
+            cursorWrapper.moveToFirst();
+
+            result = cursorWrapper.getLong(cursorWrapper.getColumnIndex(TaskDbSchema.UserTable.Cols._ID));
+        } finally {
+            cursorWrapper.close();
+
+        }
+
+        return result;
+    }
+
+    public int updateUser(User user) {
+        if (checkUserNameExist(user.getName())) return -1;
 
 
         String whereClause = TaskDbSchema.UserTable.Cols.UUID + " = ? ";
@@ -107,10 +135,11 @@ public class UserRepository {
                 user.getUserUUID().toString()
         };
         ContentValues values = getContentValues(user);
-        mDatabase.update(TaskDbSchema.UserTable.NAME,values,whereClause,args);
+        mDatabase.update(TaskDbSchema.UserTable.NAME, values, whereClause, args);
         return 1;
 
     }
+
     public long createUser(User user) {
         if (checkUserNameExist(user.getName())) return -1;
 

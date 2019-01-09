@@ -17,6 +17,7 @@
     <string name="crud_add">add</string>
     <string name="toast_crud_success">your item added successfully!</string>
     <string name="toast_req_success">your request successfully done!</string>
+    <string name="confirm">confirm</string>
     <string name="title_warning">title can\'t be empty please fill it</string>
     <string name="task_date_picker">task date picker:</string>
     <string name="task_time_picker">task time picker:</string>
@@ -34,7 +35,12 @@
     <string name="sign_up">sign up</string>
     <string name="sign_in">sign in</string>
     <string name="create_account">don\'t have any account? (create account)</string>
-    <string name="forget_password">don\'t remember your password? (remember password)</string>
+    <string name="forget_password">don\'t remember your password? (forget password)</string>
+    <string name="confirm_email">please confirm your email address</string>
+    <string name="success_send_email">password successfully send to your email ! check your email</string>
+    <string name="failed_send_email">got problem with your request!</string>
+    <string name="email_subject">forget password ? todo list application</string>
+    <string name="email_body">your password is :  </string>
 
 
     <plurals name="subtitle">

@@ -87,7 +87,8 @@ public class LoginFragment extends Fragment {
         ClickableSpan clickableSpanForgetPass = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-
+                ForgetPasswordFragment fragment = ForgetPasswordFragment.newInstance(mUserNameEt.getText().toString());
+                fragment.show(getFragmentManager(), "forgetPass");
             }
 
             @Override
@@ -119,11 +120,10 @@ public class LoginFragment extends Fragment {
                 long id = UserRepository.getInstance(getActivity()).login(mUserName, mPassword);
                 if (id > 0)
                     sendIntent(id);
-                else if (id == -2){
+                else if (id == -2) {
                     Toast.makeText(getActivity(), "wrong password!", Toast.LENGTH_SHORT).show();
                     mForgetPasswordTv.setVisibility(View.VISIBLE);
-                }
-                else
+                } else
                     Toast.makeText(getActivity(), "can't find your account", Toast.LENGTH_SHORT).show();
 
             }
@@ -144,30 +144,6 @@ public class LoginFragment extends Fragment {
         return view;
     }
 
-    private void sendEmail() {
-        BackgroundMail.newBuilder(getActivity())
-                .withUsername("todo.list.s3ep@gmail.com")
-                .withPassword("todo1234")
-                .withMailto("sepehrsadri@gmail.com")
-                .withType(BackgroundMail.TYPE_PLAIN)
-                .withSubject("this is the subject")
-                .withBody("this is the body")
-                .withOnSuccessCallback(new BackgroundMail.OnSuccessCallback() {
-                    @Override
-                    public void onSuccess() {
-                        //do some magic
-                        Toast.makeText(getActivity(), "send successfully", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .withOnFailCallback(new BackgroundMail.OnFailCallback() {
-                    @Override
-                    public void onFail() {
-                        //do some magic
-                        Toast.makeText(getActivity(), "Failed!", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .send();
-    }
 
     private void createAccount() {
         SpannableString spannableCreate = new SpannableString(getString(R.string.create_account));
