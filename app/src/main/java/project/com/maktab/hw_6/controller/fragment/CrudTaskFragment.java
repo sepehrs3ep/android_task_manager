@@ -51,9 +51,10 @@ public class CrudTaskFragment extends DialogFragment {
     public static boolean IS_EMPTY = false;
     private EditText mEditTextTitle;
     private EditText mEditTextDesc;
-    int positioin;
     private TextView mDateTextView;
     private TextView mTimeTextView;
+    private long mUserId;
+    public static final String USER_ID_ARGS = "userId";
     private Button mCalenderBtn;
     private static boolean mFromFloatButton;
     private static Task mTask;
@@ -61,11 +62,12 @@ public class CrudTaskFragment extends DialogFragment {
     private static String mRawTextTitle = "";
     private String mTaskTitle = "";
 
-    public static CrudTaskFragment getInstance(UUID id, boolean hasExtra) {
+    public static CrudTaskFragment getInstance(UUID id, boolean hasExtra,long userId) {
         CrudTaskFragment fragment = new CrudTaskFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(ARGS_EXTRA_ID, id);
         bundle.putBoolean(ARGS_EXTRA_HAS_EXTRA, hasExtra);
+        bundle.putLong(USER_ID_ARGS,userId);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -79,16 +81,15 @@ public class CrudTaskFragment extends DialogFragment {
     @Override
     public void onDismiss(DialogInterface dialog) {
         Activity activity = getActivity();
-        if(activity instanceof MyDialogCloseListener)
-            ((MyDialogCloseListener)activity).handleDialogClose(dialog);
+        if (activity instanceof MyDialogCloseListener)
+            ((MyDialogCloseListener) activity).handleDialogClose(dialog);
     }
 
     @Override
     public void onStart() {
         super.onStart();
         Dialog dialog = getDialog();
-        if (dialog != null)
-        {
+        if (dialog != null) {
             int width = ViewGroup.LayoutParams.MATCH_PARENT;
             int height = ViewGroup.LayoutParams.MATCH_PARENT;
             dialog.getWindow().setLayout(width, height);
@@ -100,11 +101,17 @@ public class CrudTaskFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         UUID id = (UUID) getArguments().getSerializable(ARGS_EXTRA_ID);
         mFromFloatButton = getArguments().getBoolean(ARGS_EXTRA_HAS_EXTRA);
+        if(mFromFloatButton){
+            mUserId = getArguments().getLong(USER_ID_ARGS);
+            mTask = new Task();
+        }
+        else
         mTask = TaskRepository.getInstance(getActivity()).getTaskByID(id);
+
+
         mTaskTitle = mTask.getTitle();
         mRawTextTitle = mTaskTitle;
     }
-
 
 
     @Override
@@ -280,6 +287,9 @@ public class CrudTaskFragment extends DialogFragment {
 
 
     private void addTask() {
+        mTask.setTaskType("undone");
+        mTask.setUserID(mUserId);
+        TaskRepository.getInstance(getActivity()).addTask(mTask);
         String title = mEditTextTitle.getText().toString();
         if (title == null || title.equals("")) {
             Snackbar.make(getView(), R.string.title_warning, Snackbar.LENGTH_SHORT).show();
@@ -335,8 +345,8 @@ public class CrudTaskFragment extends DialogFragment {
         }*/
     }
 
-    //check back pressed for add button
- /*   public static boolean onBackPressed(final Context context) {
+/*    //check back pressed for add button
+    public static boolean onBackPressed(final Context context) {
         String mTaskTitle = mTask.getTitle();
         final Activity activity = (Activity) context;
         if (mTaskTitle.length() > 0) {
@@ -361,6 +371,7 @@ public class CrudTaskFragment extends DialogFragment {
 
     }
 
+
     private static void checkForChangesBack(final Context context, final Activity activity) {
         mStay = true;
         final AlertDialog alertDialog = new AlertDialog.Builder(context)
@@ -383,6 +394,11 @@ public class CrudTaskFragment extends DialogFragment {
                 .create();
         alertDialog.show();
     }*/
+
+
+
+
+
 
 }
 

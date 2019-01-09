@@ -72,7 +72,7 @@ public class CrudShowDialogFragment extends DialogFragment {
         mNavigateEditBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CrudTaskFragment fragment = CrudTaskFragment.getInstance(mId, false);
+                CrudTaskFragment fragment = CrudTaskFragment.getInstance(mId, false,-1);
                 dismiss();
                 fragment.show(getFragmentManager(), "goto edit");
             }

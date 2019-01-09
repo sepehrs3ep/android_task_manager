@@ -1,3 +1,4 @@
+/*
 package project.com.maktab.hw_6.controller.activity;
 
 import android.content.Context;
@@ -29,11 +30,13 @@ public class CrudTaskActivity extends AppCompatActivity {
         return intent;
     }
 
- /*   @Override
+ */
+/*   @Override
     public Fragment createFragment() {
         CrudTaskFragment fragment = CrudTaskFragment.getInstance(mCurrentId,mFromAddButton);
         return fragment;
-    }*/
+    }*//*
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,7 +52,8 @@ public class CrudTaskActivity extends AppCompatActivity {
 
     }
 
-    /*@Override
+    */
+/*@Override
     public void onBackPressed() {
         if (CrudTaskFragment.IS_EMPTY)
             Snackbar.make(findViewById(android.R.id.content), R.string.title_warning, Snackbar.LENGTH_SHORT).show();
@@ -66,7 +70,9 @@ public class CrudTaskActivity extends AppCompatActivity {
             Log.d("CrudTask", "should stay now !");
         }
 
-    }*/
+    }*//*
+
 
 }
 
+*/

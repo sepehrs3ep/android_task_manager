@@ -197,7 +197,6 @@ public class TaskListFragment extends Fragment {
     }
 
 
-
     private class TaskViewHolder extends RecyclerView.ViewHolder {
         private TextView mTextViewTitle;
         private TextView mTextViewImage;
