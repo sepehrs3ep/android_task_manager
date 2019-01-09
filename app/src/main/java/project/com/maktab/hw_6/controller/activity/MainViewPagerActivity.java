@@ -22,6 +22,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import project.com.maktab.hw_6.MyDialogCloseListener;
@@ -33,6 +34,7 @@ import project.com.maktab.hw_6.controller.fragment.TaskListFragment;
 import project.com.maktab.hw_6.model.task.Task;
 import project.com.maktab.hw_6.model.task.TaskRepository;
 import project.com.maktab.hw_6.model.task.TaskType;
+import project.com.maktab.hw_6.model.user.User;
 import project.com.maktab.hw_6.model.user.UserRepository;
 
 public class MainViewPagerActivity extends AppCompatActivity implements MyDialogCloseListener {
@@ -40,6 +42,7 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
     private long mUserId;
+    private User mUser;
 
     private DrawerLayout mDrawerLayout;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -87,6 +90,8 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
         mTabLayout = findViewById(R.id.tab_layout);
         mViewPager = findViewById(R.id.view_pager);
         mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        mUserId = getIntent().getLongExtra(USER_ID_EXTRA, 1);
+        mUser = UserRepository.getInstance(MainViewPagerActivity.this).getUser(mUserId);
 
 
         mDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout,R.string.open_toggle,R.string.close_toggle);
@@ -105,7 +110,18 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
             }
         });
 
-        mUserId = getIntent().getLongExtra(USER_ID_EXTRA, 1);
+        View headerViewName = mNavigationView.getHeaderView(0);
+        TextView userTextView = headerViewName.findViewById(R.id.drawer_user_name);
+        userTextView.setText("User Name :  " + mUser.getName());
+        TextView emailTextView = headerViewName.findViewById(R.id.drawer_email);
+        emailTextView.setText("User Email : " + mUser.getEmail());
+        TextView userIdTextView = headerViewName.findViewById(R.id.drawer_uuid);
+        userIdTextView.setText("User Id : " + mUser.getUserUUID().toString());
+
+
+
+
+
 
         final FloatingActionButton floatingActionButton = findViewById(R.id.float_button_add);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
