@@ -86,10 +86,7 @@ public class SignUpDialogFragment extends DialogFragment {
         mUserEmail = view.findViewById(R.id.sign_up_email_et);
         mSignUpBtn = view.findViewById(R.id.sign_up_create_account_btn);
 
-        if (mIsFromGeust) {
-            mUserName.setText(mGeustUser.getName());
-            mUserPassword.setText(mGeustUser.getPassword());
-        }
+
 
         mUserName.addTextChangedListener(new TextWatcher() {
             @Override

@@ -21,36 +21,39 @@
 
     <EditText
         android:id="@+id/login_user_name_et"
-        style="?android:attr/listSeparatorTextViewStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="22dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-
-        android:layout_marginEnd="100dp"
-        android:ems="10"
-        android:hint="@string/user_name"
-        android:inputType="textPersonName"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/todo_image" />
-
-    <EditText
-        android:id="@+id/login_password_et"
-        style="?android:attr/listSeparatorTextViewStyle"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="8dp"
-        android:ems="10"
-        android:hint="@string/password"
-        android:inputType="textPassword"
+        android:layout_marginBottom="8dp"
+        android:hint="enter your user name"
+        app:layout_constraintBottom_toTopOf="@+id/etLoginPasswordLayout"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.546"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_user_name_et" />
+        app:layout_constraintTop_toBottomOf="@id/todo_image" />
+
+    <android.support.design.widget.TextInputLayout
+        android:id="@+id/etLoginPasswordLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/login_user_name_et"
+        app:passwordToggleDrawable="@drawable/ic_show_password"
+        app:passwordToggleEnabled="true">
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/login_password_et"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            android:hint="enter your password"
+            android:inputType="textPassword" />
+    </android.support.design.widget.TextInputLayout>
 
 
     <Button
@@ -64,7 +67,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/login_password_et" />
+        app:layout_constraintTop_toBottomOf="@+id/etLoginPasswordLayout" />
 
     <TextView
         android:id="@+id/textView2"
