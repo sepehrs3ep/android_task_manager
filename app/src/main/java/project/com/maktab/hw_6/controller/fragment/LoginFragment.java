@@ -2,19 +2,26 @@ package project.com.maktab.hw_6.controller.fragment;
 
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.TextPaint;
 import android.text.TextWatcher;
+import android.text.method.LinkMovementMethod;
+import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import project.com.maktab.hw_6.R;
@@ -29,7 +36,7 @@ import project.com.maktab.hw_6.model.user.UserRepository;
 public class LoginFragment extends Fragment {
     private EditText mUserNameEt;
     private EditText mPasswordEt;
-    private Button mLoginSignUpBtn;
+    private TextView mCreateAccountTv;
     private Button mSignInBtn;
     public static boolean IS_GEUST = false;
     private FloatingActionButton mFloatGeustBtn;
@@ -64,22 +71,32 @@ public class LoginFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_sign_in, container, false);
         mUserNameEt = view.findViewById(R.id.login_user_name_et);
         mPasswordEt = view.findViewById(R.id.login_password_et);
-        mLoginSignUpBtn = view.findViewById(R.id.login_sign_up_btn);
         mSignInBtn = view.findViewById(R.id.login_sign_in_btn);
         mFloatGeustBtn = view.findViewById(R.id.floatingGeustButton);
         mUserNameLayout = view.findViewById(R.id.login_username_layout);
         mPasswordLayout = view.findViewById(R.id.sign_in_password_layout);
+        mCreateAccountTv = view.findViewById(R.id.create_account_tv);
 
 
-        mLoginSignUpBtn.setOnClickListener(new View.OnClickListener() {
+        SpannableString ss = new SpannableString(getString(R.string.create_account));
+        ClickableSpan clickableSpan = new ClickableSpan() {
             @Override
-            public void onClick(View v) {
-              /*  long id = UserRepository.getInstance(getActivity()).createUser(mUser);
-                sendIntent(id);*/
+            public void onClick(View textView) {
                 SignUpDialogFragment fragment = SignUpDialogFragment.newInstance(0, false);
                 fragment.show(getFragmentManager(), "signUp");
             }
-        });
+
+            @Override
+            public void updateDrawState(TextPaint ds) {
+                super.updateDrawState(ds);
+                ds.setUnderlineText(false);
+            }
+        };
+        ss.setSpan(clickableSpan, 24, getString(R.string.create_account).length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        mCreateAccountTv.setText(ss);
+        mCreateAccountTv.setMovementMethod(LinkMovementMethod.getInstance());
+        mCreateAccountTv.setHighlightColor(Color.TRANSPARENT);
+
         mSignInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

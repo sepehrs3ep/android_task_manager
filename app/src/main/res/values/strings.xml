@@ -33,6 +33,7 @@
     <string name="password">enter your password</string>
     <string name="sign_up">sign up</string>
     <string name="sign_in">sign in</string>
+    <string name="create_account">don\'t have any account? (create account)</string>
 
 
     <plurals name="subtitle">
