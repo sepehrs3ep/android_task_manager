@@ -34,6 +34,7 @@
     <string name="sign_up">sign up</string>
     <string name="sign_in">sign in</string>
     <string name="create_account">don\'t have any account? (create account)</string>
+    <string name="forget_password">don\'t remember your password? (remember password)</string>
 
 
     <plurals name="subtitle">

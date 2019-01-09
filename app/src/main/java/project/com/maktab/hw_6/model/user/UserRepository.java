@@ -69,6 +69,9 @@ public class UserRepository {
 
     }
     public long login(String userName,String password) {
+        if(checkUserNameExist(userName))return -2;
+
+
         String whereClause = TaskDbSchema.UserTable.Cols.USER_NAME + " = ? AND " +
                 TaskDbSchema.UserTable.Cols.PASSWORD + " = ? ";
         String[] whereArgs = new String[]{
@@ -96,7 +99,7 @@ public class UserRepository {
         return -1;
     }
     public int updateUser(User user){
-        if(checkUserNameExist(user))return -1;
+        if(checkUserNameExist(user.getName()))return -1;
 
 
         String whereClause = TaskDbSchema.UserTable.Cols.UUID + " = ? ";
@@ -109,7 +112,7 @@ public class UserRepository {
 
     }
     public long createUser(User user) {
-        if (checkUserNameExist(user)) return -1;
+        if (checkUserNameExist(user.getName())) return -1;
 
 
         ContentValues values = getContentValues(user);
@@ -117,10 +120,10 @@ public class UserRepository {
         return id;
     }
 
-    private boolean checkUserNameExist(User user) {
+    private boolean checkUserNameExist(String userName) {
         String whereClause = TaskDbSchema.UserTable.Cols.USER_NAME + " = ? ";
         String[] args = new String[]{
-                user.getName().toLowerCase()
+                userName.toLowerCase()
         };
 
 
