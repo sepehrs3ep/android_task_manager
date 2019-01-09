@@ -14,6 +14,9 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
 import project.com.maktab.hw_6.MyDialogCloseListener;
@@ -44,6 +47,26 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.activity_main_view_pager,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.logout_menu_item:
+                if(LoginFragment.IS_GUEST)
+                    guestExit();
+                else finish();
+                return true;
+            default:
+        return super.onOptionsItemSelected(item);
+        }
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -155,32 +178,30 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
     public void onBackPressed() {
 //        User user = UserRepository.getInstance(MainViewPagerActivity.this).getUser(mUserId);
         if(LoginFragment.IS_GUEST){
-            AlertDialog dialog = new AlertDialog.Builder(MainViewPagerActivity.this)
-                    .setTitle("Don't want to create account ? your information will delete if you don't create account")
-                    .setPositiveButton("yes", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            SignUpDialogFragment fragment  = SignUpDialogFragment.newInstance(mUserId,true);
-                            fragment.show(getSupportFragmentManager(),"geustUser");
-                        }
-                    })
-                    .setNegativeButton("No", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            UserRepository.getInstance(MainViewPagerActivity.this).deleteAccount(mUserId);
-                            finish();
-                        }
-                    })
-                    .create();
-            dialog.show();
-
-
-
+            guestExit();
 
         }else
         super.onBackPressed();
+    }
 
-
-
+    private void guestExit() {
+        AlertDialog dialog = new AlertDialog.Builder(MainViewPagerActivity.this)
+                .setTitle("Don't want to create account ? your information will delete if you don't create account")
+                .setPositiveButton("yes", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SignUpDialogFragment fragment  = SignUpDialogFragment.newInstance(mUserId,true);
+                        fragment.show(getSupportFragmentManager(),"geustUser");
+                    }
+                })
+                .setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        UserRepository.getInstance(MainViewPagerActivity.this).deleteAccount(mUserId);
+                        finish();
+                    }
+                })
+                .create();
+        dialog.show();
     }
 }

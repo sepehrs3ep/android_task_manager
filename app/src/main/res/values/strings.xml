@@ -41,6 +41,7 @@
     <string name="failed_send_email">got problem with your request!</string>
     <string name="email_subject">forget password ? todo list application</string>
     <string name="email_body">your password is :  </string>
+    <string name="logout_account">logout</string>
 
 
     <plurals name="subtitle">
