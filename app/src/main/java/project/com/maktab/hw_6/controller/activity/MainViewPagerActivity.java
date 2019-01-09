@@ -75,17 +75,31 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
         switch (item.getItemId()) {
             case R.id.logout_menu_item:
 
-                finish();
 
-                if (LoginFragment.IS_GUEST)
+                if (LoginFragment.IS_GUEST){
+
+                finish();
                     guestExit();
-                else {
-                    SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE).edit();
-                    editor.putBoolean(SignUpDialogFragment.ALREADY_SIGN_IN, false);
-                    editor.commit();
-                    onBackPressedd();
                 }
-                return true;
+                else {
+                    AlertDialog exitDialog = new AlertDialog.Builder(MainViewPagerActivity.this)
+                            .setTitle("are you sure you want to log out of your account ? ")
+                            .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE).edit();
+                                    editor.putBoolean(SignUpDialogFragment.ALREADY_SIGN_IN, false);
+                                    editor.commit();
+                                    finish();
+                                    onBackPressedd();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.no,null)
+                            .create();
+                    exitDialog.show();
+return true;
+                }
+
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -255,6 +269,7 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
         dialog.show();
     }
     public void onBackPressedd(){
+        finish();
         Intent a = new Intent(Intent.ACTION_MAIN);
         a.addCategory(Intent.CATEGORY_HOME);
         a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);

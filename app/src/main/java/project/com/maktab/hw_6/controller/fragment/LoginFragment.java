@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -46,6 +47,7 @@ public class LoginFragment extends Fragment {
     private String mUserName = "";
     private String mPassword = "";
     private TextInputLayout mUserNameLayout, mPasswordLayout;
+    private CheckBox mRememberCheckBox;
 
 
     public static LoginFragment newInstance() {
@@ -80,7 +82,7 @@ public class LoginFragment extends Fragment {
         mPasswordLayout = view.findViewById(R.id.sign_in_password_layout);
         mCreateAccountTv = view.findViewById(R.id.create_account_tv);
         mForgetPasswordTv = view.findViewById(R.id.forget_password);
-
+        mRememberCheckBox = view.findViewById(R.id.remember_check_box);
 
         createAccount();
 
@@ -123,9 +125,15 @@ public class LoginFragment extends Fragment {
                 if (id > 0){
                     SharedPreferences preferences = getActivity().getApplicationContext().getSharedPreferences("MyPref",Context.MODE_PRIVATE);
                     SharedPreferences.Editor editor = preferences.edit();
+                    if(mRememberCheckBox.isChecked()){
                     editor.putBoolean(SignUpDialogFragment.ALREADY_SIGN_IN,true);
                     editor.putLong(SignUpDialogFragment.SIGN_IN_USER_ID,id);
                     editor.commit();
+
+                    }
+                    else{
+                        editor.putBoolean(SignUpDialogFragment.ALREADY_SIGN_IN,false);
+                    }
                     sendIntent(id);
 
                 }
