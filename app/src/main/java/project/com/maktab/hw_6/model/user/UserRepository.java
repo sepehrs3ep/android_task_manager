@@ -95,17 +95,29 @@ public class UserRepository {
 
         return -1;
     }
-    public void updateUser(User user){
+    public int updateUser(User user){
+        if(checkUserNameExist(user))return -1;
+
+
         String whereClause = TaskDbSchema.UserTable.Cols.UUID + " = ? ";
         String[] args = new String[]{
                 user.getUserUUID().toString()
         };
         ContentValues values = getContentValues(user);
         mDatabase.update(TaskDbSchema.UserTable.NAME,values,whereClause,args);
-
+        return 1;
 
     }
     public long createUser(User user) {
+        if (checkUserNameExist(user)) return -1;
+
+
+        ContentValues values = getContentValues(user);
+        long id = mDatabase.insert(TaskDbSchema.UserTable.NAME, null, values);
+        return id;
+    }
+
+    private boolean checkUserNameExist(User user) {
         String whereClause = TaskDbSchema.UserTable.Cols.USER_NAME + " = ? ";
         String[] args = new String[]{
                 user.getName().toLowerCase()
@@ -116,15 +128,11 @@ public class UserRepository {
         try {
 
             if (cursor.getCount() > 0)
-                return -1;
+                return true;
         } finally {
             cursor.close();
         }
-
-
-        ContentValues values = getContentValues(user);
-        long id = mDatabase.insert(TaskDbSchema.UserTable.NAME, null, values);
-        return id;
+        return false;
     }
 
     public static UserRepository getInstance(Context context) {
