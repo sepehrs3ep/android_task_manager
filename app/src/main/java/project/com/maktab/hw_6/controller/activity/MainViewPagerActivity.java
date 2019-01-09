@@ -3,6 +3,7 @@ package project.com.maktab.hw_6.controller.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -49,7 +50,6 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
     private NavigationView mNavigationView;
 
 
-
     private FragmentStatePagerAdapter mViewPagerAdapter;
     public static final String USER_ID_EXTRA = "project.com.maktab.hw_6.controller.activity.user_id_extra";
 
@@ -69,14 +69,22 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if(mDrawerToggle.onOptionsItemSelected(item))
+        if (mDrawerToggle.onOptionsItemSelected(item))
             return true;
 
         switch (item.getItemId()) {
             case R.id.logout_menu_item:
+
+                finish();
+
                 if (LoginFragment.IS_GUEST)
                     guestExit();
-                else finish();
+                else {
+                    SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE).edit();
+                    editor.putBoolean(SignUpDialogFragment.ALREADY_SIGN_IN, false);
+                    editor.commit();
+                    onBackPressedd();
+                }
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -89,19 +97,19 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
         setContentView(R.layout.activity_main_view_pager);
         mTabLayout = findViewById(R.id.tab_layout);
         mViewPager = findViewById(R.id.view_pager);
-        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mUserId = getIntent().getLongExtra(USER_ID_EXTRA, 1);
         mUser = UserRepository.getInstance(MainViewPagerActivity.this).getUser(mUserId);
 
 
-        mDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout,R.string.open_toggle,R.string.close_toggle);
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string.open_toggle, R.string.close_toggle);
 //        mDrawerToggle.setDrawerIndicatorEnabled(true);
         mDrawerLayout.addDrawerListener(mDrawerToggle);
 
         mDrawerToggle.syncState();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-       mNavigationView = findViewById(R.id.nav_view);
+        mNavigationView = findViewById(R.id.nav_view);
 
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -119,10 +127,6 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
         userIdTextView.setText("User Id : " + mUser.getUserUUID().toString());
 
 
-
-
-
-
         final FloatingActionButton floatingActionButton = findViewById(R.id.float_button_add);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,7 +139,7 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
                 Intent intent = CrudTaskActivity.newIntent(MainViewPagerActivity.this, task.getID(), true);
                 startActivity(intent);*/
 
-                CrudTaskFragment fragment = CrudTaskFragment.getInstance(null, true,mUserId);
+                CrudTaskFragment fragment = CrudTaskFragment.getInstance(null, true, mUserId);
                 fragment.show(getSupportFragmentManager(), "add Task");
 
             }
@@ -227,7 +231,7 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
         if (LoginFragment.IS_GUEST) {
             guestExit();
         } else
-            super.onBackPressed();
+            onBackPressedd();
     }
 
     private void guestExit() {
@@ -249,5 +253,12 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
                 })
                 .create();
         dialog.show();
+    }
+    public void onBackPressedd(){
+        Intent a = new Intent(Intent.ACTION_MAIN);
+        a.addCategory(Intent.CATEGORY_HOME);
+        a.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(a);
+
     }
 }

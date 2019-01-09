@@ -16,7 +16,13 @@
 
         </activity>
         <activity android:name=".controller.activity.CrudTaskActivity" />
-        <activity android:name=".controller.activity.SingleFragmentActivity"/>
+        <activity android:name=".controller.activity.SingleFragmentActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".controller.activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

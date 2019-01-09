@@ -1,7 +1,9 @@
 package project.com.maktab.hw_6.controller.fragment;
 
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
@@ -118,8 +120,15 @@ public class LoginFragment extends Fragment {
 
 
                 long id = UserRepository.getInstance(getActivity()).login(mUserName, mPassword);
-                if (id > 0)
+                if (id > 0){
+                    SharedPreferences preferences = getActivity().getApplicationContext().getSharedPreferences("MyPref",Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putBoolean(SignUpDialogFragment.ALREADY_SIGN_IN,true);
+                    editor.putLong(SignUpDialogFragment.SIGN_IN_USER_ID,id);
+                    editor.commit();
                     sendIntent(id);
+
+                }
                 else if (id == -2) {
                     Toast.makeText(getActivity(), "wrong password!", Toast.LENGTH_SHORT).show();
                     mForgetPasswordTv.setVisibility(View.VISIBLE);

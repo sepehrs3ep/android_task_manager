@@ -2,7 +2,9 @@ package project.com.maktab.hw_6.controller.fragment;
 
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
@@ -28,6 +30,8 @@ import project.com.maktab.hw_6.model.user.UserRepository;
  * A simple {@link Fragment} subclass.
  */
 public class SignUpDialogFragment extends DialogFragment {
+    public static final String ALREADY_SIGN_IN = "userSignedIn";
+    public static final String SIGN_IN_USER_ID = "signInUserId";
     private EditText mUserNameEt;
     private TextInputEditText mUserPasswordEt;
     private EditText mUserEmailEt;
@@ -38,6 +42,7 @@ public class SignUpDialogFragment extends DialogFragment {
     private boolean mIsFromGuest;
     private TextInputLayout mPasswordLayout, mEmailLayout, mUsernameLayout;
     private User mUserGuest;
+    private SharedPreferences mSharedPreferences;
 
     public SignUpDialogFragment() {
         // Required empty public constructor
@@ -122,9 +127,18 @@ public class SignUpDialogFragment extends DialogFragment {
         if (id == -1)
             Toast.makeText(getActivity(), "this user name already exist", Toast.LENGTH_SHORT).show();
         else {
+            writePref(id);
             sendIntent(id);
             dismiss();
         }
+    }
+
+    private void writePref(long id) {
+        mSharedPreferences = getActivity().getApplicationContext().getSharedPreferences("MyPref",Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor =mSharedPreferences.edit();
+        editor.putBoolean(ALREADY_SIGN_IN,true);
+        editor.putLong(SIGN_IN_USER_ID,id);
+        editor.commit();
     }
 
     private void provideGuestUser(String userText, String userPassword, String userEmail) {
@@ -136,6 +150,7 @@ public class SignUpDialogFragment extends DialogFragment {
         if (result == -1)
             Toast.makeText(getActivity(), "this user name already exist", Toast.LENGTH_SHORT).show();
         else {
+            writePref(mUserId);
             dismiss();
             getActivity().finish();
             sendIntent(mUserId);
