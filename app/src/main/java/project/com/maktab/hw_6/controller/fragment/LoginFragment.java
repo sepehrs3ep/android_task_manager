@@ -3,18 +3,18 @@ package project.com.maktab.hw_6.controller.fragment;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
-import android.text.TextWatcher;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,9 +24,10 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.creativityapps.gmailbackgroundlibrary.BackgroundMail;
+
 import project.com.maktab.hw_6.R;
 import project.com.maktab.hw_6.controller.activity.MainViewPagerActivity;
-import project.com.maktab.hw_6.controller.activity.SingleFragmentActivity;
 import project.com.maktab.hw_6.model.user.User;
 import project.com.maktab.hw_6.model.user.UserRepository;
 
@@ -38,8 +39,8 @@ public class LoginFragment extends Fragment {
     private EditText mPasswordEt;
     private TextView mCreateAccountTv, mForgetPasswordTv;
     private Button mSignInBtn;
-    public static boolean IS_GEUST = false;
-    private FloatingActionButton mFloatGeustBtn;
+    public static boolean IS_GUEST = false;
+    private FloatingActionButton mFloatGuestBtn;
     private String mUserName = "";
     private String mPassword = "";
     private TextInputLayout mUserNameLayout, mPasswordLayout;
@@ -72,7 +73,7 @@ public class LoginFragment extends Fragment {
         mUserNameEt = view.findViewById(R.id.login_user_name_et);
         mPasswordEt = view.findViewById(R.id.login_password_et);
         mSignInBtn = view.findViewById(R.id.login_sign_in_btn);
-        mFloatGeustBtn = view.findViewById(R.id.floatingGeustButton);
+        mFloatGuestBtn = view.findViewById(R.id.floatingGeustButton);
         mUserNameLayout = view.findViewById(R.id.login_username_layout);
         mPasswordLayout = view.findViewById(R.id.sign_in_password_layout);
         mCreateAccountTv = view.findViewById(R.id.create_account_tv);
@@ -82,11 +83,11 @@ public class LoginFragment extends Fragment {
         createAccount();
 
 
-        SpannableString ss = new SpannableString(getString(R.string.forget_password));
-        ClickableSpan clickableSpan = new ClickableSpan() {
+        SpannableString spannableForgetPass = new SpannableString(getString(R.string.forget_password));
+        ClickableSpan clickableSpanForgetPass = new ClickableSpan() {
             @Override
             public void onClick(View textView) {
-                Toast.makeText(getActivity(), "forget haha", Toast.LENGTH_SHORT).show();
+
             }
 
             @Override
@@ -95,9 +96,9 @@ public class LoginFragment extends Fragment {
                 ds.setUnderlineText(false);
             }
         };
-        ss.setSpan(clickableSpan, 30, getString(R.string.forget_password).length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        spannableForgetPass.setSpan(clickableSpanForgetPass, 30, getString(R.string.forget_password).length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-        mForgetPasswordTv.setText(ss);
+        mForgetPasswordTv.setText(spannableForgetPass);
         mForgetPasswordTv.setMovementMethod(LinkMovementMethod.getInstance());
         mForgetPasswordTv.setHighlightColor(Color.TRANSPARENT);
         mForgetPasswordTv.setVisibility(View.GONE);
@@ -128,12 +129,12 @@ public class LoginFragment extends Fragment {
             }
         });
 
-        mFloatGeustBtn.setOnClickListener(new View.OnClickListener() {
+        mFloatGuestBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 User user = new User();
                 user.setName("guest");
-                IS_GEUST = true;
+                IS_GUEST = true;
                 user.setPassword("admin");
                 long id = UserRepository.getInstance(getActivity()).createUser(user);
                 sendIntent(id);
@@ -141,6 +142,31 @@ public class LoginFragment extends Fragment {
         });
 
         return view;
+    }
+
+    private void sendEmail() {
+        BackgroundMail.newBuilder(getActivity())
+                .withUsername("todo.list.s3ep@gmail.com")
+                .withPassword("todo1234")
+                .withMailto("sepehrsadri@gmail.com")
+                .withType(BackgroundMail.TYPE_PLAIN)
+                .withSubject("this is the subject")
+                .withBody("this is the body")
+                .withOnSuccessCallback(new BackgroundMail.OnSuccessCallback() {
+                    @Override
+                    public void onSuccess() {
+                        //do some magic
+                        Toast.makeText(getActivity(), "send successfully", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .withOnFailCallback(new BackgroundMail.OnFailCallback() {
+                    @Override
+                    public void onFail() {
+                        //do some magic
+                        Toast.makeText(getActivity(), "Failed!", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .send();
     }
 
     private void createAccount() {
@@ -198,5 +224,6 @@ public class LoginFragment extends Fragment {
             getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         }
     }
+
 
 }

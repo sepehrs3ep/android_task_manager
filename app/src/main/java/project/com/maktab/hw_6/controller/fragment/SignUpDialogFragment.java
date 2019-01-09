@@ -139,7 +139,7 @@ public class SignUpDialogFragment extends DialogFragment {
             dismiss();
             getActivity().finish();
             sendIntent(mUserId);
-            LoginFragment.IS_GEUST = false;
+            LoginFragment.IS_GUEST = false;
         }
     }
 

@@ -3,7 +3,6 @@ package project.com.maktab.hw_6.controller.activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -26,7 +25,6 @@ import project.com.maktab.hw_6.controller.fragment.TaskListFragment;
 import project.com.maktab.hw_6.model.task.Task;
 import project.com.maktab.hw_6.model.task.TaskRepository;
 import project.com.maktab.hw_6.model.task.TaskType;
-import project.com.maktab.hw_6.model.user.User;
 import project.com.maktab.hw_6.model.user.UserRepository;
 
 public class MainViewPagerActivity extends AppCompatActivity implements MyDialogCloseListener {
@@ -156,7 +154,7 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
     @Override
     public void onBackPressed() {
 //        User user = UserRepository.getInstance(MainViewPagerActivity.this).getUser(mUserId);
-        if(LoginFragment.IS_GEUST){
+        if(LoginFragment.IS_GUEST){
             AlertDialog dialog = new AlertDialog.Builder(MainViewPagerActivity.this)
                     .setTitle("Don't want to create account ? your information will delete if you don't create account")
                     .setPositiveButton("yes", new DialogInterface.OnClickListener() {
