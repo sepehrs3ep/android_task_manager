@@ -6,12 +6,15 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -38,6 +41,12 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
     private TabLayout mTabLayout;
     private long mUserId;
 
+    private DrawerLayout mDrawerLayout;
+    private ActionBarDrawerToggle mDrawerToggle;
+    private NavigationView mNavigationView;
+
+
+
     private FragmentStatePagerAdapter mViewPagerAdapter;
     public static final String USER_ID_EXTRA = "project.com.maktab.hw_6.controller.activity.user_id_extra";
 
@@ -57,6 +66,9 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if(mDrawerToggle.onOptionsItemSelected(item))
+            return true;
+
         switch (item.getItemId()) {
             case R.id.logout_menu_item:
                 if (LoginFragment.IS_GUEST)
@@ -66,16 +78,33 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
             default:
                 return super.onOptionsItemSelected(item);
         }
-
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_view_pager);
-
         mTabLayout = findViewById(R.id.tab_layout);
         mViewPager = findViewById(R.id.view_pager);
+        mDrawerLayout = (DrawerLayout)findViewById(R.id.drawer_layout);
+
+
+        mDrawerToggle = new ActionBarDrawerToggle(this,mDrawerLayout,R.string.open_toggle,R.string.close_toggle);
+//        mDrawerToggle.setDrawerIndicatorEnabled(true);
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
+
+        mDrawerToggle.syncState();
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+       mNavigationView = findViewById(R.id.nav_view);
+
+        mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+                return true;
+            }
+        });
+
         mUserId = getIntent().getLongExtra(USER_ID_EXTRA, 1);
 
         final FloatingActionButton floatingActionButton = findViewById(R.id.float_button_add);
