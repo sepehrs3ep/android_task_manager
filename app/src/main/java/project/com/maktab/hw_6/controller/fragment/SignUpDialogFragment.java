@@ -93,18 +93,12 @@ public class SignUpDialogFragment extends DialogFragment {
                 String userText = mUserNameEt.getText().toString();
                 String userPassword = mUserPasswordEt.getText().toString();
                 String userEmail = mUserEmailEt.getText().toString();
-                if (!validateName()) {
+                if (!validateName())
                     return;
-                }
-
-                if (!validateEmail()) {
+                if (!validatePassword())
                     return;
-                }
-
-                if (!validatePassword()) {
+                if (!validateEmail())
                     return;
-                }
-
 
 
                 if (mIsFromGuest) {
@@ -163,10 +157,14 @@ public class SignUpDialogFragment extends DialogFragment {
             mPasswordLayout.setError("should not be empty!");
             requestFocus(mUserPasswordEt);
             return false;
+
+        } else if (mUserPasswordEt.getText().toString().trim().length() < 5) {
+            mPasswordLayout.setError("password length should be more thant 5 characters");
+            requestFocus(mUserPasswordEt);
+            return false;
         } else {
             mPasswordLayout.setErrorEnabled(false);
         }
-
         return true;
     }
 

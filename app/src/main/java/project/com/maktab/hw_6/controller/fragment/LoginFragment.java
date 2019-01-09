@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -31,8 +33,9 @@ public class LoginFragment extends Fragment {
     private Button mSignInBtn;
     public static boolean IS_GEUST = false;
     private FloatingActionButton mFloatGeustBtn;
-    private String mUserName= "";
-    private String mPassword= "";
+    private String mUserName = "";
+    private String mPassword = "";
+    private TextInputLayout mUserNameLayout, mPasswordLayout;
 
 
     public static LoginFragment newInstance() {
@@ -64,47 +67,17 @@ public class LoginFragment extends Fragment {
         mLoginSignUpBtn = view.findViewById(R.id.login_sign_up_btn);
         mSignInBtn = view.findViewById(R.id.login_sign_in_btn);
         mFloatGeustBtn = view.findViewById(R.id.floatingGeustButton);
+        mUserNameLayout = view.findViewById(R.id.login_username_layout);
+        mPasswordLayout = view.findViewById(R.id.sign_in_password_layout);
 
-   /*     mUserNameEt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mUserName.concat(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
-        mPasswordEt.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mPassword.concat(s.toString());
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });*/
 
         mLoginSignUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
               /*  long id = UserRepository.getInstance(getActivity()).createUser(mUser);
                 sendIntent(id);*/
-              SignUpDialogFragment fragment = SignUpDialogFragment.newInstance(0,false);
-              fragment.show(getFragmentManager(),"signUp");
+                SignUpDialogFragment fragment = SignUpDialogFragment.newInstance(0, false);
+                fragment.show(getFragmentManager(), "signUp");
             }
         });
         mSignInBtn.setOnClickListener(new View.OnClickListener() {
@@ -112,7 +85,14 @@ public class LoginFragment extends Fragment {
             public void onClick(View v) {
                 mUserName = mUserNameEt.getText().toString();
                 mPassword = mPasswordEt.getText().toString();
-                long id = UserRepository.getInstance(getActivity()).login(mUserName,mPassword);
+                if (!validateName())
+                    return;
+
+                if (!validatePassword())
+                    return;
+
+
+                long id = UserRepository.getInstance(getActivity()).login(mUserName, mPassword);
                 if (id > 0)
                     sendIntent(id);
                 else
@@ -138,6 +118,36 @@ public class LoginFragment extends Fragment {
     private void sendIntent(long id) {
         Intent sendIntent = MainViewPagerActivity.newIntent(getActivity(), id);
         startActivity(sendIntent);
+    }
+
+    private boolean validatePassword() {
+        if (mPasswordEt.getText().toString().trim().isEmpty()) {
+            mPasswordLayout.setError("should not be empty!");
+            requestFocus(mPasswordEt);
+            return false;
+        } else {
+            mPasswordLayout.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+
+    private boolean validateName() {
+        if (mUserNameEt.getText().toString().trim().isEmpty()) {
+            mUserNameLayout.setError("should not be empty!");
+            requestFocus(mUserNameEt);
+            return false;
+        } else {
+            mUserNameLayout.setErrorEnabled(false);
+        }
+
+        return true;
+    }
+
+    private void requestFocus(View view) {
+        if (view.requestFocus()) {
+            getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        }
     }
 
 }
