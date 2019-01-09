@@ -3,6 +3,7 @@ package project.com.maktab.hw_6.controller.fragment;
 
 import android.app.Dialog;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -40,16 +41,7 @@ public class ForgetPasswordFragment extends DialogFragment {
         fragment.setArguments(args);
         return fragment;
     }
-    @Override
-    public void onStart() {
-        super.onStart();
-        Dialog dialog = getDialog();
-        if (dialog != null) {
-            int width = ViewGroup.LayoutParams.MATCH_PARENT;
-            int height = ViewGroup.LayoutParams.MATCH_PARENT;
-            dialog.getWindow().setLayout(width, height);
-        }
-    }
+
 
 
     @Override
@@ -58,6 +50,7 @@ public class ForgetPasswordFragment extends DialogFragment {
         mUserName = getArguments().getString(USER_NAME_ARGS);
         mUserId = UserRepository.getInstance(getActivity()).getUserId(mUserName);
         mUser = UserRepository.getInstance(getActivity()).getUser(mUserId);
+        setStyle(DialogFragment.STYLE_NO_TITLE, android.R.style.Theme_Holo_Light_Dialog_NoActionBar_MinWidth);
     }
 
     public ForgetPasswordFragment() {
@@ -79,6 +72,14 @@ public class ForgetPasswordFragment extends DialogFragment {
             public void onClick(View v) {
                 String finalEmail = mEditEmailEt.getText().toString();
                 sendEmail(finalEmail);
+                Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        dismiss();
+                    }
+                },5000);
+
             }
         });
 

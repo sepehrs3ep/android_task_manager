@@ -71,7 +71,6 @@ public class UserRepository {
     }
 
     public long login(String userName, String password) {
-        if (checkUserNameExist(userName)) return -2;
 
 
         String whereClause = TaskDbSchema.UserTable.Cols.USER_NAME + " = ? AND " +
@@ -97,6 +96,7 @@ public class UserRepository {
 
             cursor.close();
         }
+        if (checkUserNameExist(userName)) return -2;
 
         return -1;
     }
