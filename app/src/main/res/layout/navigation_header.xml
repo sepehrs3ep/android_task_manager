@@ -3,18 +3,18 @@
     android:layout_width="match_parent"
     android:gravity="center"
     android:orientation="vertical"
-    android:background="@color/design_default_color_primary_dark"
+    android:background="@color/crud_btn_back"
     android:layout_height="wrap_content">
 
-    <ImageView
+
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/user_profile_image"
-        android:layout_width="130dp"
-        android:layout_height="130dp"
         android:src="@drawable/ic_account_info"
         android:layout_marginTop="15dp"
         android:layout_marginBottom="15dp"
-        />
-    <TextView
+        android:layout_width="130dp"
+        android:layout_height="130dp" />
+  <!--  <TextView
         android:text="@string/hello_blank_fragment"
         android:textSize="20sp"
         android:fontFamily="serif-monospace"
@@ -36,7 +36,7 @@
         android:id="@+id/drawer_uuid"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
+-->
 
 
 

@@ -33,6 +33,8 @@ import android.widget.Toast;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+import project.com.maktab.hw_6.DbBitmapUtility;
 import project.com.maktab.hw_6.MyDialogCloseListener;
 import project.com.maktab.hw_6.R;
 import project.com.maktab.hw_6.controller.fragment.CrudTaskFragment;
@@ -94,7 +96,7 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
                                     SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE).edit();
-                                    editor.putBoolean(SignUpDialogFragment.ALREADY_SIGN_IN,false);
+                                    editor.putBoolean(SignUpDialogFragment.ALREADY_SIGN_IN, false);
                                     editor.commit();
                                     finishAffinity();
                                 }
@@ -134,11 +136,11 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                switch (menuItem.getItemId()){
+                switch (menuItem.getItemId()) {
                     case R.id.show_my_profile:
                         ShowUserFragment fragment = ShowUserFragment.newInstance(mUserId);
-                        fragment.show(getSupportFragmentManager(),"showMyProfile");
-                    return true;
+                        fragment.show(getSupportFragmentManager(), "showMyProfile");
+                        return true;
                     case R.id.delete_account:
                         AlertDialog deleteDialog = new AlertDialog.Builder(MainViewPagerActivity.this)
                                 .setTitle("Are you sure you want to delete your account?")
@@ -147,7 +149,7 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
                                     public void onClick(DialogInterface dialog, int which) {
                                         UserRepository.getInstance(MainViewPagerActivity.this).deleteAccount(mUserId);
                                         SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE).edit();
-                                        editor.putBoolean(SignUpDialogFragment.ALREADY_SIGN_IN,false);
+                                        editor.putBoolean(SignUpDialogFragment.ALREADY_SIGN_IN, false);
                                         editor.commit();
                                         finishAffinity();
                                     }
@@ -163,17 +165,19 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
         });
 
         View headerViewName = mNavigationView.getHeaderView(0);
-        TextView userTextView = headerViewName.findViewById(R.id.drawer_user_name);
+        /*TextView userTextView = headerViewName.findViewById(R.id.drawer_user_name);
         userTextView.setText("User Name :  " + mUser.getName());
         TextView emailTextView = headerViewName.findViewById(R.id.drawer_email);
         emailTextView.setText("User Email : " + mUser.getEmail());
         TextView userIdTextView = headerViewName.findViewById(R.id.drawer_uuid);
-        userIdTextView.setText("User Id : " + mUser.getUserUUID().toString());
-        ImageView photoImageView = headerViewName.findViewById(R.id.user_profile_image);
-        byte[] image = Base64.decode(mUser.getImage(),Base64.NO_WRAP);
-        InputStream inputStream  = new ByteArrayInputStream(image);
-        Bitmap bitmap  = BitmapFactory.decodeStream(inputStream);
+        userIdTextView.setText("User Id : " + mUser.getUserUUID().toString())*/;
+        if(!LoginFragment.IS_GUEST){
+
+        CircleImageView photoImageView = headerViewName.findViewById(R.id.user_profile_image);
+        Bitmap bitmap = DbBitmapUtility.getImage(mUser.getImage());
         photoImageView.setImageBitmap(bitmap);
+        }
+
 
         final FloatingActionButton floatingActionButton = findViewById(R.id.float_button_add);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
@@ -280,7 +284,7 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
             guestExit();
         } else
 //            finishAffinity();
-        finishAffinity();
+            finishAffinity();
     }
 
     private void guestExit() {
