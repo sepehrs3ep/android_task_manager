@@ -133,6 +133,7 @@ public class LoginFragment extends Fragment {
                     }
                     else{
                         editor.putBoolean(SignUpDialogFragment.ALREADY_SIGN_IN,false);
+                        editor.commit();
                     }
                     sendIntent(id);
 

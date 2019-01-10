@@ -135,7 +135,7 @@ public class SignUpDialogFragment extends DialogFragment {
 
     private void writePref(long id) {
         mSharedPreferences = getActivity().getApplicationContext().getSharedPreferences("MyPref",Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor =mSharedPreferences.edit();
+        SharedPreferences.Editor editor = mSharedPreferences.edit();
         editor.putBoolean(ALREADY_SIGN_IN,true);
         editor.putLong(SIGN_IN_USER_ID,id);
         editor.commit();

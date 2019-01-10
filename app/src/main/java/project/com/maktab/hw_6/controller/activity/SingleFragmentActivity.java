@@ -25,7 +25,7 @@ public class SingleFragmentActivity extends AppCompatActivity {
         boolean status = preferences.getBoolean(SignUpDialogFragment.ALREADY_SIGN_IN,false);
         if(status){
             long id = preferences.getLong(SignUpDialogFragment.SIGN_IN_USER_ID,-1);
-            Intent intent = MainViewPagerActivity.newIntent(this,id);
+            Intent intent = MainViewPagerActivity.newIntent(SingleFragmentActivity.this,id);
             startActivity(intent);
 
         }

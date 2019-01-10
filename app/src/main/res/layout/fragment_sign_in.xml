@@ -68,7 +68,7 @@
         android:id="@+id/login_sign_in_btn"
         android:layout_width="85dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="148dp"
+        android:layout_marginStart="140dp"
         android:layout_marginTop="16dp"
         android:text="@string/sign_in"
         app:layout_constraintStart_toStartOf="parent"
