@@ -22,6 +22,9 @@ public class SingleFragmentActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_single_fragment);
         SharedPreferences preferences = getApplicationContext().getSharedPreferences("MyPref",MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean(SignUpDialogFragment.ALREADY_SIGN_IN,false);
+        editor.commit();
         boolean status = preferences.getBoolean(SignUpDialogFragment.ALREADY_SIGN_IN,false);
         if(status){
             long id = preferences.getLong(SignUpDialogFragment.SIGN_IN_USER_ID,-1);
