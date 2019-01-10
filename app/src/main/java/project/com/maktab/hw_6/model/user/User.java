@@ -10,6 +10,15 @@ public class User {
     private UUID mUserUUID;
     private Date mUserDate;
     private String mEmail;
+    private byte[] mImage;
+
+    public byte[] getImage() {
+        return mImage;
+    }
+
+    public void setImage(byte[] image) {
+        mImage = image;
+    }
 
     public String getEmail() {
         return mEmail;

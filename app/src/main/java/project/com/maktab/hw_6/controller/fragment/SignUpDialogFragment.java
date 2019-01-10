@@ -1,11 +1,16 @@
 package project.com.maktab.hw_6.controller.fragment;
 
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -18,13 +23,22 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+import project.com.maktab.hw_6.DbBitmapUtility;
 import project.com.maktab.hw_6.R;
 import project.com.maktab.hw_6.controller.activity.MainViewPagerActivity;
 import project.com.maktab.hw_6.model.user.User;
 import project.com.maktab.hw_6.model.user.UserRepository;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -32,9 +46,11 @@ import project.com.maktab.hw_6.model.user.UserRepository;
 public class SignUpDialogFragment extends DialogFragment {
     public static final String ALREADY_SIGN_IN = "userSignedIn";
     public static final String SIGN_IN_USER_ID = "signInUserId";
+    private static final int GET_FROM_GALLERY_REQ_CODE = 21;
     private EditText mUserNameEt;
     private TextInputEditText mUserPasswordEt;
     private EditText mUserEmailEt;
+    private CircleImageView mCircleImageView;
     private Button mSignUpBtn;
     public static final String ID_ARGS = "id";
     public static final String IS_GUEST_ARGS = "isGuest";
@@ -42,7 +58,9 @@ public class SignUpDialogFragment extends DialogFragment {
     private boolean mIsFromGuest;
     private TextInputLayout mPasswordLayout, mEmailLayout, mUsernameLayout;
     private User mUserGuest;
+    private ImageButton mUploadPhotoIbtn;
     private SharedPreferences mSharedPreferences;
+    private Bitmap mBitmap;
 
     public SignUpDialogFragment() {
         // Required empty public constructor
@@ -91,6 +109,8 @@ public class SignUpDialogFragment extends DialogFragment {
         mPasswordLayout = view.findViewById(R.id.sign_up_password_layout);
         mEmailLayout = view.findViewById(R.id.sign_up_email_layout);
         mUsernameLayout = view.findViewById(R.id.sign_up_user_name_layout);
+        mUploadPhotoIbtn = view.findViewById(R.id.upload_image_btn);
+        mCircleImageView = view.findViewById(R.id.sign_up_profile_image);
 
         mSignUpBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,6 +134,19 @@ public class SignUpDialogFragment extends DialogFragment {
 
             }
         });
+
+        mUploadPhotoIbtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                photoPickerIntent.setType("image/*");
+                startActivityForResult(photoPickerIntent, GET_FROM_GALLERY_REQ_CODE);
+//                startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY_REQ_CODE);
+            }
+        });
+
+
+
         return view;
     }
 
@@ -122,6 +155,8 @@ public class SignUpDialogFragment extends DialogFragment {
         createUser.setName(userText);
         createUser.setPassword(userPassword);
         createUser.setEmail(userEmail);
+        byte[] image = DbBitmapUtility.getBytes(mBitmap);
+        createUser.setImage(image);
 
         long id = UserRepository.getInstance(getActivity()).createUser(createUser);
         if (id == -1)
@@ -146,6 +181,8 @@ public class SignUpDialogFragment extends DialogFragment {
         mUserGuest.setPassword(userPassword);
         mUserGuest.setEmail(userEmail);
         mUserGuest.setId(mUserId);
+        byte[] image = DbBitmapUtility.getBytes(mBitmap);
+        mUserGuest.setImage(image);
         int result = UserRepository.getInstance(getActivity()).updateUser(mUserGuest);
         if (result == -1)
             Toast.makeText(getActivity(), "this user name already exist", Toast.LENGTH_SHORT).show();
@@ -220,4 +257,43 @@ public class SignUpDialogFragment extends DialogFragment {
         }
     }
 
+
+    @Override
+    public void onActivityResult(int reqCode, int resultCode, Intent data) {
+        super.onActivityResult(reqCode, resultCode, data);
+
+
+        if (resultCode == RESULT_OK) {
+            try {
+                final Uri imageUri = data.getData();
+                final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
+                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                mCircleImageView.setImageBitmap(selectedImage);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
+            }
+
+        }else {
+            Toast.makeText(getActivity(), "You haven't picked Image",Toast.LENGTH_LONG).show();
+        }
+    }
+/*    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        //Detects request codes
+        if(requestCode==GET_FROM_GALLERY_REQ_CODE && resultCode == Activity.RESULT_OK) {
+            Uri selectedImage = data.getData();
+            try {
+                mBitmap = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), selectedImage);
+
+            } catch (FileNotFoundException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }
+    }*/
 }

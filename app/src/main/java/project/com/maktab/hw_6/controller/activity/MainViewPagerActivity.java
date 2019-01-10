@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -19,12 +21,17 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 
 import project.com.maktab.hw_6.MyDialogCloseListener;
 import project.com.maktab.hw_6.R;
@@ -162,7 +169,11 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
         emailTextView.setText("User Email : " + mUser.getEmail());
         TextView userIdTextView = headerViewName.findViewById(R.id.drawer_uuid);
         userIdTextView.setText("User Id : " + mUser.getUserUUID().toString());
-
+        ImageView photoImageView = headerViewName.findViewById(R.id.user_profile_image);
+        byte[] image = Base64.decode(mUser.getImage(),Base64.NO_WRAP);
+        InputStream inputStream  = new ByteArrayInputStream(image);
+        Bitmap bitmap  = BitmapFactory.decodeStream(inputStream);
+        photoImageView.setImageBitmap(bitmap);
 
         final FloatingActionButton floatingActionButton = findViewById(R.id.float_button_add);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {

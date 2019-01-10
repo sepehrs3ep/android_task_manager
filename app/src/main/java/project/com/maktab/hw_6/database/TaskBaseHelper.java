@@ -30,7 +30,8 @@ public class TaskBaseHelper extends SQLiteOpenHelper {
                 + TaskDbSchema.UserTable.Cols.USER_NAME + ", "
                 + TaskDbSchema.UserTable.Cols.EMAIL + ", "
                 + TaskDbSchema.UserTable.Cols.DATE + ", "
-                + TaskDbSchema.UserTable.Cols.PASSWORD
+                + TaskDbSchema.UserTable.Cols.PASSWORD + ", "
+                + TaskDbSchema.UserTable.Cols.IMAGE + " BLOB "
                 + ")"
 
         );

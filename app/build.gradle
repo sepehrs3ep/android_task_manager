@@ -19,6 +19,7 @@ android {
 }
 
 dependencies {
+    compile 'de.hdodenhof:circleimageview:1.2.1'
     compile 'com.github.yesidlazaro:GmailBackground:1.2.0'
     compile "com.android.support:design:28.0.0"
     compile 'io.paperdb:paperdb:2.6'
