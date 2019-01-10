@@ -63,7 +63,7 @@ public class UserRepository {
                 " cast(" + TaskDbSchema.UserTable.Cols._ID + " as text) = " + String.valueOf(id);
         String taskSearchQuery = " delete from " + TaskDbSchema.TaskTable.NAME +
                 " where " +
-                " cast(" + TaskDbSchema.UserTable.Cols._ID + " as text) = " + String.valueOf(id);
+                " cast(" + TaskDbSchema.TaskTable.Cols.USER_ID + " as text) = " + String.valueOf(id);
 
         mDatabase.execSQL(userSearch_query);
         mDatabase.execSQL(taskSearchQuery);

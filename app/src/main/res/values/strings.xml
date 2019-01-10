@@ -47,6 +47,10 @@
     <string name="remove_profile">delete account</string>
     <string name="open_toggle">Open</string>
     <string name="close_toggle">Close</string>
+    <string name="username">username : </string>
+    <string name="user_id">ID :  </string>
+    <string name="email">email : </string>
+    <string name="user_date">date created : </string>
 
 
     <plurals name="subtitle">

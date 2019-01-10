@@ -30,6 +30,7 @@ import project.com.maktab.hw_6.MyDialogCloseListener;
 import project.com.maktab.hw_6.R;
 import project.com.maktab.hw_6.controller.fragment.CrudTaskFragment;
 import project.com.maktab.hw_6.controller.fragment.LoginFragment;
+import project.com.maktab.hw_6.controller.fragment.ShowUserFragment;
 import project.com.maktab.hw_6.controller.fragment.SignUpDialogFragment;
 import project.com.maktab.hw_6.controller.fragment.TaskListFragment;
 import project.com.maktab.hw_6.model.task.Task;
@@ -126,7 +127,31 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
         mNavigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-                return true;
+                switch (menuItem.getItemId()){
+                    case R.id.show_my_profile:
+                        ShowUserFragment fragment = ShowUserFragment.newInstance(mUserId);
+                        fragment.show(getSupportFragmentManager(),"showMyProfile");
+                    return true;
+                    case R.id.delete_account:
+                        AlertDialog deleteDialog = new AlertDialog.Builder(MainViewPagerActivity.this)
+                                .setTitle("Are you sure you want to delete your account?")
+                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        UserRepository.getInstance(MainViewPagerActivity.this).deleteAccount(mUserId);
+                                        SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE).edit();
+                                        editor.putBoolean(SignUpDialogFragment.ALREADY_SIGN_IN,false);
+                                        editor.commit();
+                                        finishAffinity();
+                                    }
+                                })
+                                .create();
+                        deleteDialog.show();
+                        return true;
+                    default:
+                        return true;
+
+                }
             }
         });
 
