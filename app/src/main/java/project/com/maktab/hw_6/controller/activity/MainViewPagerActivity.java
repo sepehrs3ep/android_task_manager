@@ -174,8 +174,8 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
         if(!LoginFragment.IS_GUEST){
 
         CircleImageView photoImageView = headerViewName.findViewById(R.id.user_profile_image);
-        Bitmap bitmap = DbBitmapUtility.getImage(mUser.getImage());
-        photoImageView.setImageBitmap(bitmap);
+       /* Bitmap bitmap = DbBitmapUtility.getImage(mUser.getImage());
+        photoImageView.setImageBitmap(bitmap);*/
         }
 
 

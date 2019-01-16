@@ -156,7 +156,7 @@ public class SignUpDialogFragment extends DialogFragment {
         createUser.setPassword(userPassword);
         createUser.setEmail(userEmail);
         byte[] image = DbBitmapUtility.getBytes(mBitmap);
-        createUser.setImage(image);
+//        createUser.setImage(image);
 
         long id = UserRepository.getInstance(getActivity()).createUser(createUser);
         if (id == -1)
@@ -181,8 +181,8 @@ public class SignUpDialogFragment extends DialogFragment {
         mUserGuest.setPassword(userPassword);
         mUserGuest.setEmail(userEmail);
         mUserGuest.setId(mUserId);
-        byte[] image = DbBitmapUtility.getBytes(mBitmap);
-        mUserGuest.setImage(image);
+      /*  byte[] image = DbBitmapUtility.getBytes(mBitmap);
+        mUserGuest.setImage(image);*/
         int result = UserRepository.getInstance(getActivity()).updateUser(mUserGuest);
         if (result == -1)
             Toast.makeText(getActivity(), "this user name already exist", Toast.LENGTH_SHORT).show();

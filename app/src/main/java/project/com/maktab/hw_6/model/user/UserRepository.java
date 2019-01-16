@@ -181,7 +181,7 @@ public class UserRepository {
         values.put(TaskDbSchema.UserTable.Cols.EMAIL, user.getEmail());
         values.put(TaskDbSchema.UserTable.Cols.DATE, user.getUserDate().getTime());
         values.put(TaskDbSchema.UserTable.Cols.UUID, user.getUserUUID().toString());
-        values.put(TaskDbSchema.UserTable.Cols.IMAGE,user.getImage());
+//        values.put(TaskDbSchema.UserTable.Cols.IMAGE,user.getImage());
 
         return values;
     }
