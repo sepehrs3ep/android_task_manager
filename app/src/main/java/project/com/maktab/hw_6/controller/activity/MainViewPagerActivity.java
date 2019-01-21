@@ -101,7 +101,7 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
                                     SharedPreferences.Editor editor = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE).edit();
                                     editor.putBoolean(SignUpDialogFragment.ALREADY_SIGN_IN, false);
                                     editor.commit();
-                                    finishAffinity();
+                                    finish();
                                 }
                             })
                             .setNegativeButton(android.R.string.no, null)
