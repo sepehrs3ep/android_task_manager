@@ -10,6 +10,15 @@ public class User {
     private UUID mUserUUID;
     private Date mUserDate;
     private String mEmail;
+    private String mImage;
+
+    public String getImage() {
+        return mImage;
+    }
+
+    public void setImage(String image) {
+        mImage = image;
+    }
     /*private byte[] mImage;
 
     public byte[] getImage() {
@@ -74,7 +83,9 @@ public class User {
         mPassword = password;
     }
 
-
+    public String getPhotoName(){
+        return "IMG_" + this.mUserUUID.toString() + ".jpg";
+    }
 
 
 }

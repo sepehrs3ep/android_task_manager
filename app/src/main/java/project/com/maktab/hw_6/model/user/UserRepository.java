@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.CursorWrapper;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.io.File;
 import java.util.UUID;
 
 import project.com.maktab.hw_6.database.TaskBaseHelper;
@@ -181,6 +182,7 @@ public class UserRepository {
         values.put(TaskDbSchema.UserTable.Cols.EMAIL, user.getEmail());
         values.put(TaskDbSchema.UserTable.Cols.DATE, user.getUserDate().getTime());
         values.put(TaskDbSchema.UserTable.Cols.UUID, user.getUserUUID().toString());
+        values.put(TaskDbSchema.UserTable.Cols.IMAGE,user.getImage());
 //        values.put(TaskDbSchema.UserTable.Cols.IMAGE,user.getImage());
 
         return values;
@@ -191,6 +193,13 @@ public class UserRepository {
                 whereClause, args, null, null, null);
         return new UserCursorWrapper(cursor);
     }
+
+    /*    public File getPhotoFile(User user) {
+            File fileDir = mContext.getExternalFilesDir(".jpg");
+            File photoFile = new File(fileDir, user.getPhotoName());
+
+            return photoFile;
+        }*/
 
 
 }

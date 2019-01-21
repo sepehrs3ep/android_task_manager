@@ -35,7 +35,7 @@ public class TaskDbSchema {
             public static final String DATE = "date";
             public static final String UUID = "uuid";
             public static final String EMAIL = "email";
-//            public static final String IMAGE = "image";
+            public static final String IMAGE = "image";
 
 
         }

@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -31,11 +32,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.ByteArrayInputStream;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import project.com.maktab.hw_6.DbBitmapUtility;
 import project.com.maktab.hw_6.MyDialogCloseListener;
+import project.com.maktab.hw_6.PictureUtils;
 import project.com.maktab.hw_6.R;
 import project.com.maktab.hw_6.controller.fragment.CrudTaskFragment;
 import project.com.maktab.hw_6.controller.fragment.LoginFragment;
@@ -172,8 +175,20 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
         TextView userIdTextView = headerViewName.findViewById(R.id.drawer_uuid);
         userIdTextView.setText("User Id : " + mUser.getUserUUID().toString())*/;
         if(!LoginFragment.IS_GUEST){
-
+            InputStream imageStream = null;
+        String imagePath = mUser.getImage();
+            Uri imageUri = Uri.parse(imagePath);
         CircleImageView photoImageView = headerViewName.findViewById(R.id.user_profile_image);
+            try {
+                imageStream = MainViewPagerActivity.this.getContentResolver().openInputStream(imageUri);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+
+
+//        Bitmap bitmap = PictureUtils.getScaledBitmap(mUser.getImage(),MainViewPagerActivity.this);
+        photoImageView.setImageBitmap(selectedImage);
        /* Bitmap bitmap = DbBitmapUtility.getImage(mUser.getImage());
         photoImageView.setImageBitmap(bitmap);*/
         }

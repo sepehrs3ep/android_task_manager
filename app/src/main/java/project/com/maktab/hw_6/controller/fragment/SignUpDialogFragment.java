@@ -27,12 +27,16 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import project.com.maktab.hw_6.DbBitmapUtility;
+import project.com.maktab.hw_6.PictureUtils;
 import project.com.maktab.hw_6.R;
 import project.com.maktab.hw_6.controller.activity.MainViewPagerActivity;
 import project.com.maktab.hw_6.model.user.User;
@@ -60,7 +64,8 @@ public class SignUpDialogFragment extends DialogFragment {
     private User mUserGuest;
     private ImageButton mUploadPhotoIbtn;
     private SharedPreferences mSharedPreferences;
-    private Bitmap mBitmap;
+//    private Bitmap mBitmap;
+    private User mCreateUser;
 
     public SignUpDialogFragment() {
         // Required empty public constructor
@@ -90,6 +95,7 @@ public class SignUpDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+       mCreateUser= new User();
 
         mUserId = getArguments().getLong(ID_ARGS);
         mIsFromGuest = getArguments().getBoolean(IS_GUEST_ARGS, false);
@@ -151,14 +157,16 @@ public class SignUpDialogFragment extends DialogFragment {
     }
 
     private void createNewUser(String userText, String userPassword, String userEmail) {
-        User createUser = new User();
-        createUser.setName(userText);
-        createUser.setPassword(userPassword);
-        createUser.setEmail(userEmail);
-        byte[] image = DbBitmapUtility.getBytes(mBitmap);
+        mCreateUser.setName(userText);
+            mCreateUser.setPassword(userPassword);
+        mCreateUser.setEmail(userEmail);
+//        byte[] image = DbBitmapUtility.getBytes(mBitmap);
 //        createUser.setImage(image);
 
-        long id = UserRepository.getInstance(getActivity()).createUser(createUser);
+
+
+
+        long id = UserRepository.getInstance(getActivity()).createUser(mCreateUser);
         if (id == -1)
             Toast.makeText(getActivity(), "this user name already exist", Toast.LENGTH_SHORT).show();
         else {
@@ -264,16 +272,35 @@ public class SignUpDialogFragment extends DialogFragment {
 
 
         if (resultCode == RESULT_OK) {
+            String imagePath;
+                Uri imageUri = data.getData();
+                imagePath = imageUri.getPath();
+                mCreateUser.setImage(imageUri.toString());
+
+//            OutputStream outputStream = null;
+            InputStream imageStream = null;
             try {
-                final Uri imageUri = data.getData();
-                final InputStream imageStream = getActivity().getContentResolver().openInputStream(imageUri);
-                final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                mBitmap = selectedImage;
-                mCircleImageView.setImageBitmap(selectedImage);
+                imageStream = getActivity().getContentResolver().openInputStream(imageUri);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
-                Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
             }
+            final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+                Bitmap userProfileBitmap;
+                userProfileBitmap = PictureUtils.getScaledBitmap(imagePath,getActivity());
+                mCircleImageView.setImageBitmap(selectedImage);
+            try {
+//                mPhotoFile.createNewFile();
+//                outputStream = new FileOutputStream(mPhotoFile,false);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+//            mBitmap.compress(Bitmap.CompressFormat.PNG,90,outputStream);
+
+
+            /*} catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
+            }*/
 
         }else {
             Toast.makeText(getActivity(), "You haven't picked Image",Toast.LENGTH_LONG).show();

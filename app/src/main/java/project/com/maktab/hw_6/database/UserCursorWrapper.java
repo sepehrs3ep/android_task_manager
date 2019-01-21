@@ -26,6 +26,7 @@ public class UserCursorWrapper extends CursorWrapper {
         Date date  = new Date(getLong(getColumnIndex(TaskDbSchema.UserTable.Cols.DATE)));
         String email = getString(getColumnIndex(TaskDbSchema.UserTable.Cols.EMAIL));
         long _id = getLong(getColumnIndex(TaskDbSchema.UserTable.Cols._ID));
+        String imagePath = getString(getColumnIndex(TaskDbSchema.UserTable.Cols.IMAGE));
 //        byte[] image = getBlob(getColumnIndex(TaskDbSchema.UserTable.Cols.IMAGE));
 
         User user = new User(uuid);
@@ -34,6 +35,7 @@ public class UserCursorWrapper extends CursorWrapper {
         user.setEmail(email);
         user.setId(_id);
         user.setUserDate(date);
+        user.setImage(imagePath);
 //        user.setImage(image);
 
 
