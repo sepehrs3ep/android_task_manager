@@ -64,7 +64,7 @@ public class SignUpDialogFragment extends DialogFragment {
     private User mUserGuest;
     private ImageButton mUploadPhotoIbtn;
     private SharedPreferences mSharedPreferences;
-//    private Bitmap mBitmap;
+    //    private Bitmap mBitmap;
     private User mCreateUser;
 
     public SignUpDialogFragment() {
@@ -95,7 +95,7 @@ public class SignUpDialogFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-       mCreateUser= new User();
+        mCreateUser = new User();
 
         mUserId = getArguments().getLong(ID_ARGS);
         mIsFromGuest = getArguments().getBoolean(IS_GUEST_ARGS, false);
@@ -144,7 +144,7 @@ public class SignUpDialogFragment extends DialogFragment {
         mUploadPhotoIbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                Intent photoPickerIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
                 photoPickerIntent.setType("image/*");
                 startActivityForResult(photoPickerIntent, GET_FROM_GALLERY_REQ_CODE);
 //                startActivityForResult(new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI), GET_FROM_GALLERY_REQ_CODE);
@@ -152,18 +152,15 @@ public class SignUpDialogFragment extends DialogFragment {
         });
 
 
-
         return view;
     }
 
     private void createNewUser(String userText, String userPassword, String userEmail) {
         mCreateUser.setName(userText);
-            mCreateUser.setPassword(userPassword);
+        mCreateUser.setPassword(userPassword);
         mCreateUser.setEmail(userEmail);
 //        byte[] image = DbBitmapUtility.getBytes(mBitmap);
 //        createUser.setImage(image);
-
-
 
 
         long id = UserRepository.getInstance(getActivity()).createUser(mCreateUser);
@@ -177,10 +174,10 @@ public class SignUpDialogFragment extends DialogFragment {
     }
 
     private void writePref(long id) {
-        mSharedPreferences = getActivity().getApplicationContext().getSharedPreferences("MyPref",Context.MODE_PRIVATE);
+        mSharedPreferences = getActivity().getApplicationContext().getSharedPreferences("MyPref", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = mSharedPreferences.edit();
-        editor.putBoolean(ALREADY_SIGN_IN,true);
-        editor.putLong(SIGN_IN_USER_ID,id);
+        editor.putBoolean(ALREADY_SIGN_IN, true);
+        editor.putLong(SIGN_IN_USER_ID, id);
         editor.commit();
     }
 
@@ -269,42 +266,32 @@ public class SignUpDialogFragment extends DialogFragment {
     @Override
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
+        if (resultCode != RESULT_OK) {
+            Toast.makeText(getActivity(), "You haven't picked Image", Toast.LENGTH_LONG).show();
+            return;
+        }
+        if (reqCode == GET_FROM_GALLERY_REQ_CODE) {
+            Uri imageUri = data.getData();
+            mCreateUser.setImage(imageUri.toString());
+            Bitmap selectedImage = null;
 
 
-        if (resultCode == RESULT_OK) {
-            String imagePath;
-                Uri imageUri = data.getData();
-                imagePath = imageUri.getPath();
-                mCreateUser.setImage(imageUri.toString());
-
-//            OutputStream outputStream = null;
-            InputStream imageStream = null;
             try {
-                imageStream = getActivity().getContentResolver().openInputStream(imageUri);
+                selectedImage = PictureUtils.decodeUri(getActivity(), imageUri);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-            final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
-                Bitmap userProfileBitmap;
-                userProfileBitmap = PictureUtils.getScaledBitmap(imagePath,getActivity());
-                mCircleImageView.setImageBitmap(selectedImage);
-            try {
-//                mPhotoFile.createNewFile();
-//                outputStream = new FileOutputStream(mPhotoFile,false);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-//            mBitmap.compress(Bitmap.CompressFormat.PNG,90,outputStream);
+                /*
+                for casting uri to bitmap but take too much size.
+                InputStream imageStream = null;
+                imageStream = getActivity().getContentResolver().openInputStream(imageUri);
+            BitmapFactory.decodeStream(imageStream);*/
 
+            mCircleImageView.setImageBitmap(selectedImage);
 
-            /*} catch (FileNotFoundException e) {
-                e.printStackTrace();
-                Toast.makeText(getActivity(), "Something went wrong", Toast.LENGTH_LONG).show();
-            }*/
-
-        }else {
-            Toast.makeText(getActivity(), "You haven't picked Image",Toast.LENGTH_LONG).show();
         }
+
+
     }
 /*    @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

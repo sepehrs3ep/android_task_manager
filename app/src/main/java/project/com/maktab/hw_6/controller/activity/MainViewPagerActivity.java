@@ -173,22 +173,23 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
         TextView emailTextView = headerViewName.findViewById(R.id.drawer_email);
         emailTextView.setText("User Email : " + mUser.getEmail());
         TextView userIdTextView = headerViewName.findViewById(R.id.drawer_uuid);
-        userIdTextView.setText("User Id : " + mUser.getUserUUID().toString())*/;
-        if(!LoginFragment.IS_GUEST){
+        userIdTextView.setText("User Id : " + mUser.getUserUUID().toString())*/
+        ;
+        if (!LoginFragment.IS_GUEST) {
+            Bitmap selectedImage = null;
             InputStream imageStream = null;
-        String imagePath = mUser.getImage();
+            String imagePath = mUser.getImage();
             Uri imageUri = Uri.parse(imagePath);
-        CircleImageView photoImageView = headerViewName.findViewById(R.id.user_profile_image);
+            CircleImageView photoImageView = headerViewName.findViewById(R.id.user_profile_image);
             try {
-                imageStream = MainViewPagerActivity.this.getContentResolver().openInputStream(imageUri);
+                selectedImage = PictureUtils.decodeUri(MainViewPagerActivity.this,imageUri);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-            final Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
 
 
 //        Bitmap bitmap = PictureUtils.getScaledBitmap(mUser.getImage(),MainViewPagerActivity.this);
-        photoImageView.setImageBitmap(selectedImage);
+            photoImageView.setImageBitmap(selectedImage);
        /* Bitmap bitmap = DbBitmapUtility.getImage(mUser.getImage());
         photoImageView.setImageBitmap(bitmap);*/
         }
