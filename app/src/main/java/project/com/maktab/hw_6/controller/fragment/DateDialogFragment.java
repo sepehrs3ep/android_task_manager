@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -56,6 +57,17 @@ public class DateDialogFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         mDate = (Date) getArguments().getSerializable(MULTI_DIALOG_ARGS);
     }
+    private String getFormatTime() {
+        final SimpleDateFormat timeFormat = new SimpleDateFormat("HH-mm");
+        String timeOutput = timeFormat.format(mDate);
+        return timeOutput;
+    }
+
+    private String getFormatDate() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd,E");
+        String dateOutput = dateFormat.format(mDate);
+        return dateOutput;
+    }
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container,
@@ -68,6 +80,8 @@ public class DateDialogFragment extends DialogFragment {
         mCancelBtn = view.findViewById(R.id.date_time_cancel_btn);
         mTimePicker.setIs24HourView(true);
         mDatePicker.setVisibility(View.VISIBLE);
+        mTabLayout.getTabAt(0).setText(getFormatDate());
+        mTabLayout.getTabAt(1).setText(getFormatTime());
         mTimePicker.setVisibility(View.GONE);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(mDate);
@@ -84,11 +98,13 @@ public class DateDialogFragment extends DialogFragment {
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
                     case 0:
+                        tab.setText(getFormatDate());
                         mDatePicker.setVisibility(View.VISIBLE);
                         mTimePicker.setVisibility(View.GONE);
                         mDatePicker.init(year, month, day, null);
                         break;
                     case 1:
+                        tab.setText(getFormatTime());
                         mDatePicker.setVisibility(View.GONE);
                         mTimePicker.setVisibility(View.VISIBLE);
                         mTimePicker.setHour(hour);
