@@ -263,11 +263,17 @@ public class CrudTaskFragment extends DialogFragment {
    /*     mTimeTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+<<<<<<< HEAD
              *//*   TimePickerFragment fragment = TimePickerFragment.newInstance(mTask.getDate());
                 fragment.setTargetFragment(CrudTaskFragment.this, TIME_REQ_CODE);
                 fragment.show(getFragmentManager(), TIME_TAG);*//*
              DateDialogFragment fragment = new DateDialogFragment();
              fragment.show(getFragmentManager(),"tag");
+=======
+                TimePickerFragment fragment = TimePickerFragment.newInstance(mTask.getDate());
+                fragment.setTargetFragment(CrudTaskFragment.this, TIME_REQ_CODE);
+                fragment.show(getFragmentManager(), TIME_TAG);
+>>>>>>> parent of 9d1af47... + multi date and time picker on dialog created.
             }
         });
         mDateTextView.setOnClickListener(new View.OnClickListener() {

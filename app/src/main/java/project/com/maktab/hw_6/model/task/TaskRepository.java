@@ -28,7 +28,6 @@ public class TaskRepository {
 
     public void addTask(Task task) {
         ContentValues values = getContentValues(task);
-        Log.d("yeh test", "add test" + values.toString());
         mDatabase.insert(TaskDbSchema.TaskTable.NAME, null, values);
     }
 
