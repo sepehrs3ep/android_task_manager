@@ -58,37 +58,17 @@ public class TaskRepository {
     }
 
     public List<Task> getDoneTaskList(long userId) {
-        List<Task> crimes = new ArrayList<>();
         String[] whereArgs = new String[]{"done", String.valueOf(userId)};
         String search_query = " select * from " + TaskDbSchema.TaskTable.NAME +
                 " where " + TaskDbSchema.TaskTable.Cols.TYPE + " = ? AND " +
                 " cast(" + TaskDbSchema.TaskTable.Cols.USER_ID + " as text) = ? ";
-        TaskCursorWrapper cursor = new TaskCursorWrapper(mDatabase.rawQuery(search_query, whereArgs));
 
-        try {
-            if (cursor.getCount() == 0)
-                return crimes;
-
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
-
-                crimes.add(cursor.getTask());
-
-                cursor.moveToNext();
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-
-        } finally {
-            cursor.close();
-        }
-
-        return crimes;
+        return getDifLists(whereArgs,search_query);
     }
 
 
     public List<Task> getUnDoneTaskList(long userId) {
-        List<Task> crimes = new ArrayList<>();
+
        /* String whereClause = TaskDbSchema.TaskTable.Cols.TYPE + " = ? AND " +
                 TaskDbSchema.TaskTable.Cols.USER_ID + " = ? ";
         TaskCursorWrapper cursor = queryTask(whereClause, whereArgs);*/
@@ -96,6 +76,12 @@ public class TaskRepository {
         String search_query = " select * from " + TaskDbSchema.TaskTable.NAME +
                 " where " + TaskDbSchema.TaskTable.Cols.TYPE + " = ? AND " +
                 " cast(" + TaskDbSchema.TaskTable.Cols.USER_ID + " as text) = ? ";
+        return getDifLists(whereArgs, search_query);
+
+    }
+
+    private List<Task> getDifLists(String[] whereArgs, String search_query) {
+        List<Task> crimes = new ArrayList<>();
         TaskCursorWrapper cursor = new TaskCursorWrapper(mDatabase.rawQuery(search_query, whereArgs));
         try {
             if (cursor.getCount() == 0)
@@ -116,7 +102,6 @@ public class TaskRepository {
         }
 
         return crimes;
-
     }
 
 
@@ -143,50 +128,13 @@ public class TaskRepository {
 
     public List<Task> getList(long userId) {
 //        return cursorGetList(null, null);
-        List<Task> crimes = new ArrayList<>();
         String[] whereArgs = new String[]{String.valueOf(userId)};
         String search_query = " select * from " + TaskDbSchema.TaskTable.NAME +
                 " where " +
                 " cast(" + TaskDbSchema.TaskTable.Cols.USER_ID + " as text) = ? ";
-        TaskCursorWrapper cursor = new TaskCursorWrapper(mDatabase.rawQuery(search_query, whereArgs));
 
-        try {
-            if (cursor.getCount() == 0)
-                return crimes;
-
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
-
-                crimes.add(cursor.getTask());
-
-                cursor.moveToNext();
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-
-        } finally {
-            cursor.close();
-        }
-
-        return crimes;
-
+       return getDifLists(whereArgs,search_query);
     }
-
- /*   private List<Task> cursorGetList(List<Task> list, String whereClause, String[] whereArgs) {
-        try (TaskCursorWrapper cursorWrapper = queryTask(whereClause, whereArgs)) {
-            if (cursorWrapper.getCount() == 0) return list;
-
-            cursorWrapper.moveToFirst();
-
-            while (!cursorWrapper.isAfterLast()) {
-                list.add(cursorWrapper.getTask());
-
-            }
-
-        }
-        return list;
-    }*/
-
 
     public static TaskRepository getInstance(Context context) {
         if (mInstance == null)
