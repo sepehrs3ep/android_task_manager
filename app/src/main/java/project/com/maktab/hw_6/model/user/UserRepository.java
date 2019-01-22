@@ -31,22 +31,14 @@ public class UserRepository {
         String[] args = new String[]{
                 String.valueOf(id)
         };
-//        String whereClause = TaskDbSchema.UserTable.Cols.UUID + " = ? ";
         Cursor cursor = mDatabase.rawQuery(search_query, args);
         UserCursorWrapper cursorWrapper = new UserCursorWrapper(cursor);
-//        Cursor cursorWrapper = mDatabase.rawQuery(search_query, args);
 
         try {
             if (cursorWrapper.getCount() <= 0) return null;
 
             cursorWrapper.moveToFirst();
 
-            /*String name = cursorWrapper.getString(cursorWrapper.getColumnIndex(TaskDbSchema.UserTable.Cols.USER_NAME));
-            String password = cursorWrapper.getString(cursorWrapper.getColumnIndex(TaskDbSchema.UserTable.Cols.PASSWORD));
-            UUID uuid = UUID.fromString(cursorWrapper.getString(cursorWrapper.getColumnIndex(TaskDbSchema.UserTable.Cols.UUID)));
-            user = new User(uuid);
-            user.setName(name);
-            user.setPassword(password);*/
             user = cursorWrapper.getUser();
 
 
