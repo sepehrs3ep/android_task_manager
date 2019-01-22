@@ -1,6 +1,8 @@
 package project.com.maktab.hw_6.controller.fragment;
 
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -108,7 +110,6 @@ public class LoginFragment extends Fragment {
         mForgetPasswordTv.setHighlightColor(Color.TRANSPARENT);
         mForgetPasswordTv.setVisibility(View.GONE);
 
-
         mSignInBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -140,7 +141,20 @@ public class LoginFragment extends Fragment {
                 }
                 else if (id == -2) {
                     Toast.makeText(getActivity(), "wrong password!", Toast.LENGTH_SHORT).show();
-                    mForgetPasswordTv.setVisibility(View.VISIBLE);
+//                    mForgetPasswordTv.setVisibility(View.VISIBLE);
+                    mForgetPasswordTv.animate()
+                            .translationY(mForgetPasswordTv.getHeight())
+                            .alpha(0.0f)
+                            .setDuration(300)
+                            .setListener(new AnimatorListenerAdapter() {
+                                @Override
+                                public void onAnimationEnd(Animator animation) {
+                                    super.onAnimationEnd(animation);
+                                    mForgetPasswordTv.setVisibility(View.VISIBLE);
+                                }
+                            });
+
+
                 } else
                     Toast.makeText(getActivity(), "can't find your account", Toast.LENGTH_SHORT).show();
 
