@@ -1,6 +1,7 @@
 package project.com.maktab.hw_6.controller.fragment;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -41,6 +42,7 @@ public class TaskListFragment extends Fragment {
     private TaskAdapter mTaskAdapter;
     private String mListType;
     private long mUserId;
+    private OnDataPass mOnDataPass;
     private boolean mClickedShowSub = false;
 
 
@@ -63,6 +65,12 @@ public class TaskListFragment extends Fragment {
         updateUI();
         updateSubtitle();
 //        ((MainViewPagerActivity) getContext()).setAdapter(selected);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        mOnDataPass = (OnDataPass) context;
     }
 
     public void updateUI() {
@@ -124,6 +132,9 @@ public class TaskListFragment extends Fragment {
 //        updateSubtitle();
         return view;
     }
+    public interface OnDataPass {
+        public void onDataPass();
+    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -161,6 +172,7 @@ public class TaskListFragment extends Fragment {
                     @Override
                     public void onYesClicked() {
                         TaskRepository.getInstance(getActivity()).clearLists(mUserId);
+                        mOnDataPass.onDataPass();
                         updateUI();
 
                     }

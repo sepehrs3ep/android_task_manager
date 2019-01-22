@@ -51,7 +51,7 @@ import project.com.maktab.hw_6.model.task.TaskType;
 import project.com.maktab.hw_6.model.user.User;
 import project.com.maktab.hw_6.model.user.UserRepository;
 
-public class MainViewPagerActivity extends AppCompatActivity implements MyDialogCloseListener {
+public class MainViewPagerActivity extends AppCompatActivity implements MyDialogCloseListener ,TaskListFragment.OnDataPass {
     static TaskListFragment[] mListFragments = new TaskListFragment[3];
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
@@ -239,6 +239,11 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
     public void handleDialogClose(DialogInterface dialog) {
         mViewPagerAdapter.notifyDataSetChanged();
 
+    }
+
+    @Override
+    public void onDataPass() {
+        mViewPagerAdapter.notifyDataSetChanged();
     }
 
     public class viewPagerAdapter extends FragmentStatePagerAdapter {
