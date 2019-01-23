@@ -1,16 +1,13 @@
 package project.com.maktab.hw_6.controller.fragment;
 
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.support.design.widget.TextInputLayout;
@@ -27,15 +24,9 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import project.com.maktab.hw_6.DbBitmapUtility;
 import project.com.maktab.hw_6.PictureUtils;
 import project.com.maktab.hw_6.R;
 import project.com.maktab.hw_6.controller.activity.MainViewPagerActivity;
@@ -156,14 +147,14 @@ public class SignUpDialogFragment extends DialogFragment {
     }
 
     private void createNewUser(String userText, String userPassword, String userEmail) {
-        mCreateUser.setName(userText);
-        mCreateUser.setPassword(userPassword);
-        mCreateUser.setEmail(userEmail);
+        mCreateUser.setMName(userText);
+        mCreateUser.setMPassword(userPassword);
+        mCreateUser.setMEmail(userEmail);
 //        byte[] image = DbBitmapUtility.getBytes(mBitmap);
 //        createUser.setImage(image);
 
 
-        long id = UserRepository.getInstance(getActivity()).createUser(mCreateUser);
+        Long id = UserRepository.getInstance(getActivity()).createUser(mCreateUser);
         if (id == -1)
             Toast.makeText(getActivity(), "this user name already exist", Toast.LENGTH_SHORT).show();
         else {
@@ -182,9 +173,9 @@ public class SignUpDialogFragment extends DialogFragment {
     }
 
     private void provideGuestUser(String userText, String userPassword, String userEmail) {
-        mUserGuest.setName(userText);
-        mUserGuest.setPassword(userPassword);
-        mUserGuest.setEmail(userEmail);
+        mUserGuest.setMName(userText);
+        mUserGuest.setMPassword(userPassword);
+        mUserGuest.setMEmail(userEmail);
         mUserGuest.setId(mUserId);
       /*  byte[] image = DbBitmapUtility.getBytes(mBitmap);
         mUserGuest.setImage(image);*/
@@ -204,7 +195,7 @@ public class SignUpDialogFragment extends DialogFragment {
         return !TextUtils.isEmpty(email) && android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches();
     }
 
-    private void sendIntent(long id) {
+    private void sendIntent(Long id) {
         Intent sendIntent = MainViewPagerActivity.newIntent(getActivity(), id);
         startActivity(sendIntent);
     }
@@ -273,9 +264,9 @@ public class SignUpDialogFragment extends DialogFragment {
         if (reqCode == GET_FROM_GALLERY_REQ_CODE) {
             Uri imageUri = data.getData();
             if (mIsFromGuest)
-                mUserGuest.setImage(imageUri.toString());
+                mUserGuest.setMImage(imageUri.toString());
             else
-            mCreateUser.setImage(imageUri.toString());
+            mCreateUser.setMImage(imageUri.toString());
             Bitmap selectedImage = null;
 
 

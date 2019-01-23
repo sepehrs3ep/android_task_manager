@@ -1,4 +1,5 @@
-package project.com.maktab.hw_6.database;
+/*
+package project.com.maktab.hw_6.database.sql;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -43,3 +44,4 @@ public class TaskBaseHelper extends SQLiteOpenHelper {
 
     }
 }
+*/

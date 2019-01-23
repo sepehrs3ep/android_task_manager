@@ -26,6 +26,7 @@ import java.util.UUID;
 
 import project.com.maktab.hw_6.R;
 import project.com.maktab.hw_6.model.task.Task;
+
 import project.com.maktab.hw_6.model.task.TaskRepository;
 import project.com.maktab.hw_6.model.task.TaskType;
 
@@ -225,7 +226,7 @@ public class TaskListFragment extends Fragment {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    UUID id = mTask.getID();
+                    UUID id = mTask.getMID();
                     /*Intent intent = CrudTaskActivity.newIntent(getActivity(), id, false);
                     startActivity(intent);*/
                     CrudShowDialogFragment fragment = CrudShowDialogFragment.newInstance(id);
@@ -237,11 +238,11 @@ public class TaskListFragment extends Fragment {
         public void bind(Task task) {
 
             mTask = task;
-            String taskTitleText = task.getTitle() == null ? "@" : task.getTitle();
+            String taskTitleText = task.getMTitle() == null ? "@" : task.getMTitle();
             mTextViewTitle.setText(taskTitleText);
             mTextViewImage.setText(taskTitleText.charAt(0) + "");
 
-            if (task.getTaskType().equals("done"))
+            if (task.getMTaskType().equals("done"))
                 mImageViewUndone.setVisibility(View.GONE);
             else mImageViewDone.setVisibility(View.GONE);
 
@@ -278,9 +279,9 @@ public class TaskListFragment extends Fragment {
         @Override
         public void onBindViewHolder(@NonNull TaskViewHolder taskViewHolder, int i) {
             Task task = mSearchTaskList.get(i);
-            if (task != null || task.getTitle() != null)
+            if (task != null || task.getMTitle() != null)
                 taskViewHolder.bind(task);
-            else TaskRepository.getInstance(getActivity()).removeTask(task.getID());
+            else TaskRepository.getInstance(getActivity()).removeTask(task);
 
         }
 
@@ -297,7 +298,7 @@ public class TaskListFragment extends Fragment {
             } else {
                 text = text.toLowerCase();
                 for (Task item : mTaskList) {
-                    if (item.getTitle().toLowerCase().contains(text)) {
+                    if (item.getMTitle().toLowerCase().contains(text)) {
                         mSearchTaskList.add(item);
                     }
                 }

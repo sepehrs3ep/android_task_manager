@@ -1,7 +1,6 @@
 package project.com.maktab.hw_6.controller.fragment;
 
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -65,7 +64,7 @@ public class ForgetPasswordFragment extends DialogFragment {
         View view =  inflater.inflate(R.layout.fragment_forget_password, container, false);
         mSubmitBtn = view.findViewById(R.id.confirm_submit_btn);
         mEditEmailEt = view.findViewById(R.id.confirm_email_et);
-        mEditEmailEt.setText(mUser.getEmail());
+        mEditEmailEt.setText(mUser.getMEmail());
 
         mSubmitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,7 +99,7 @@ public class ForgetPasswordFragment extends DialogFragment {
                 .withMailto(email)
                 .withType(BackgroundMail.TYPE_PLAIN)
                 .withSubject(R.string.email_subject)
-                .withBody(getString(R.string.email_body)+ mUser.getPassword())
+                .withBody(getString(R.string.email_body)+ mUser.getMPassword())
                 .withOnSuccessCallback(new BackgroundMail.OnSuccessCallback() {
                     @Override
                     public void onSuccess() {

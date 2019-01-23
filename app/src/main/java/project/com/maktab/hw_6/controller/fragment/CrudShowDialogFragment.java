@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import java.text.SimpleDateFormat;
@@ -64,15 +63,15 @@ public class CrudShowDialogFragment extends DialogFragment {
         mTaskDate = view.findViewById(R.id.date_show_crud_dialog);
         mTaskTime = view.findViewById(R.id.time_show_crud_dialog);
         mNavigateEditBtn = view.findViewById(R.id.edit_show_curd_btn);
-        mTaskTitle.setText(mTask.getTitle());
-        mTaskDesc.setText(mTask.getDescription());
+        mTaskTitle.setText(mTask.getMTitle());
+        mTaskDesc.setText(mTask.getMDescription());
         setDateTextView();
         setTimeTextView();
 
         mNavigateEditBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CrudTaskFragment fragment = CrudTaskFragment.getInstance(mId, false,-1);
+                CrudTaskFragment fragment = CrudTaskFragment.getInstance(mId, false,-1l);
                 dismiss();
                 fragment.show(getFragmentManager(), "goto edit");
             }
@@ -82,13 +81,13 @@ public class CrudShowDialogFragment extends DialogFragment {
 
     private void setDateTextView() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd,E");
-        String dateOutput = dateFormat.format(mTask.getDate());
+        String dateOutput = dateFormat.format(mTask.getMDate());
         mTaskDate.setText(dateOutput);
     }
 
     private void setTimeTextView() {
         final SimpleDateFormat timeFormat = new SimpleDateFormat("HH-mm");
-        String timeOutput = timeFormat.format(mTask.getDate());
+        String timeOutput = timeFormat.format(mTask.getMDate());
         mTaskTime.setText(timeOutput);
     }
 

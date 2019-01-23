@@ -1,40 +1,50 @@
 package project.com.maktab.hw_6.model.task;
 
+import org.greenrobot.greendao.annotation.Convert;
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.ToOne;
+import org.greenrobot.greendao.annotation.Transient;
+
 import java.util.Date;
 import java.util.UUID;
+import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.converter.PropertyConverter;
 
+import project.com.maktab.hw_6.model.user.User;
+import org.greenrobot.greendao.DaoException;
+import project.com.maktab.hw_6.model.user.UserDao;
+
+
+@Entity
 public class Task {
+    @Id(autoincrement = true)
+    private Long id;
 
     private String mTitle;
     private String mDescription;
     private Date mDate;
+
+//    @Transient
+    @Convert(converter =UuidConverter.class,columnType = String.class)
     private UUID mID;
+
     private String mTaskType;
-    private long mUserID;
 
-    public long getUserID() {
-        return mUserID;
-    }
+    @ToOne(joinProperty = "mUserID")
+    private User mUser;
+    private Long mUserID;
 
-    public void setUserID(long userID) {
-        mUserID = userID;
-    }
+    /** Used to resolve relations */
+    @Generated(hash = 2040040024)
+    private transient DaoSession daoSession;
 
-    public String getTaskType() {
-        return mTaskType;
-    }
+    /** Used for active entity operations. */
+    @Generated(hash = 1469429066)
+    private transient TaskDao myDao;
 
-    public void setTaskType(String taskType) {
-        this.mTaskType = taskType;
-    }
-
-    public Date getDate() {
-        return mDate;
-    }
-
-    public void setDate(Date date) {
-        mDate = date;
-    }
+    @Generated(hash = 1377221062)
+    private transient Long mUser__resolvedKey;
 
 
     public Task(UUID id) {
@@ -47,24 +57,159 @@ public class Task {
         this(UUID.randomUUID());
     }
 
-    public UUID getID() {
-        return mID;
+    @Generated(hash = 2112433849)
+    public Task(Long id, String mTitle, String mDescription, Date mDate, UUID mID,
+            String mTaskType, Long mUserID) {
+        this.id = id;
+        this.mTitle = mTitle;
+        this.mDescription = mDescription;
+        this.mDate = mDate;
+        this.mID = mID;
+        this.mTaskType = mTaskType;
+        this.mUserID = mUserID;
     }
 
-    public String getTitle() {
-        return mTitle;
+    public Long getId() {
+        return this.id;
     }
 
-    public void setTitle(String title) {
-        mTitle = title;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public String getDescription() {
-        return mDescription;
+    public String getMTitle() {
+        return this.mTitle;
     }
 
-    public void setDescription(String description) {
-        mDescription = description;
+    public void setMTitle(String mTitle) {
+        this.mTitle = mTitle;
+    }
+
+    public String getMDescription() {
+        return this.mDescription;
+    }
+
+    public void setMDescription(String mDescription) {
+        this.mDescription = mDescription;
+    }
+
+    public Date getMDate() {
+        return this.mDate;
+    }
+
+    public void setMDate(Date mDate) {
+        this.mDate = mDate;
+    }
+
+    public UUID getMID() {
+        return this.mID;
+    }
+
+    public void setMID(UUID mID) {
+        this.mID = mID;
+    }
+
+    public String getMTaskType() {
+        return this.mTaskType;
+    }
+
+    public void setMTaskType(String mTaskType) {
+        this.mTaskType = mTaskType;
+    }
+
+    public Long getMUserID() {
+        return this.mUserID;
+    }
+
+    public void setMUserID(Long mUserID) {
+        this.mUserID = mUserID;
+    }
+
+    /** To-one relationship, resolved on first access. */
+    @Generated(hash = 1742446920)
+    public User getMUser() {
+        Long __key = this.mUserID;
+        if (mUser__resolvedKey == null || !mUser__resolvedKey.equals(__key)) {
+            final DaoSession daoSession = this.daoSession;
+            if (daoSession == null) {
+                throw new DaoException("Entity is detached from DAO context");
+            }
+            UserDao targetDao = daoSession.getUserDao();
+            User mUserNew = targetDao.load(__key);
+            synchronized (this) {
+                mUser = mUserNew;
+                mUser__resolvedKey = __key;
+            }
+        }
+        return mUser;
+    }
+
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 195124107)
+    public void setMUser(User mUser) {
+        synchronized (this) {
+            this.mUser = mUser;
+            mUserID = mUser == null ? null : mUser.getId();
+            mUser__resolvedKey = mUserID;
+        }
+    }
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#delete(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 128553479)
+    public void delete() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.delete(this);
+    }
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#refresh(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 1942392019)
+    public void refresh() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.refresh(this);
+    }
+
+    /**
+     * Convenient call for {@link org.greenrobot.greendao.AbstractDao#update(Object)}.
+     * Entity must attached to an entity context.
+     */
+    @Generated(hash = 713229351)
+    public void update() {
+        if (myDao == null) {
+            throw new DaoException("Entity is detached from DAO context");
+        }
+        myDao.update(this);
+    }
+
+    /** called by internal mechanisms, do not call yourself. */
+    @Generated(hash = 1442741304)
+    public void __setDaoSession(DaoSession daoSession) {
+        this.daoSession = daoSession;
+        myDao = daoSession != null ? daoSession.getTaskDao() : null;
+    }
+
+
+
+    public static class UuidConverter implements PropertyConverter<UUID,String> {
+
+        @Override
+        public UUID convertToEntityProperty(String databaseValue) {
+            return UUID.fromString(databaseValue);
+        }
+
+        @Override
+        public String convertToDatabaseValue(UUID entityProperty) {
+            return entityProperty.toString();
+        }
     }
 
 }

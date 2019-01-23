@@ -3,7 +3,6 @@ package project.com.maktab.hw_6.controller.fragment;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -13,7 +12,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -31,7 +29,6 @@ import java.util.UUID;
 
 import project.com.maktab.hw_6.MyDialogCloseListener;
 import project.com.maktab.hw_6.R;
-import project.com.maktab.hw_6.controller.activity.MainViewPagerActivity;
 import project.com.maktab.hw_6.model.task.Task;
 import project.com.maktab.hw_6.model.task.TaskRepository;
 import project.com.maktab.hw_6.model.task.TaskType;
@@ -53,7 +50,7 @@ public class CrudTaskFragment extends DialogFragment {
     private EditText mEditTextDesc;
     private TextView mDateTextView;
     private TextView mTimeTextView;
-    private long mUserId;
+    private Long mUserId;
     public static final String USER_ID_ARGS = "userId";
     private Button mCalenderBtn;
     private static boolean mFromFloatButton;
@@ -62,7 +59,7 @@ public class CrudTaskFragment extends DialogFragment {
     private static String mRawTextTitle = "";
     private String mTaskTitle = "";
 
-    public static CrudTaskFragment getInstance(UUID id, boolean hasExtra,long userId) {
+    public static CrudTaskFragment getInstance(UUID id, boolean hasExtra,Long userId) {
         CrudTaskFragment fragment = new CrudTaskFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(ARGS_EXTRA_ID, id);
@@ -115,7 +112,7 @@ public class CrudTaskFragment extends DialogFragment {
         mTask = TaskRepository.getInstance(getActivity()).getTaskByID(id);
 
 
-        mTaskTitle = mTask.getTitle();
+        mTaskTitle = mTask.getMTitle();
         mRawTextTitle = mTaskTitle;
     }
 
@@ -147,7 +144,7 @@ public class CrudTaskFragment extends DialogFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mTask.setTitle(s.toString());
+                mTask.setMTitle(s.toString());
             }
 
             //check back button pressed for edit.
@@ -164,7 +161,7 @@ public class CrudTaskFragment extends DialogFragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                mTask.setDescription(s.toString());
+                mTask.setMDescription(s.toString());
             }
 
             @Override
@@ -196,14 +193,14 @@ public class CrudTaskFragment extends DialogFragment {
             buttonDeleteCrud.setVisibility(View.VISIBLE);
             buttonDoneCrud.setVisibility(View.VISIBLE);
             buttonAddCrud.setVisibility(View.GONE);
-            mEditTextTitle.setText(mTask.getTitle());
-            mEditTextDesc.setText(mTask.getDescription());
+            mEditTextTitle.setText(mTask.getMTitle());
+            mEditTextDesc.setText(mTask.getMDescription());
 
 
             buttonEditCrud.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String title = mTask.getTitle();
+                    String title = mTask.getMTitle();
                     if (title == null || title.equals("")) {
                         checkTitle();
                     } else {
@@ -223,7 +220,7 @@ public class CrudTaskFragment extends DialogFragment {
                     deleteAlert.setOnYesNoClick(new AlertDialogFragment.OnYesNoClick() {
                         @Override
                         public void onYesClicked() {
-                            TaskRepository.getInstance(getActivity()).removeTask(mTask.getID());
+                            TaskRepository.getInstance(getActivity()).removeTask(mTask);
                             toast.show();
                             dismiss();
                         }
@@ -238,17 +235,17 @@ public class CrudTaskFragment extends DialogFragment {
                 }
             });
 
-            if (mTask.getTaskType().equals(TaskType.DONE))
+            if (mTask.getMTaskType().equals(TaskType.DONE))
                 buttonDoneCrud.setEnabled(false);
 
             buttonDoneCrud.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    String title = mTask.getTitle();
+                    String title = mTask.getMTitle();
                     if (title == null || title.equals("")) {
                         checkTitle();
                     } else {
-                        mTask.setTaskType(TaskType.DONE);
+                        mTask.setMTaskType(TaskType.DONE);
                         TaskRepository.getInstance(getActivity()).updateTask(mTask);
                         toast.show();
                         dismiss();
@@ -287,7 +284,7 @@ public class CrudTaskFragment extends DialogFragment {
         mCalenderBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DateDialogFragment fragment = DateDialogFragment.newInstance(mTask.getDate());
+                DateDialogFragment fragment = DateDialogFragment.newInstance(mTask.getMDate());
                 fragment.setTargetFragment(CrudTaskFragment.this, CALENDER_REQ_CODE);
                 fragment.show(getFragmentManager(), "calenderTag");
             }
@@ -299,8 +296,8 @@ public class CrudTaskFragment extends DialogFragment {
 
 
     private void addTask() {
-        mTask.setTaskType("undone");
-        mTask.setUserID(mUserId);
+        mTask.setMTaskType("undone");
+        mTask.setMUserID(mUserId);
         TaskRepository.getInstance(getActivity()).addTask(mTask);
         String title = mEditTextTitle.getText().toString();
         if (title == null || title.equals("")) {
@@ -310,8 +307,8 @@ public class CrudTaskFragment extends DialogFragment {
 //                        mEditTextTitle.setBackgroundColor(descDrawble.getColor());
             mEditTextTitle.setBackgroundColor(Color.WHITE);
             String desc = mEditTextDesc.getText().toString();
-            mTask.setTitle(title);
-            mTask.setDescription(desc);
+            mTask.setMTitle(title);
+            mTask.setMDescription(desc);
 //            TaskRepository.getInstance().addTask(mTask);
             TaskRepository.getInstance(getActivity()).updateTask(mTask);
             Toast.makeText(getActivity(), R.string.toast_crud_success, Toast.LENGTH_SHORT).show();
@@ -322,21 +319,21 @@ public class CrudTaskFragment extends DialogFragment {
 
     private void setTimeTextView() {
         final SimpleDateFormat timeFormat = new SimpleDateFormat("HH-mm");
-        String timeOutput = timeFormat.format(mTask.getDate());
+        String timeOutput = timeFormat.format(mTask.getMDate());
         mTimeTextView.setText(timeOutput);
     }
 
     private void setDateTextView() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd,E");
-        String dateOutput = dateFormat.format(mTask.getDate());
+        String dateOutput = dateFormat.format(mTask.getMDate());
         mDateTextView.setText(dateOutput);
     }
 
     public void checkTitle() {
         Snackbar.make(getView(), R.string.title_warning, Snackbar.LENGTH_SHORT).show();
         mEditTextTitle.setBackgroundColor(Color.RED);
-        mTask.setTitle(mTaskTitle);
-        mEditTextTitle.setText(mTask.getTitle());
+        mTask.setMTitle(mTaskTitle);
+        mEditTextTitle.setText(mTask.getMTitle());
     }
 
     @Override
@@ -344,7 +341,7 @@ public class CrudTaskFragment extends DialogFragment {
         if (resultCode != Activity.RESULT_OK) return;
         if (requestCode == CALENDER_REQ_CODE) {
             Date date = (Date) data.getSerializableExtra(DateDialogFragment.getCalenderExtra());
-            mTask.setDate(date);
+            mTask.setMDate(date);
             setDateTextView();
             setTimeTextView();
         }

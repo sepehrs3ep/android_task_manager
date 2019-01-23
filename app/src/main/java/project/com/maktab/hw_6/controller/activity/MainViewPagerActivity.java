@@ -5,13 +5,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -22,21 +20,14 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Base64;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
-import java.io.InputStream;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-import project.com.maktab.hw_6.DbBitmapUtility;
 import project.com.maktab.hw_6.MyDialogCloseListener;
 import project.com.maktab.hw_6.PictureUtils;
 import project.com.maktab.hw_6.R;
@@ -45,8 +36,6 @@ import project.com.maktab.hw_6.controller.fragment.LoginFragment;
 import project.com.maktab.hw_6.controller.fragment.ShowUserFragment;
 import project.com.maktab.hw_6.controller.fragment.SignUpDialogFragment;
 import project.com.maktab.hw_6.controller.fragment.TaskListFragment;
-import project.com.maktab.hw_6.model.task.Task;
-import project.com.maktab.hw_6.model.task.TaskRepository;
 import project.com.maktab.hw_6.model.task.TaskType;
 import project.com.maktab.hw_6.model.user.User;
 import project.com.maktab.hw_6.model.user.UserRepository;
@@ -55,7 +44,7 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
     static TaskListFragment[] mListFragments = new TaskListFragment[3];
     private ViewPager mViewPager;
     private TabLayout mTabLayout;
-    private long mUserId;
+    private Long mUserId;
     private User mUser;
 
     private DrawerLayout mDrawerLayout;
@@ -177,7 +166,7 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
         ;
         if (!LoginFragment.IS_GUEST) {
             Bitmap selectedImage = null;
-            String imagePath = mUser.getImage();
+            String imagePath = mUser.getMImage();
             Uri imageUri = Uri.parse(imagePath);
             CircleImageView photoImageView = headerViewName.findViewById(R.id.user_profile_image);
             try {

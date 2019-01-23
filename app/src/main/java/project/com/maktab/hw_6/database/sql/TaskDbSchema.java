@@ -1,4 +1,5 @@
-package project.com.maktab.hw_6.database;
+/*
+package project.com.maktab.hw_6.database.sql;
 
 public class TaskDbSchema {
 
@@ -45,3 +46,4 @@ public class TaskDbSchema {
 
 
 }
+*/

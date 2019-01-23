@@ -1,45 +1,17 @@
 package project.com.maktab.hw_6.model.user;
 
+import org.greenrobot.greendao.annotation.Convert;
+import org.greenrobot.greendao.annotation.Entity;
+import org.greenrobot.greendao.annotation.Id;
+import org.greenrobot.greendao.annotation.Unique;
+import org.greenrobot.greendao.converter.PropertyConverter;
+
 import java.util.Date;
 import java.util.UUID;
+import org.greenrobot.greendao.annotation.Generated;
 
-public class User {
-    private String mName;
-    private String mPassword;
-    private long mId;
-    private UUID mUserUUID;
-    private Date mUserDate;
-    private String mEmail;
-    private String mImage;
-
-    public String getImage() {
-        return mImage;
-    }
-
-    public void setImage(String image) {
-        mImage = image;
-    }
-    /*private byte[] mImage;
-
-    public byte[] getImage() {
-        return mImage;
-    }
-
-    public void setImage(byte[] image) {
-        mImage = image;
-    }*/
-
-    public String getEmail() {
-        return mEmail;
-    }
-
-    public void setEmail(String email) {
-        mEmail = email;
-    }
-
-    public void setId(long id) {
-        mId = id;
-    }
+@Entity
+public class User  {
 
     public User(UUID id){
         this.mUserUUID = id;
@@ -49,43 +21,91 @@ public class User {
     public User(){
         this(UUID.randomUUID());
     }
-
-    public Date getUserDate() {
-        return mUserDate;
-    }
-
-    public void setUserDate(Date userDate) {
-        mUserDate = userDate;
-    }
-
-    public UUID getUserUUID() {
-        return mUserUUID;
-    }
-
-    public long getId() {
-        return mId;
+    @Generated(hash = 823876703)
+    public User(String mName, String mPassword, Long id, UUID mUserUUID,
+            Date mUserDate, String mEmail, String mImage) {
+        this.mName = mName;
+        this.mPassword = mPassword;
+        this.id = id;
+        this.mUserUUID = mUserUUID;
+        this.mUserDate = mUserDate;
+        this.mEmail = mEmail;
+        this.mImage = mImage;
     }
 
 
-    public String getName() {
-        return mName;
-    }
+    @Unique
+    private String mName;
+    private String mPassword;
+    @Id(autoincrement = true)
+    private Long id;
 
-    public void setName(String name) {
-        mName = name;
-    }
+    @Convert(converter = UuidConverter.class,columnType = String.class)
+    private UUID mUserUUID;
 
-    public String getPassword() {
-        return mPassword;
-    }
+    private Date mUserDate;
+    private String mEmail;
+    private String mImage;
 
-    public void setPassword(String password) {
-        mPassword = password;
-    }
 
     public String getPhotoName(){
         return "IMG_" + this.mUserUUID.toString() + ".jpg";
     }
+    public String getMName() {
+        return this.mName;
+    }
+    public void setMName(String mName) {
+        this.mName = mName;
+    }
+    public String getMPassword() {
+        return this.mPassword;
+    }
+    public void setMPassword(String mPassword) {
+        this.mPassword = mPassword;
+    }
+    public Long getId() {
+        return this.id;
+    }
+    public void setId(Long id) {
+        this.id = id;
+    }
+    public UUID getMUserUUID() {
+        return this.mUserUUID;
+    }
+    public void setMUserUUID(UUID mUserUUID) {
+        this.mUserUUID = mUserUUID;
+    }
+    public Date getMUserDate() {
+        return this.mUserDate;
+    }
+    public void setMUserDate(Date mUserDate) {
+        this.mUserDate = mUserDate;
+    }
+    public String getMEmail() {
+        return this.mEmail;
+    }
+    public void setMEmail(String mEmail) {
+        this.mEmail = mEmail;
+    }
+    public String getMImage() {
+        return this.mImage;
+    }
+    public void setMImage(String mImage) {
+        this.mImage = mImage;
+    }
 
+
+    public static class UuidConverter implements PropertyConverter<UUID,String>{
+
+        @Override
+        public UUID convertToEntityProperty(String databaseValue) {
+            return UUID.fromString(databaseValue);
+        }
+
+        @Override
+        public String convertToDatabaseValue(UUID entityProperty) {
+            return entityProperty.toString();
+        }
+    }
 
 }

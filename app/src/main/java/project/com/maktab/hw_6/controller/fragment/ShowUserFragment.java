@@ -10,8 +10,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.text.SimpleDateFormat;
 
 import project.com.maktab.hw_6.R;
@@ -61,9 +59,9 @@ public class ShowUserFragment extends DialogFragment {
         mUserId = view.findViewById(R.id.show_user_id);
         mUserDate = view.findViewById(R.id.show_user_date);
 
-        mUserName.setText(mUser.getName());
-        mUserEmail.setText(mUser.getEmail());
-        mUserId.setText(mUser.getUserUUID().toString());
+        mUserName.setText(mUser.getMName());
+        mUserEmail.setText(mUser.getMEmail());
+        mUserId.setText(mUser.getMUserUUID().toString());
         setDateTextView();
 
 
@@ -72,7 +70,7 @@ public class ShowUserFragment extends DialogFragment {
 
     private void setDateTextView() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd,E");
-        String dateOutput = dateFormat.format(mUser.getUserDate());
+        String dateOutput = dateFormat.format(mUser.getMUserDate());
         mUserDate.setText(dateOutput);
     }
 

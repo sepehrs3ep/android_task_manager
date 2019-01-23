@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -18,7 +17,6 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,8 +26,6 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.creativityapps.gmailbackgroundlibrary.BackgroundMail;
 
 import project.com.maktab.hw_6.R;
 import project.com.maktab.hw_6.controller.activity.MainViewPagerActivity;
@@ -165,9 +161,9 @@ public class LoginFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 User user = new User();
-                user.setName("guest");
+                user.setMName("guest");
                 IS_GUEST = true;
-                user.setPassword("admin");
+                user.setMPassword("admin");
                 long id = UserRepository.getInstance(getActivity()).createUser(user);
                 sendIntent(id);
             }

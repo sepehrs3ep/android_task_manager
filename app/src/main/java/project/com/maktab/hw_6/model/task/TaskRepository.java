@@ -4,135 +4,82 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.provider.ContactsContract;
 import android.util.Log;
+
+import org.greenrobot.greendao.query.QueryBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import project.com.maktab.hw_6.database.TaskBaseHelper;
-import project.com.maktab.hw_6.database.TaskCursorWrapper;
-import project.com.maktab.hw_6.database.TaskDbSchema;
+import project.com.maktab.hw_6.database.orm.App;
+import project.com.maktab.hw_6.model.user.User;
 
 public class TaskRepository {
     private static TaskRepository mInstance;
-    private SQLiteDatabase mDatabase;
     private Context mContext;
+    private DaoSession mDaoSession;
+    private TaskDao mTaskDao;
 
 
     private TaskRepository(Context context) {
-        mContext = context.getApplicationContext();
-        mDatabase = new TaskBaseHelper(mContext).getWritableDatabase();
+        mDaoSession = App.getInstance().getDaoSession();
+        mTaskDao = mDaoSession.getTaskDao();
+
     }
 
     public void addTask(Task task) {
-        ContentValues values = getContentValues(task);
-        mDatabase.insert(TaskDbSchema.TaskTable.NAME, null, values);
+        mTaskDao.insert(task);
+
     }
 
     public void updateTask(Task task) {
-        ContentValues values = getContentValues(task);
-        String whereClause = TaskDbSchema.TaskTable.Cols.UUID + " = ? ";
-        String[] whereArgs = new String[]{task.getID().toString()};
-
-        Log.d("yeh test", "update test" + values.toString());
-        mDatabase.update(TaskDbSchema.TaskTable.NAME, values, whereClause, whereArgs);
-
-
+        mTaskDao.update(task);
     }
 
-    public void clearLists(long userId) {
-        mDatabase.execSQL(" delete from " + TaskDbSchema.TaskTable.NAME
-                + " where cast ( " + TaskDbSchema.TaskTable.Cols.USER_ID + " as text ) "
-                + " = " + String.valueOf(userId)
-        );
-
+    public void clearLists(Long userId) {
+        mTaskDao.deleteByKey(userId);
     }
 
-    public void removeTask(UUID id) {
-        String whereClause = TaskDbSchema.TaskTable.Cols.UUID + " = ? ";
-        String[] args = new String[]{id.toString()};
-        mDatabase.delete(TaskDbSchema.TaskTable.NAME, whereClause, args);
+    public void removeTask(Task task) {
+        mTaskDao.delete(task);
     }
 
-    public List<Task> getDoneTaskList(long userId) {
-        String[] whereArgs = new String[]{"done", String.valueOf(userId)};
-        String search_query = " select * from " + TaskDbSchema.TaskTable.NAME +
-                " where " + TaskDbSchema.TaskTable.Cols.TYPE + " = ? AND " +
-                " cast(" + TaskDbSchema.TaskTable.Cols.USER_ID + " as text) = ? ";
-
-        return getDifLists(whereArgs,search_query);
+    public List<Task> getDoneTaskList(Long userId) {
+        return getDifLists(userId, TaskType.DONE);
     }
 
 
-    public List<Task> getUnDoneTaskList(long userId) {
-
-       /* String whereClause = TaskDbSchema.TaskTable.Cols.TYPE + " = ? AND " +
-                TaskDbSchema.TaskTable.Cols.USER_ID + " = ? ";
-        TaskCursorWrapper cursor = queryTask(whereClause, whereArgs);*/
-        String[] whereArgs = new String[]{"undone", Long.toString(userId)};
-        String search_query = " select * from " + TaskDbSchema.TaskTable.NAME +
-                " where " + TaskDbSchema.TaskTable.Cols.TYPE + " = ? AND " +
-                " cast(" + TaskDbSchema.TaskTable.Cols.USER_ID + " as text) = ? ";
-        return getDifLists(whereArgs, search_query);
-
+    public List<Task> getUnDoneTaskList(Long userId) {
+        return getDifLists(userId,TaskType.UNDONE);
     }
 
-    private List<Task> getDifLists(String[] whereArgs, String search_query) {
-        List<Task> crimes = new ArrayList<>();
-        TaskCursorWrapper cursor = new TaskCursorWrapper(mDatabase.rawQuery(search_query, whereArgs));
-        try {
-            if (cursor.getCount() == 0)
-                return crimes;
+    private List<Task> getDifLists(Long id, String taskType) {
 
-            cursor.moveToFirst();
-            while (!cursor.isAfterLast()) {
 
-                crimes.add(cursor.getTask());
-
-                cursor.moveToNext();
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-
-        } finally {
-            cursor.close();
-        }
-
-        return crimes;
+        List<Task> list = mTaskDao.queryBuilder()
+                .where(TaskDao.Properties.MUserID.eq(id))
+                .where(TaskDao.Properties.MTaskType.eq(taskType))
+                .list();
+        return list;
     }
 
 
     public Task getTaskByID(UUID id) {
-        String whereClause = TaskDbSchema.TaskTable.Cols.UUID + " = ? ";
-        String[] args = new String[]{id.toString()};
-        Task task = null;
-
-        try (TaskCursorWrapper cursorWrapper = queryTask(whereClause, args)) {
-
-            if (cursorWrapper.getCount() == 0)
-                return null;
-
-            cursorWrapper.moveToFirst();
-
-            task = cursorWrapper.getTask();
-
-
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return task;
+        List<Task> result =
+        mTaskDao.queryBuilder()
+                .where(TaskDao.Properties.MID.eq(id))
+                .list();
+        if(result.size()>0)
+            return result.get(0);
+        return null;
     }
 
-    public List<Task> getList(long userId) {
-//        return cursorGetList(null, null);
-        String[] whereArgs = new String[]{String.valueOf(userId)};
-        String search_query = " select * from " + TaskDbSchema.TaskTable.NAME +
-                " where " +
-                " cast(" + TaskDbSchema.TaskTable.Cols.USER_ID + " as text) = ? ";
-
-       return getDifLists(whereArgs,search_query);
+    public List<Task> getList(Long userId) {
+        List<Task> list = mTaskDao.queryBuilder()
+                .where(TaskDao.Properties.MUserID.eq(userId))
+                .list();
+        return list;
     }
 
     public static TaskRepository getInstance(Context context) {
@@ -143,25 +90,5 @@ public class TaskRepository {
         return mInstance;
     }
 
-    private ContentValues getContentValues(Task task) {
-        ContentValues values = new ContentValues();
-
-        values.put(TaskDbSchema.TaskTable.Cols.UUID, task.getID().toString());
-        values.put(TaskDbSchema.TaskTable.Cols.TITLE, task.getTitle());
-        values.put(TaskDbSchema.TaskTable.Cols.DESCRIPTION, task.getDescription());
-        values.put(TaskDbSchema.TaskTable.Cols.DATE, task.getDate().getTime());
-        values.put(TaskDbSchema.TaskTable.Cols.TYPE, task.getTaskType());
-        values.put(TaskDbSchema.TaskTable.Cols.USER_ID, task.getUserID());
-
-        return values;
-    }
-
-    private TaskCursorWrapper queryTask(String whereClause, String[] args) {
-        Cursor cursor = mDatabase.query(TaskDbSchema.TaskTable.NAME, null, whereClause,
-                args, null, null, null);
-
-        return new TaskCursorWrapper(cursor);
-
-    }
 
 }

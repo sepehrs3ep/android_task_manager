@@ -1,4 +1,5 @@
-package project.com.maktab.hw_6.database;
+/*
+package project.com.maktab.hw_6.database.sql;
 
 import android.database.Cursor;
 import android.database.CursorWrapper;
@@ -9,11 +10,13 @@ import java.util.UUID;
 import project.com.maktab.hw_6.model.user.User;
 
 public class UserCursorWrapper extends CursorWrapper {
-    /**
+    */
+/**
      * Creates a cursor wrapper.
      *
      * @param cursor The underlying cursor to wrap.
-     */
+     *//*
+
     public UserCursorWrapper(Cursor cursor) {
         super(cursor);
     }
@@ -42,3 +45,4 @@ public class UserCursorWrapper extends CursorWrapper {
         return user;
     }
 }
+*/
