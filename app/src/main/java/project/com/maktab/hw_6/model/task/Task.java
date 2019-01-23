@@ -4,20 +4,38 @@ import org.greenrobot.greendao.annotation.Convert;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.ToOne;
-import org.greenrobot.greendao.annotation.Transient;
 
 import java.util.Date;
 import java.util.UUID;
+
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.converter.PropertyConverter;
 
 import project.com.maktab.hw_6.model.user.User;
+
 import org.greenrobot.greendao.DaoException;
+
 import project.com.maktab.hw_6.model.user.UserDao;
 
 
 @Entity
 public class Task {
+
+    public enum TaskType {
+        UNDONE(0), DONE(1), ALL(2);
+
+        int mIndex;
+
+        public int getIndex() {
+            return mIndex;
+        }
+
+        TaskType(int index) {
+            this.mIndex = index;
+        }
+    }
+
+
     @Id(autoincrement = true)
     private Long id;
 
@@ -25,11 +43,12 @@ public class Task {
     private String mDescription;
     private Date mDate;
 
-//    @Transient
-    @Convert(converter =UuidConverter.class,columnType = String.class)
+    //    @Transient
+    @Convert(converter = UuidConverter.class, columnType = String.class)
     private UUID mID;
 
-    private String mTaskType;
+    @Convert(converter = TypeConverter.class,columnType = Integer.class)
+    private TaskType mTaskType;
 
     @ToOne(joinProperty = "mUserID")
     private User mUser;
@@ -46,6 +65,8 @@ public class Task {
     @Generated(hash = 1377221062)
     private transient Long mUser__resolvedKey;
 
+;
+
 
     public Task(UUID id) {
         this.mID = id;
@@ -57,9 +78,9 @@ public class Task {
         this(UUID.randomUUID());
     }
 
-    @Generated(hash = 2112433849)
+    @Generated(hash = 788600800)
     public Task(Long id, String mTitle, String mDescription, Date mDate, UUID mID,
-            String mTaskType, Long mUserID) {
+            TaskType mTaskType, Long mUserID) {
         this.id = id;
         this.mTitle = mTitle;
         this.mDescription = mDescription;
@@ -109,11 +130,11 @@ public class Task {
         this.mID = mID;
     }
 
-    public String getMTaskType() {
+    public TaskType getMTaskType() {
         return this.mTaskType;
     }
 
-    public void setMTaskType(String mTaskType) {
+    public void setMTaskType(TaskType mTaskType) {
         this.mTaskType = mTaskType;
     }
 
@@ -197,9 +218,7 @@ public class Task {
         myDao = daoSession != null ? daoSession.getTaskDao() : null;
     }
 
-
-
-    public static class UuidConverter implements PropertyConverter<UUID,String> {
+    public static class UuidConverter implements PropertyConverter<UUID, String> {
 
         @Override
         public UUID convertToEntityProperty(String databaseValue) {
@@ -209,6 +228,27 @@ public class Task {
         @Override
         public String convertToDatabaseValue(UUID entityProperty) {
             return entityProperty.toString();
+        }
+    }
+
+    public static class TypeConverter implements PropertyConverter<TaskType, Integer> {
+
+
+        @Override
+        public TaskType convertToEntityProperty(Integer databaseValue) {
+            for (TaskType type : TaskType.values()) {
+                if (type.getIndex() == databaseValue)
+                    return type;
+
+            }
+
+
+            return null;
+        }
+
+        @Override
+        public Integer convertToDatabaseValue(TaskType entityProperty) {
+            return entityProperty.getIndex();
         }
     }
 

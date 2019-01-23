@@ -31,7 +31,6 @@ import project.com.maktab.hw_6.MyDialogCloseListener;
 import project.com.maktab.hw_6.R;
 import project.com.maktab.hw_6.model.task.Task;
 import project.com.maktab.hw_6.model.task.TaskRepository;
-import project.com.maktab.hw_6.model.task.TaskType;
 
 
 /**
@@ -235,7 +234,7 @@ public class CrudTaskFragment extends DialogFragment {
                 }
             });
 
-            if (mTask.getMTaskType().equals(TaskType.DONE))
+            if (mTask.getMTaskType().equals(Task.TaskType.DONE))
                 buttonDoneCrud.setEnabled(false);
 
             buttonDoneCrud.setOnClickListener(new View.OnClickListener() {
@@ -245,7 +244,7 @@ public class CrudTaskFragment extends DialogFragment {
                     if (title == null || title.equals("")) {
                         checkTitle();
                     } else {
-                        mTask.setMTaskType(TaskType.DONE);
+                        mTask.setMTaskType(Task.TaskType.DONE);
                         TaskRepository.getInstance(getActivity()).updateTask(mTask);
                         toast.show();
                         dismiss();
@@ -296,7 +295,7 @@ public class CrudTaskFragment extends DialogFragment {
 
 
     private void addTask() {
-        mTask.setMTaskType("undone");
+        mTask.setMTaskType(Task.TaskType.UNDONE);
         mTask.setMUserID(mUserId);
         TaskRepository.getInstance(getActivity()).addTask(mTask);
         String title = mEditTextTitle.getText().toString();

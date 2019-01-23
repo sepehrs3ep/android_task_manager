@@ -46,20 +46,20 @@ public class TaskRepository {
     }
 
     public List<Task> getDoneTaskList(Long userId) {
-        return getDifLists(userId, TaskType.DONE);
+        return getDifLists(userId, Task.TaskType.DONE);
     }
 
 
     public List<Task> getUnDoneTaskList(Long userId) {
-        return getDifLists(userId,TaskType.UNDONE);
+        return getDifLists(userId, Task.TaskType.UNDONE);
     }
 
-    private List<Task> getDifLists(Long id, String taskType) {
+    private List<Task> getDifLists(Long id, Task.TaskType taskType) {
 
 
         List<Task> list = mTaskDao.queryBuilder()
                 .where(TaskDao.Properties.MUserID.eq(id))
-                .where(TaskDao.Properties.MTaskType.eq(taskType))
+                .where(TaskDao.Properties.MTaskType.eq(taskType.getIndex()))
                 .list();
         return list;
     }

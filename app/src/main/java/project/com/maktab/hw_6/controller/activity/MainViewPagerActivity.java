@@ -36,7 +36,7 @@ import project.com.maktab.hw_6.controller.fragment.LoginFragment;
 import project.com.maktab.hw_6.controller.fragment.ShowUserFragment;
 import project.com.maktab.hw_6.controller.fragment.SignUpDialogFragment;
 import project.com.maktab.hw_6.controller.fragment.TaskListFragment;
-import project.com.maktab.hw_6.model.task.TaskType;
+import project.com.maktab.hw_6.model.task.Task;
 import project.com.maktab.hw_6.model.user.User;
 import project.com.maktab.hw_6.model.user.UserRepository;
 
@@ -245,15 +245,15 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
         public Fragment getItem(int i) {
             TaskListFragment taskListFragment = null;
             if (i == 0) {
-                taskListFragment = TaskListFragment.getInstance(TaskType.UNDONE, mUserId);
+                taskListFragment = TaskListFragment.getInstance(Task.TaskType.UNDONE, mUserId);
                 mListFragments[0] = taskListFragment;
             }
             if (i == 1) {
-                taskListFragment = TaskListFragment.getInstance(TaskType.DONE, mUserId);
+                taskListFragment = TaskListFragment.getInstance(Task.TaskType.DONE, mUserId);
                 mListFragments[1] = taskListFragment;
             }
             if (i == 2) {
-                taskListFragment = TaskListFragment.getInstance(TaskType.ALL, mUserId);
+                taskListFragment = TaskListFragment.getInstance(Task.TaskType.ALL, mUserId);
                 mListFragments[2] = taskListFragment;
             }
             return taskListFragment;

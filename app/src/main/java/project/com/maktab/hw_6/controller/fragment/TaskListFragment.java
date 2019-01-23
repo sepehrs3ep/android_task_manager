@@ -28,7 +28,6 @@ import project.com.maktab.hw_6.R;
 import project.com.maktab.hw_6.model.task.Task;
 
 import project.com.maktab.hw_6.model.task.TaskRepository;
-import project.com.maktab.hw_6.model.task.TaskType;
 
 
 /**
@@ -41,7 +40,7 @@ public class TaskListFragment extends Fragment {
     private static final String ARGS_LIST_TYPE = "args_list_type";
     private static final String USER_ID_ARGS = "user_id_args";
     private TaskAdapter mTaskAdapter;
-    private String mListType;
+    private Task.TaskType mListType;
     private long mUserId;
     private OnDataPass mOnDataPass;
     private boolean mClickedShowSub = false;
@@ -51,9 +50,9 @@ public class TaskListFragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static TaskListFragment getInstance(String listType,long userId) {
+    public static TaskListFragment getInstance(Task.TaskType listType, long userId) {
         Bundle args = new Bundle();
-        args.putString(ARGS_LIST_TYPE, listType);
+        args.putSerializable(ARGS_LIST_TYPE, listType);
         args.putLong(USER_ID_ARGS,userId);
         TaskListFragment fragment = new TaskListFragment();
         fragment.setArguments(args);
@@ -97,11 +96,11 @@ public class TaskListFragment extends Fragment {
     @Nullable
     private List<Task> getTaskList() {
         List<Task> list = null;
-        if (mListType.equals(TaskType.ALL))
+        if (mListType.equals(Task.TaskType.ALL))
             list = TaskRepository.getInstance(getActivity()).getList(mUserId);
-        if (mListType.equals(TaskType.DONE))
+        if (mListType.equals(Task.TaskType.DONE))
             list = TaskRepository.getInstance(getActivity()).getDoneTaskList(mUserId);
-        if (mListType.equals(TaskType.UNDONE))
+        if (mListType.equals(Task.TaskType.UNDONE))
             list = TaskRepository.getInstance(getActivity()).getUnDoneTaskList(mUserId);
         return list;
     }
@@ -111,7 +110,7 @@ public class TaskListFragment extends Fragment {
         super.onCreate(savedInstanceState);
         /*true>> all list
         false >> doneList*/
-        mListType = getArguments().getString(ARGS_LIST_TYPE);
+        mListType = (Task.TaskType) getArguments().getSerializable(ARGS_LIST_TYPE);
         mUserId = getArguments().getLong(USER_ID_ARGS);
         setHasOptionsMenu(true);
 
@@ -242,7 +241,7 @@ public class TaskListFragment extends Fragment {
             mTextViewTitle.setText(taskTitleText);
             mTextViewImage.setText(taskTitleText.charAt(0) + "");
 
-            if (task.getMTaskType().equals("done"))
+            if (task.getMTaskType().equals(Task.TaskType.DONE))
                 mImageViewUndone.setVisibility(View.GONE);
             else mImageViewDone.setVisibility(View.GONE);
 
