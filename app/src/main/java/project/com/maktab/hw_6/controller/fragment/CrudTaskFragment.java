@@ -192,28 +192,38 @@ public class CrudTaskFragment extends DialogFragment {
         setDateTextView();
         setTimeTextView();
 
+        final Snackbar photoSnackbar = Snackbar.make(view, "", Snackbar.LENGTH_LONG);
+        Snackbar.SnackbarLayout snackbarLayout = (Snackbar.SnackbarLayout) photoSnackbar.getView();
+
+        TextView textView = (TextView) snackbarLayout.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setVisibility(View.INVISIBLE);
+
+        View snackView = LayoutInflater.from(getActivity()).inflate(R.layout.custom_snack_bar, null);
+
+        final Button cameraBtn = snackView.findViewById(R.id.take_from_camera_btn);
+
+        Button galleryBtn = snackView.findViewById(R.id.take_from_gallery_btn);
+
+        snackbarLayout.setPadding(0, 0, 0, 0);
+        snackbarLayout.addView(snackView, 0);
+
+//        photoSnackbar.show();
+
+
         if (mTask.getMTaskImageUri() != null)
             updateTaskPhoto(Uri.parse(mTask.getMTaskImageUri()));
 
         mUploadTaskImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                photoSnackbar.show();
+                cameraBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        takeFromCamera();
 
-                Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
-                StrictMode.setVmPolicy(builder.build());
-                try {
-                    mPhotoFile = getFileForCamera();
-                } catch (Exception e) {
-                    Toast.makeText(getActivity(), "Please check SD card! Image shot is impossible!", Toast.LENGTH_SHORT);
-                    return;
-                }
-
-                Uri uri = Uri.fromFile(mPhotoFile);
-                captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-
-
-                startActivityForResult(captureIntent, REQ_PHOTOS);
+                    }
+                });
             }
         });
         mEditTextTitle.addTextChangedListener(new TextWatcher() {
@@ -372,6 +382,24 @@ public class CrudTaskFragment extends DialogFragment {
 
 
         return view;
+    }
+
+    private void takeFromCamera() {
+        Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+        StrictMode.setVmPolicy(builder.build());
+        try {
+            mPhotoFile = getFileForCamera();
+        } catch (Exception e) {
+            Toast.makeText(getActivity(), "Please check SD card! Image shot is impossible!", Toast.LENGTH_SHORT);
+            return;
+        }
+
+        Uri uri = Uri.fromFile(mPhotoFile);
+        captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+
+
+        startActivityForResult(captureIntent, REQ_PHOTOS);
     }
 
 
