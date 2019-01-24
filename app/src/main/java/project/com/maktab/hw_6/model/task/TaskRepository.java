@@ -1,19 +1,11 @@
 package project.com.maktab.hw_6.model.task;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
 
-import org.greenrobot.greendao.query.QueryBuilder;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 import project.com.maktab.hw_6.database.orm.App;
-import project.com.maktab.hw_6.model.user.User;
 
 public class TaskRepository {
     private static TaskRepository mInstance;
@@ -38,7 +30,11 @@ public class TaskRepository {
     }
 
     public void clearLists(Long userId) {
-        mTaskDao.deleteByKey(userId);
+        mTaskDao.queryBuilder().
+                where(TaskDao.Properties.MUserID.eq(userId))
+                .buildDelete()
+                .executeDeleteWithoutDetachingEntities();
+
     }
 
     public void removeTask(Task task) {
