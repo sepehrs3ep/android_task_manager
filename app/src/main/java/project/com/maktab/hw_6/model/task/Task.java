@@ -39,6 +39,8 @@ public class Task {
     @Id(autoincrement = true)
     private Long id;
 
+
+    private String mTaskImageUri;
     private String mTitle;
     private String mDescription;
     private Date mDate;
@@ -78,10 +80,11 @@ public class Task {
         this(UUID.randomUUID());
     }
 
-    @Generated(hash = 788600800)
-    public Task(Long id, String mTitle, String mDescription, Date mDate, UUID mID,
-            TaskType mTaskType, Long mUserID) {
+    @Generated(hash = 433994621)
+    public Task(Long id, String mTaskImageUri, String mTitle, String mDescription, Date mDate,
+            UUID mID, TaskType mTaskType, Long mUserID) {
         this.id = id;
+        this.mTaskImageUri = mTaskImageUri;
         this.mTitle = mTitle;
         this.mDescription = mDescription;
         this.mDate = mDate;
@@ -209,6 +212,14 @@ public class Task {
             throw new DaoException("Entity is detached from DAO context");
         }
         myDao.update(this);
+    }
+
+    public String getMTaskImageUri() {
+        return this.mTaskImageUri;
+    }
+
+    public void setMTaskImageUri(String mTaskImageUri) {
+        this.mTaskImageUri = mTaskImageUri;
     }
 
     /** called by internal mechanisms, do not call yourself. */

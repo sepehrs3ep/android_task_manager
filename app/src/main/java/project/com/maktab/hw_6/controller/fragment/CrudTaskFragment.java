@@ -5,8 +5,15 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.StrictMode;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
@@ -14,6 +21,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,12 +35,19 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.net.URI;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 import project.com.maktab.hw_6.MyDialogCloseListener;
+import project.com.maktab.hw_6.PictureUtils;
 import project.com.maktab.hw_6.R;
 import project.com.maktab.hw_6.model.task.Task;
 import project.com.maktab.hw_6.model.task.TaskRepository;
@@ -49,6 +64,7 @@ public class CrudTaskFragment extends DialogFragment {
     private static final String TIME_TAG = "time_tag";
     private static final int CALENDER_REQ_CODE = 2;
     private static final int TIME_REQ_CODE = -1;
+    private static final int REQ_PHOTOS = 24;
     public static boolean IS_EMPTY = false;
     private EditText mEditTextTitle;
     private EditText mEditTextDesc;
@@ -61,6 +77,7 @@ public class CrudTaskFragment extends DialogFragment {
     private static boolean mFromFloatButton;
     private static Task mTask;
     public static boolean mStay;
+    private File mPhotoFile;
     private ImageButton mUploadTaskImageBtn;
     private static String mRawTextTitle = "";
     private String mTaskTitle = "";
@@ -122,6 +139,36 @@ public class CrudTaskFragment extends DialogFragment {
         mRawTextTitle = mTaskTitle;
     }
 
+    private void SaveImage(Bitmap finalBitmap) {
+
+        File file = getFileForCamera();
+        try {
+            FileOutputStream out = new FileOutputStream(file);
+            finalBitmap.compress(Bitmap.CompressFormat.JPEG, 90, out);
+            out.flush();
+            out.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private File getFileForCamera() {
+        String root = Environment.getExternalStorageDirectory().toString();
+        File myDir = new File(root + "/saved_images");
+        if (!myDir.exists()) {
+            myDir.mkdirs();
+        }
+        Random generator = new Random();
+        int n = 10000;
+        n = generator.nextInt(n);
+        String fname = "Image-" + n + ".jpg";
+        File file = new File(myDir, fname);
+        if (file.exists())
+            file.delete();
+        return file;
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -136,7 +183,7 @@ public class CrudTaskFragment extends DialogFragment {
         mDateTextView = view.findViewById(R.id.date_text_view);
         mTimeTextView = view.findViewById(R.id.time_text_view);
         mTaskCircleImageView = view.findViewById(R.id.task_circle_image_view);
-        mUploadTaskImageBtn = view.findViewById(R.id.upload_image_btn);
+        mUploadTaskImageBtn = view.findViewById(R.id.upload_task_image);
         mCalenderBtn = view.findViewById(R.id.calender_button);
         Button buttonAddCrud = layoutButtonSheet.findViewById(R.id.crud_add);
         Button buttonEditCrud = layoutButtonSheet.findViewById(R.id.crud_edit);
@@ -145,10 +192,28 @@ public class CrudTaskFragment extends DialogFragment {
         setDateTextView();
         setTimeTextView();
 
+        if (mTask.getMTaskImageUri() != null)
+            updateTaskPhoto(Uri.parse(mTask.getMTaskImageUri()));
+
         mUploadTaskImageBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
+                StrictMode.setVmPolicy(builder.build());
+                try {
+                    mPhotoFile = getFileForCamera();
+                } catch (Exception e) {
+                    Toast.makeText(getActivity(), "Please check SD card! Image shot is impossible!", Toast.LENGTH_SHORT);
+                    return;
+                }
+
+                Uri uri = Uri.fromFile(mPhotoFile);
+                captureIntent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+
+
+                startActivityForResult(captureIntent, REQ_PHOTOS);
             }
         });
         mEditTextTitle.addTextChangedListener(new TextWatcher() {
@@ -352,7 +417,6 @@ public class CrudTaskFragment extends DialogFragment {
     }
 
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != Activity.RESULT_OK) return;
@@ -362,6 +426,27 @@ public class CrudTaskFragment extends DialogFragment {
             setDateTextView();
             setTimeTextView();
         }
+        if (requestCode == REQ_PHOTOS) {
+            Uri uri = Uri.fromFile(mPhotoFile);
+            mTask.setMTaskImageUri(uri.toString());
+
+
+            updateTaskPhoto(uri);
+//            updatePhotoView();
+
+
+        }
+    }
+
+    private void updateTaskPhoto(Uri uri) {
+        Bitmap bitmap = null;
+        try {
+            bitmap = PictureUtils.decodeUri(getActivity(), uri);
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        mTaskCircleImageView.setImageBitmap(bitmap);
+    }
        /* if (requestCode == TIME_REQ_CODE) {
             Date date = (Date) data.getSerializableExtra(TimePickerFragment.getTimeExtra());
             mTask.setDate(date);
@@ -369,57 +454,76 @@ public class CrudTaskFragment extends DialogFragment {
 
 
         }*/
-    }
 
-/*    //check back pressed for add button
-    public static boolean onBackPressed(final Context context) {
-        String mTaskTitle = mTask.getTitle();
-        final Activity activity = (Activity) context;
-        if (mTaskTitle.length() > 0) {
+    /*    //check back pressed for add button
+        public static boolean onBackPressed(final Context context) {
+            String mTaskTitle = mTask.getTitle();
+            final Activity activity = (Activity) context;
+            if (mTaskTitle.length() > 0) {
 
-            if (mFromFloatButton)
-                checkForChangesBack(context, activity);
-            else {
-                if (mRawTextTitle.equals(mTaskTitle))
-                    activity.finish();
-                else checkForChangesBack(context, activity);
+                if (mFromFloatButton)
+                    checkForChangesBack(context, activity);
+                else {
+                    if (mRawTextTitle.equals(mTaskTitle))
+                        activity.finish();
+                    else checkForChangesBack(context, activity);
+
+                }
 
             }
 
+            if (mTaskTitle == null || mTaskTitle.equals("") || mTaskTitle.length() <= 0) {
+                TaskRepository.getInstance(context).removeTask(mTask.getID());
+                return true;
+            }
+            return false;
+
+
         }
 
-        if (mTaskTitle == null || mTaskTitle.equals("") || mTaskTitle.length() <= 0) {
-            TaskRepository.getInstance(context).removeTask(mTask.getID());
-            return true;
+
+        private static void checkForChangesBack(final Context context, final Activity activity) {
+            mStay = true;
+            final AlertDialog alertDialog = new AlertDialog.Builder(context)
+                    .setMessage("save your changes?")
+                    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            TaskRepository.getInstance(context).updateTask(mTask);
+                            activity.finish();
+                        }
+                    })
+                    .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            if (mFromFloatButton)
+                                TaskRepository.getInstance(context).removeTask(mTask.getID());
+                            activity.finish();
+                        }
+                    })
+                    .create();
+            alertDialog.show();
+        }*/
+    private void updatePhotoView() {
+        if (mPhotoFile == null || !mPhotoFile.exists()) {
+            mTaskCircleImageView.setImageDrawable(null);
+        } else {
+            Bitmap bitmap = PictureUtils.getScaledBitmap(
+                    mPhotoFile.getPath(),
+                    getActivity());
+
+            mTaskCircleImageView.setImageBitmap(bitmap);
         }
-        return false;
-
-
     }
 
-
-    private static void checkForChangesBack(final Context context, final Activity activity) {
-        mStay = true;
-        final AlertDialog alertDialog = new AlertDialog.Builder(context)
-                .setMessage("save your changes?")
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        TaskRepository.getInstance(context).updateTask(mTask);
-                        activity.finish();
-                    }
-                })
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (mFromFloatButton)
-                            TaskRepository.getInstance(context).removeTask(mTask.getID());
-                        activity.finish();
-                    }
-                })
-                .create();
-        alertDialog.show();
-    }*/
+    public File createTempFile(String part, String ext) throws Exception {
+        File tempDir = Environment.getExternalStorageDirectory();
+        tempDir = new File(tempDir.getAbsolutePath() + "/.temp/");
+        if (!tempDir.exists()) {
+            tempDir.mkdirs();
+        }
+        return File.createTempFile(part, ext, tempDir);
+    }
 
 
 }
