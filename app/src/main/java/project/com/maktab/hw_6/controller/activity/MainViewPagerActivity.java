@@ -164,7 +164,7 @@ public class MainViewPagerActivity extends AppCompatActivity implements MyDialog
         TextView userIdTextView = headerViewName.findViewById(R.id.drawer_uuid);
         userIdTextView.setText("User Id : " + mUser.getUserUUID().toString())*/
         ;
-        if (!LoginFragment.IS_GUEST) {
+        if (!LoginFragment.IS_GUEST&&mUser.getMImage()!=null) {
             Bitmap selectedImage = null;
             String imagePath = mUser.getMImage();
             Uri imageUri = Uri.parse(imagePath);

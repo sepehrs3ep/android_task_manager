@@ -394,6 +394,7 @@ public class CrudTaskFragment extends DialogFragment {
     }
 
     private void takeFromCamera() {
+        mPhotoFile = null;
         Intent captureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());
@@ -466,26 +467,30 @@ public class CrudTaskFragment extends DialogFragment {
         if (requestCode == REQ_PHOTOS) {
             Uri uri = Uri.fromFile(mPhotoFile);
             mTask.setMTaskImageUri(uri.toString());
+            /*if(mTask.getMTaskImageUri()!=null)
+                TaskRepository.getInstance(getActivity()).updateTask(mTask);*/
+
+
             updateTaskPhoto(uri);
 //            updatePhotoView();
         }
         if (requestCode == GET_FROM_GALLERY_REQ_CODE) {
             Uri imageUri = data.getData();
-            Bitmap selectedImage = null;
 
             mTask.setMTaskImageUri(imageUri.toString());
-            try {
+            updateTaskPhoto(imageUri);
+            /*try {
                 selectedImage = PictureUtils.decodeUri(getActivity(), imageUri);
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
+            mTaskCircleImageView.setImageBitmap(selectedImage);*/
                 /*
                 for casting uri to bitmap but take too much size.
                 InputStream imageStream = null;
                 imageStream = getActivity().getContentResolver().openInputStream(imageUri);
             BitmapFactory.decodeStream(imageStream);*/
 
-            mTaskCircleImageView.setImageBitmap(selectedImage);
 
         }
 

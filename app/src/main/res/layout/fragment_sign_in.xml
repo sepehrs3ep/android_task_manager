@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:animateLayoutChanges="true"
     android:layout_height="match_parent"
+    android:background="@drawable/login_gradian"
     tools:context=".controller.fragment.LoginFragment">
 
     <ImageView
@@ -112,7 +113,7 @@
 
     <CheckBox
         android:textStyle="italic"
-        android:textColor="@color/colorAccent"
+        android:textColor="@android:color/black"
         android:id="@+id/remember_check_box"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

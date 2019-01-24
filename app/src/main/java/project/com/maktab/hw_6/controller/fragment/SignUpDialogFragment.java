@@ -263,6 +263,8 @@ public class SignUpDialogFragment extends DialogFragment {
         }
         if (reqCode == GET_FROM_GALLERY_REQ_CODE) {
             Uri imageUri = data.getData();
+            if(imageUri==null)
+                return;
             if (mIsFromGuest)
                 mUserGuest.setMImage(imageUri.toString());
             else

@@ -1,5 +1,7 @@
 package project.com.maktab.hw_6.model.user;
 
+import android.arch.persistence.room.Insert;
+import android.arch.persistence.room.OnConflictStrategy;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -79,6 +81,7 @@ public class UserRepository {
         return 1;
     }
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     public Long createUser(User user) {
         Long userId =mUserDao.insert(user);
         return userId;
