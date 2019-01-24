@@ -65,6 +65,7 @@ public class CrudTaskFragment extends DialogFragment {
     private static final int CALENDER_REQ_CODE = 2;
     private static final int TIME_REQ_CODE = -1;
     private static final int REQ_PHOTOS = 24;
+    private static final int GET_FROM_GALLERY_REQ_CODE = 99;
     public static boolean IS_EMPTY = false;
     private EditText mEditTextTitle;
     private EditText mEditTextDesc;
@@ -202,7 +203,7 @@ public class CrudTaskFragment extends DialogFragment {
 
         final Button cameraBtn = snackView.findViewById(R.id.take_from_camera_btn);
 
-        Button galleryBtn = snackView.findViewById(R.id.take_from_gallery_btn);
+        final Button galleryBtn = snackView.findViewById(R.id.take_from_gallery_btn);
 
         snackbarLayout.setPadding(0, 0, 0, 0);
         snackbarLayout.addView(snackView, 0);
@@ -222,6 +223,14 @@ public class CrudTaskFragment extends DialogFragment {
                     public void onClick(View v) {
                         takeFromCamera();
 
+                    }
+                });
+                galleryBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent photoPickerIntent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                        photoPickerIntent.setType("image/*");
+                        startActivityForResult(photoPickerIntent, GET_FROM_GALLERY_REQ_CODE);
                     }
                 });
             }
@@ -457,13 +466,29 @@ public class CrudTaskFragment extends DialogFragment {
         if (requestCode == REQ_PHOTOS) {
             Uri uri = Uri.fromFile(mPhotoFile);
             mTask.setMTaskImageUri(uri.toString());
-
-
             updateTaskPhoto(uri);
 //            updatePhotoView();
+        }
+        if (requestCode == GET_FROM_GALLERY_REQ_CODE) {
+            Uri imageUri = data.getData();
+            Bitmap selectedImage = null;
 
+            mTask.setMTaskImageUri(imageUri.toString());
+            try {
+                selectedImage = PictureUtils.decodeUri(getActivity(), imageUri);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+                /*
+                for casting uri to bitmap but take too much size.
+                InputStream imageStream = null;
+                imageStream = getActivity().getContentResolver().openInputStream(imageUri);
+            BitmapFactory.decodeStream(imageStream);*/
+
+            mTaskCircleImageView.setImageBitmap(selectedImage);
 
         }
+
     }
 
     private void updateTaskPhoto(Uri uri) {
