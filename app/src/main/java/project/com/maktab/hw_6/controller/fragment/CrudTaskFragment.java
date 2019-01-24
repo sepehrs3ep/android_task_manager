@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,6 +31,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import project.com.maktab.hw_6.MyDialogCloseListener;
 import project.com.maktab.hw_6.R;
 import project.com.maktab.hw_6.model.task.Task;
@@ -55,9 +57,11 @@ public class CrudTaskFragment extends DialogFragment {
     private Long mUserId;
     public static final String USER_ID_ARGS = "userId";
     private Button mCalenderBtn;
+    private CircleImageView mTaskCircleImageView;
     private static boolean mFromFloatButton;
     private static Task mTask;
     public static boolean mStay;
+    private ImageButton mUploadTaskImageBtn;
     private static String mRawTextTitle = "";
     private String mTaskTitle = "";
 
@@ -131,6 +135,8 @@ public class CrudTaskFragment extends DialogFragment {
         mEditTextTitle.setBackground(colorDrawable);*/
         mDateTextView = view.findViewById(R.id.date_text_view);
         mTimeTextView = view.findViewById(R.id.time_text_view);
+        mTaskCircleImageView = view.findViewById(R.id.task_circle_image_view);
+        mUploadTaskImageBtn = view.findViewById(R.id.upload_image_btn);
         mCalenderBtn = view.findViewById(R.id.calender_button);
         Button buttonAddCrud = layoutButtonSheet.findViewById(R.id.crud_add);
         Button buttonEditCrud = layoutButtonSheet.findViewById(R.id.crud_edit);
@@ -138,6 +144,13 @@ public class CrudTaskFragment extends DialogFragment {
         Button buttonDeleteCrud = layoutButtonSheet.findViewById(R.id.crud_delete);
         setDateTextView();
         setTimeTextView();
+
+        mUploadTaskImageBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
         mEditTextTitle.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
