@@ -51,6 +51,23 @@
     <string name="user_id">ID :  </string>
     <string name="email">email : </string>
     <string name="user_date">date created : </string>
+    
+
+    <string name="share_task_format">
+        %1$s! this task have status %2$s at %3$s by %4$s and  %5$s
+    </string>
+    <string name="have_description">
+    with description %s
+    </string>
+    <string name="no_description">
+        don\'t have description
+    </string>
+
+    <string name="task_report_subject">TaskManager Task Report </string>
+    <string name="send_report">
+        send Task via
+    </string>
+
 
 
     <plurals name="subtitle">

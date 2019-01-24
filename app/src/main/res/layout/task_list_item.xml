@@ -37,28 +37,39 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
+        app:layout_constraintRight_toLeftOf="@id/share_btn"
         android:id="@+id/done_image_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:padding="8dp"
         android:layout_marginBottom="8dp"
+        android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_task_done" />
+        app:srcCompat="@drawable/ic_task_done"
+        tools:layout_editor_absoluteX="363dp" />
+
     <ImageView
-        android:src="@drawable/ic_task_undone"
+        app:layout_constraintRight_toLeftOf="@id/share_btn"
         android:id="@+id/undone_image_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
+        android:padding="8dp"
+        android:src="@drawable/ic_task_undone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_editor_absoluteX="363dp" />
+
+    <ImageButton
+
+        android:id="@+id/share_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-       />
+        app:srcCompat="@drawable/ic_share" />
 </android.support.constraint.ConstraintLayout>

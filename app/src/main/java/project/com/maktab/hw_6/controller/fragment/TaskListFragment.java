@@ -2,6 +2,7 @@ package project.com.maktab.hw_6.controller.fragment;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,9 +18,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -45,15 +49,38 @@ public class TaskListFragment extends Fragment {
     private OnDataPass mOnDataPass;
     private boolean mClickedShowSub = false;
 
+    private void shareTask(Task task) {
+
+        Intent reportIntent = new Intent(Intent.ACTION_SEND);
+        reportIntent.setType("text/plain");
+        reportIntent.putExtra(Intent.EXTRA_TEXT, getTaskReport(task));
+        reportIntent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.task_report_subject));
+
+        startActivity(Intent.createChooser(reportIntent, getString(R.string.send_report)));
+    }
 
     public TaskListFragment() {
         // Required empty public constructor
     }
 
+    private String getTaskReport(Task mTask) {
+        SimpleDateFormat dateFormater = new SimpleDateFormat("yyyy-MM-dd,E,HH-mm");
+        String outputDate = dateFormater.format(mTask.getMDate());
+
+        String description = mTask.getMDescription().trim().length() <= 0 ? getString(R.string.no_description) :
+                getString(R.string.have_description, mTask.getMDescription());
+
+        String report = getString(R.string.share_task_format
+                , mTask.getMTitle(), mTask.getMTaskType().toString(), outputDate, mTask.getMUser().getMName(), description);
+
+
+        return report;
+    }
+
     public static TaskListFragment getInstance(Task.TaskType listType, long userId) {
         Bundle args = new Bundle();
         args.putSerializable(ARGS_LIST_TYPE, listType);
-        args.putLong(USER_ID_ARGS,userId);
+        args.putLong(USER_ID_ARGS, userId);
         TaskListFragment fragment = new TaskListFragment();
         fragment.setArguments(args);
         return fragment;
@@ -132,6 +159,7 @@ public class TaskListFragment extends Fragment {
 //        updateSubtitle();
         return view;
     }
+
     public interface OnDataPass {
         public void onDataPass();
     }
@@ -211,6 +239,7 @@ public class TaskListFragment extends Fragment {
 
     private class TaskViewHolder extends RecyclerView.ViewHolder {
         private TextView mTextViewTitle;
+        private ImageButton mButtonShareTask;
         private TextView mTextViewImage;
         private ImageView mImageViewDone;
         private ImageView mImageViewUndone;
@@ -221,6 +250,7 @@ public class TaskListFragment extends Fragment {
             mTextViewTitle = itemView.findViewById(R.id.item_title);
             mTextViewImage = itemView.findViewById(R.id.item_circle_view);
             mImageViewDone = itemView.findViewById(R.id.done_image_view);
+            mButtonShareTask = itemView.findViewById(R.id.share_btn);
             mImageViewUndone = itemView.findViewById(R.id.undone_image_view);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -229,7 +259,13 @@ public class TaskListFragment extends Fragment {
                     /*Intent intent = CrudTaskActivity.newIntent(getActivity(), id, false);
                     startActivity(intent);*/
                     CrudShowDialogFragment fragment = CrudShowDialogFragment.newInstance(id);
-                    fragment.show(getFragmentManager(),"showCrud");
+                    fragment.show(getFragmentManager(), "showCrud");
+                }
+            });
+            mButtonShareTask.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    shareTask(mTask);
                 }
             });
         }
@@ -314,7 +350,7 @@ public class TaskListFragment extends Fragment {
         outState.putBoolean(SUBTITLE_STATUS, mClickedShowSub);
     }
 
-    }
+}
 
 
 

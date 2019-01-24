@@ -15,6 +15,9 @@ import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -58,12 +61,12 @@ public class CrudTaskFragment extends DialogFragment {
     private static String mRawTextTitle = "";
     private String mTaskTitle = "";
 
-    public static CrudTaskFragment getInstance(UUID id, boolean hasExtra,Long userId) {
+    public static CrudTaskFragment getInstance(UUID id, boolean hasExtra, Long userId) {
         CrudTaskFragment fragment = new CrudTaskFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable(ARGS_EXTRA_ID, id);
         bundle.putBoolean(ARGS_EXTRA_HAS_EXTRA, hasExtra);
-        bundle.putLong(USER_ID_ARGS,userId);
+        bundle.putLong(USER_ID_ARGS, userId);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -101,14 +104,14 @@ public class CrudTaskFragment extends DialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         UUID id = (UUID) getArguments().getSerializable(ARGS_EXTRA_ID);
         mFromFloatButton = getArguments().getBoolean(ARGS_EXTRA_HAS_EXTRA);
-        if(mFromFloatButton){
+        if (mFromFloatButton) {
             mUserId = getArguments().getLong(USER_ID_ARGS);
             mTask = new Task();
-        }
-        else
-        mTask = TaskRepository.getInstance(getActivity()).getTaskByID(id);
+        } else
+            mTask = TaskRepository.getInstance(getActivity()).getTaskByID(id);
 
 
         mTaskTitle = mTask.getMTitle();
@@ -335,6 +338,8 @@ public class CrudTaskFragment extends DialogFragment {
         mEditTextTitle.setText(mTask.getMTitle());
     }
 
+
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != Activity.RESULT_OK) return;
@@ -402,10 +407,6 @@ public class CrudTaskFragment extends DialogFragment {
                 .create();
         alertDialog.show();
     }*/
-
-
-
-
 
 
 }
